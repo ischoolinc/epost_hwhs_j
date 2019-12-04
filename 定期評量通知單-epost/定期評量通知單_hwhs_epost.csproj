@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{016BD42D-48C5-43F7-9970-5B7C20ACFDD3}</ProjectGuid>
+    <ProjectGuid>{4A2B3730-3796-48A0-AA1B-683F1A08641C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>K12.缺曠通知單2015</RootNamespace>
-    <AssemblyName>K12.AttendanceAnAdviceNote_hwhs_epost</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>hwhs.epost.定期評量通知單</RootNamespace>
+    <AssemblyName>ExamNotification_2019_hwhs_j_epost</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,6 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aspose.Cells_201402, Version=7.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
@@ -76,6 +78,16 @@
       <HintPath>..\..\..\ischool_Senior with FISCA\LibraryProject\FISCA.Presentation.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="FISCA.UDT">
+      <HintPath>Library\FISCA.UDT.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JHSchool.Data">
+      <HintPath>Library\JHSchool.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="JHSchool.Evaluation">
+      <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
+    </Reference>
     <Reference Include="K12.Data">
       <HintPath>..\..\..\ischool_Senior with FISCA\LibraryProject\K12.Data.dll</HintPath>
       <Private>False</Private>
@@ -108,6 +120,14 @@
     <Compile Include="AttendanceOBJ.cs" />
     <Compile Include="CommonMethods.cs" />
     <Compile Include="ConfigOBJ.cs" />
+    <Compile Include="DAO\DomainRangeCount.cs" />
+    <Compile Include="DAO\ExamDomainScore.cs" />
+    <Compile Include="DAO\ExamSubjectScore.cs" />
+    <Compile Include="DAO\StudExamScore.cs" />
+    <Compile Include="DAO\SubjectDomainName.cs" />
+    <Compile Include="DAO\SubjectRangeCount.cs" />
+    <Compile Include="DAO\UDTTransfer.cs" />
+    <Compile Include="DAO\UDT_ScoreConfig.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -116,7 +136,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StringComparer.cs" />
     <Compile Include="StudentOBJ.cs" />
+    <Compile Include="Utility.cs" />
     <Compile Include="主畫面\AbsenceNotificationConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
