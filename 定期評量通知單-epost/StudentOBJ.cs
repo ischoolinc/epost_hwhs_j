@@ -17,6 +17,10 @@ namespace hwhs.epost.定期評量通知單
 
             studentSemesterAbsence = new Dictionary<string, int>();
 
+            studentMerit = new Dictionary<string, int>();
+
+            studentSemesterMerit = new Dictionary<string, int>();
+
             studentAbsenceDetail = new Dictionary<string, Dictionary<string, string>>();
         }
         /// <summary>
@@ -33,6 +37,16 @@ namespace hwhs.epost.定期評量通知單
         /// 缺曠學期統計
         /// </summary>
         public Dictionary<string, int> studentSemesterAbsence = new Dictionary<string, int>();
+
+        /// <summary>
+        /// 獎懲統計
+        /// </summary>
+        public Dictionary<string, int> studentMerit = new Dictionary<string, int>();
+
+        /// <summary>
+        /// 獎懲學期統計
+        /// </summary>
+        public Dictionary<string, int> studentSemesterMerit = new Dictionary<string, int>();
 
         /// <summary>
         /// 缺曠明細內容

@@ -31,7 +31,7 @@ namespace hwhs.epost.定期評量通知單
         ConfigOBJ obj;
 
         string entityName;
-        
+
         //轉縮寫
         Dictionary<string, string> absenceList = new Dictionary<string, string>();
 
@@ -91,7 +91,7 @@ namespace hwhs.epost.定期評量通知單
                 obj.EndDate = form.EndDate;
                 obj.PrintHasRecordOnly = form.PrintHasRecordOnly;
                 obj.Template = form.Template;
-                
+
 
                 obj.ReceiveName = form.ReceiveName;
                 obj.ReceiveAddress = form.ReceiveAddress;
@@ -99,7 +99,7 @@ namespace hwhs.epost.定期評量通知單
                 obj.ConditionNumber = form.ConditionNumber;
                 obj.ConditionName2 = form.ConditionName2;
                 obj.ConditionNumber2 = form.ConditionNumber2;
-                obj.PrintStudentList = form.PrintStudentList;                
+                obj.PrintStudentList = form.PrintStudentList;
                 #endregion
 
                 _BGWAbsenceNotification = new BackgroundWorker();
@@ -145,6 +145,9 @@ namespace hwhs.epost.定期評量通知單
             //超級資訊物件
             Dictionary<string, StudentOBJ> StudentSuperOBJ = new Dictionary<string, StudentOBJ>();
 
+            // 獎懲List
+            List<string> meritNameList = new List<string>();
+
             //合併列印的資料
             Dictionary<string, object> Allmapping = new Dictionary<string, object>();
             Dictionary<string, string> ReversionDic = new Dictionary<string, string>();
@@ -157,13 +160,13 @@ namespace hwhs.epost.定期評量通知單
             int totalStudentNumber = 0;
 
             #region 取得 Period List            
-            Dictionary<string, string> TestPeriodList = new Dictionary<string, string>();            
+            Dictionary<string, string> TestPeriodList = new Dictionary<string, string>();
             Dictionary<string, object> mappingAccessory_copy = new Dictionary<string, object>();
 
             foreach (K12.Data.PeriodMappingInfo each in K12.Data.PeriodMapping.SelectAll())
-            {                
+            {
                 if (!TestPeriodList.ContainsKey(each.Name)) //節次<-->類別
-                    TestPeriodList.Add(each.Name, each.Type);                
+                    TestPeriodList.Add(each.Name, each.Type);
             }
             #endregion
 
@@ -185,6 +188,15 @@ namespace hwhs.epost.定期評量通知單
                 //Allmapping.Add("類型" + DefinedType + "缺曠" + DefinedAbsence,
 
             }
+            #endregion
+
+            #region 設定 Merit List (固定)
+            meritNameList.Add("大功");
+            meritNameList.Add("小功");
+            meritNameList.Add("嘉獎");
+            meritNameList.Add("大過");
+            meritNameList.Add("小過");
+            meritNameList.Add("警告");
             #endregion
 
             //????使用者所選取的所有假別種類????
@@ -239,21 +251,21 @@ namespace hwhs.epost.定期評量通知單
             string sql = "select student.id, student.parent_code, student.student_code, student.seat_no, student.name, class.grade_year, class.class_name from student";
             sql += " join class on class.id = student.ref_class_id where student.status in (1,2) and student.id in (" + ids + ") order by class.grade_year,class.display_order,class.class_name,student.seat_no";
             DataTable dt_parent_code = queryHelper.Select(sql); ;
-            
+
             foreach (DataRow row in dt_parent_code.Rows)
             {
                 if (StudentSuperOBJ.ContainsKey("" + row["id"]))
                 {
                     StudentSuperOBJ["" + row["id"]].ParentCode = "" + row["parent_code"];
                 }
-            } 
+            }
             #endregion
 
 
             #region 取得所有學生缺曠紀錄，日期區間
 
             List<AttendanceRecord> attendanceList = K12.Data.Attendance.SelectByDate(SelectedStudents, obj.StartDate, obj.EndDate);
-            
+
             foreach (AttendanceRecord attendance in attendanceList)
             {
                 if (!allStudentID.Contains(attendance.RefStudentID)) //如果是選取班級的學生
@@ -304,7 +316,7 @@ namespace hwhs.epost.定期評量通知單
             #endregion
 
             List<string> DelStudent = new List<string>(); //列印的學生
-           
+
             #region 無條件則全部列印
             if (obj.ConditionName == "" && obj.ConditionName2 == "")
             {
@@ -319,7 +331,7 @@ namespace hwhs.epost.定期評量通知單
             #endregion
 
             #region 取得所有學生缺曠紀錄，學期累計
-            foreach (AttendanceRecord attendance in K12.Data.Attendance.SelectBySchoolYearAndSemester(Student.SelectByIDs(allStudentID), int.Parse(School.DefaultSchoolYear), int.Parse(School.DefaultSemester)))
+            foreach (AttendanceRecord attendance in K12.Data.Attendance.SelectBySchoolYearAndSemester(Student.SelectByIDs(allStudentID), int.Parse(obj.SchoolYear), int.Parse(obj.Semester)))
             {
                 //1(大於),0(等於)-1(小於)
                 if (obj.EndDate.CompareTo(attendance.OccurDate) == -1)
@@ -345,6 +357,138 @@ namespace hwhs.epost.定期評量通知單
 
                     studentOBJ.studentSemesterAbsence[PeriodAndAbsence]++;
                 }
+            }
+
+            #endregion
+
+            #region 取得所有學生獎懲紀錄，日期區間
+
+            foreach (MeritRecord merit in K12.Data.Merit.SelectByOccurDate(allStudentID, obj.StartDate, obj.EndDate))
+            {
+                string studentID = merit.RefStudentID;
+                DateTime occurDate = merit.OccurDate;
+                StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
+
+                //區間統計
+                if (!studentOBJ.studentMerit.ContainsKey("大功"))
+                {
+                    studentOBJ.studentMerit.Add("大功", 0);
+                }
+                if (!studentOBJ.studentMerit.ContainsKey("小功"))
+                {
+                    studentOBJ.studentMerit.Add("小功", 0);
+                }
+                if (!studentOBJ.studentMerit.ContainsKey("嘉獎"))
+                {
+                    studentOBJ.studentMerit.Add("嘉獎", 0);
+                }
+
+                int meritA = 0;
+                int meritB = 0;
+                int meritC = 0;
+
+                studentOBJ.studentMerit["大功"] += (int)(int.TryParse("" + merit.MeritA, out meritA) ? int.Parse("" + merit.MeritA) : 0);
+                studentOBJ.studentMerit["小功"] += (int)(int.TryParse("" + merit.MeritB, out meritB) ? int.Parse("" + merit.MeritB) : 0);
+                studentOBJ.studentMerit["嘉獎"] += (int)(int.TryParse("" + merit.MeritC, out meritC) ? int.Parse("" + merit.MeritC) : 0);
+            }
+
+            foreach (DemeritRecord demerit in K12.Data.Demerit.SelectByOccurDate(allStudentID, obj.StartDate, obj.EndDate))
+            {
+                string studentID = demerit.RefStudentID;
+                DateTime occurDate = demerit.OccurDate;
+                StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
+
+                //區間統計
+                if (!studentOBJ.studentMerit.ContainsKey("大過"))
+                {
+                    studentOBJ.studentMerit.Add("大過", 0);
+                }
+                if (!studentOBJ.studentMerit.ContainsKey("小過"))
+                {
+                    studentOBJ.studentMerit.Add("小過", 0);
+                }
+                if (!studentOBJ.studentMerit.ContainsKey("警告"))
+                {
+                    studentOBJ.studentMerit.Add("警告", 0);
+                }
+
+                int DemeritA = 0;
+                int DemeritB = 0;
+                int DemeritC = 0;
+
+                studentOBJ.studentMerit["大過"] += (int)(int.TryParse("" + demerit.DemeritA, out DemeritA) ? int.Parse("" + demerit.DemeritA) : 0);
+                studentOBJ.studentMerit["小過"] += (int)(int.TryParse("" + demerit.DemeritB, out DemeritB) ? int.Parse("" + demerit.DemeritB) : 0);
+                studentOBJ.studentMerit["警告"] += (int)(int.TryParse("" + demerit.DemeritC, out DemeritC) ? int.Parse("" + demerit.DemeritC) : 0);
+            }
+
+            #endregion
+
+            #region 取得所有學生獎懲紀錄，學期累計
+            // ... 意外發現K12 API 缺曠、獎懲的支援度不同... 缺曠可以用 studentRecord 抓 ，獎懲不行
+            foreach (MeritRecord merit in K12.Data.Merit.SelectBySchoolYearAndSemester(allStudentID, int.Parse(obj.SchoolYear), int.Parse(obj.Semester)))
+            {
+                //1(大於),0(等於)-1(小於)
+                if (obj.EndDate.CompareTo(merit.OccurDate) == -1)
+                    continue;
+
+                string studentID = merit.RefStudentID;
+                DateTime occurDate = merit.OccurDate;
+                StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
+
+                //區間統計
+                if (!studentOBJ.studentSemesterMerit.ContainsKey("大功"))
+                {
+                    studentOBJ.studentSemesterMerit.Add("大功", 0);
+                }
+                if (!studentOBJ.studentSemesterMerit.ContainsKey("小功"))
+                {
+                    studentOBJ.studentSemesterMerit.Add("小功", 0);
+                }
+                if (!studentOBJ.studentSemesterMerit.ContainsKey("嘉獎"))
+                {
+                    studentOBJ.studentSemesterMerit.Add("嘉獎", 0);
+                }
+
+                int meritA = 0;
+                int meritB = 0;
+                int meritC = 0;
+
+                studentOBJ.studentSemesterMerit["大功"] += (int)(int.TryParse("" + merit.MeritA, out meritA) ? int.Parse("" + merit.MeritA) : 0);
+                studentOBJ.studentSemesterMerit["小功"] += (int)(int.TryParse("" + merit.MeritB, out meritB) ? int.Parse("" + merit.MeritB) : 0);
+                studentOBJ.studentSemesterMerit["嘉獎"] += (int)(int.TryParse("" + merit.MeritC, out meritC) ? int.Parse("" + merit.MeritC) : 0);
+            }
+
+            foreach (DemeritRecord demerit in K12.Data.Demerit.SelectBySchoolYearAndSemester(allStudentID, int.Parse(obj.SchoolYear), int.Parse(obj.Semester)))
+            {
+                //1(大於),0(等於)-1(小於)
+                if (obj.EndDate.CompareTo(demerit.OccurDate) == -1)
+                    continue;
+
+                string studentID = demerit.RefStudentID;
+                DateTime occurDate = demerit.OccurDate;
+                StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
+
+                //區間統計
+                if (!studentOBJ.studentSemesterMerit.ContainsKey("大過"))
+                {
+                    studentOBJ.studentSemesterMerit.Add("大過", 0);
+                }
+                if (!studentOBJ.studentSemesterMerit.ContainsKey("小過"))
+                {
+                    studentOBJ.studentSemesterMerit.Add("小過", 0);
+                }
+                if (!studentOBJ.studentSemesterMerit.ContainsKey("警告"))
+                {
+                    studentOBJ.studentSemesterMerit.Add("警告", 0);
+                }
+
+                int demeritA = 0;
+                int demeritB = 0;
+                int demeritC = 0;
+
+                studentOBJ.studentSemesterMerit["大過"] += (int)(int.TryParse("" + demerit.DemeritA, out demeritA) ? int.Parse("" + demerit.DemeritA) : 0);
+                studentOBJ.studentSemesterMerit["小過"] += (int)(int.TryParse("" + demerit.DemeritB, out demeritB) ? int.Parse("" + demerit.DemeritB) : 0);
+                studentOBJ.studentSemesterMerit["警告"] += (int)(int.TryParse("" + demerit.DemeritC, out demeritC) ? int.Parse("" + demerit.DemeritC) : 0);
             }
 
             #endregion
@@ -441,14 +585,14 @@ namespace hwhs.epost.定期評量通知單
 
             #region 通用資料
 
-            Allmapping.Add("學年度",obj.SchoolYear);
+            Allmapping.Add("學年度", obj.SchoolYear);
             Allmapping.Add("學期", obj.Semester);
             Allmapping.Add("試別", obj.ExamName);
             Allmapping.Add("缺曠獎懲統計期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
             Allmapping.Add("校長", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorChineseName").InnerText);
             Allmapping.Add("教務主任", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText);
 
-            
+
             Allmapping.Add("科目名稱1", "");
             Allmapping.Add("科目名稱2", "");
             Allmapping.Add("科目名稱3", "");
@@ -637,25 +781,16 @@ namespace hwhs.epost.定期評量通知單
             Allmapping.Add("科目PR值", "");
             #endregion
 
-            #region 缺曠類別部份
-            int columnNumber = 0;
-
-            foreach (List<string> var in config.Values)
-            {
-                columnNumber += var.Count;
-            }
-            #endregion
-
             #region 產生報表
 
             Document doc = new Document();
             doc.Sections.Clear();
-            
+
             DataTable dt = new DataTable();
 
             foreach (string studentID in StudentSuperOBJ.Keys)
             {
-                
+
                 StudentOBJ eachStudentInfo = StudentSuperOBJ[studentID];
 
                 //合併列印的資料
@@ -672,8 +807,8 @@ namespace hwhs.epost.定期評量通知單
                         currentStudentCount++;
                         continue;
                     }
-                }                                                
-                
+                }
+
                 // 弘文高中國中部 CSV 規格 沒有要用到這些
                 ////學校資訊
                 //mapping.Add("學校名稱", School.ChineseName);
@@ -685,7 +820,7 @@ namespace hwhs.epost.定期評量通知單
                 mapping.Add("班級", eachStudentInfo.ClassName);
                 mapping.Add("座號", eachStudentInfo.SeatNo);
                 mapping.Add("學號", eachStudentInfo.StudentNumber);
-                mapping.Add("班級導師", eachStudentInfo.TeacherName);                
+                mapping.Add("班級導師", eachStudentInfo.TeacherName);
                 mapping.Add("資料期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
 
                 // 2019/11/12 穎驊註解 本專案為弘文於本學期提出來的需求，增加家長代碼
@@ -753,13 +888,28 @@ namespace hwhs.epost.定期評量通知單
                         {
                             absenceTotalDict["學期" + absenceType] += semesterDataValue;
                         }
-                       
+
                     }
                 }
 
                 foreach (string absence in absenceTotalDict.Keys)
                 {
-                    mapping.Add(absence, "" +absenceTotalDict[absence]);                    
+                    mapping.Add(absence, "" + absenceTotalDict[absence]);
+                }
+
+                // 獎懲統計
+                foreach (string merit in meritNameList)
+                {
+                    if (eachStudentInfo.studentMerit.ContainsKey(merit))
+                    {
+                        mapping.Add(merit, eachStudentInfo.studentMerit[merit]);
+                    }
+
+                    if (eachStudentInfo.studentSemesterMerit.ContainsKey(merit))
+                    {
+                        mapping.Add("學期" + merit, eachStudentInfo.studentSemesterMerit[merit]);
+                    }
+
                 }
 
 
@@ -797,11 +947,11 @@ namespace hwhs.epost.定期評量通知單
                     row[key] = mapping[key];
                 }
 
-                
+
                 dt.Rows.Add(row);
                 #endregion
 
-                
+
                 //回報進度
                 _BGWAbsenceNotification.ReportProgress((int)(((double)currentStudentCount++ * 100.0) / (double)totalStudentNumber));
             }
@@ -859,7 +1009,7 @@ namespace hwhs.epost.定期評量通知單
             }
             #endregion
 
-            
+
             string path = Path.Combine(Application.StartupPath, "Reports");
             string path2 = Path.Combine(Application.StartupPath, "Reports");
             if (!Directory.Exists(path))
