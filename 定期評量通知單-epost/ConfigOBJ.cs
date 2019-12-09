@@ -64,6 +64,27 @@ namespace hwhs.epost.定期評量通知單
         /// </summary>
         public bool PrintStudentList { get; set; }
 
-        public bool PaperUpdate { get; set; }
+
+        /// <summary>
+        /// 學年度
+        /// </summary>
+        public string SchoolYear { get; set; }
+
+        /// <summary>
+        /// 學期
+        /// </summary>
+        public string Semester { get; set; }
+
+        /// <summary>
+        /// 試別名稱
+        /// </summary>
+        public string ExamName { get; set; }
+
+        /// <summary>
+        /// 試別ID
+        /// </summary>
+        public string ExamID { get; set; }
+
+
     }
 }

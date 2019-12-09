@@ -81,11 +81,18 @@ namespace hwhs.epost.定期評量通知單
 
                 #region 建立設定檔
                 obj = new ConfigOBJ();
+
+                obj.SchoolYear = "" + form._SelSchoolYear;
+                obj.Semester = "" + form._SelSemester;
+                obj.ExamName = "" + form._SelExamName;
+                obj.ExamID = "" + form._SelExamID;
+
                 obj.StartDate = form.StartDate;
                 obj.EndDate = form.EndDate;
                 obj.PrintHasRecordOnly = form.PrintHasRecordOnly;
                 obj.Template = form.Template;
-                //obj.userDefinedConfig = config;
+                
+
                 obj.ReceiveName = form.ReceiveName;
                 obj.ReceiveAddress = form.ReceiveAddress;
                 obj.ConditionName = form.ConditionName;
@@ -149,23 +156,14 @@ namespace hwhs.epost.定期評量通知單
             int currentStudentCount = 1;
             int totalStudentNumber = 0;
 
-            #region 取得 Period List
-            List<string> periodList = new List<string>();
-            Dictionary<string, string> TestPeriodList = new Dictionary<string, string>();
-            int PeriodX = 1;
+            #region 取得 Period List            
+            Dictionary<string, string> TestPeriodList = new Dictionary<string, string>();            
             Dictionary<string, object> mappingAccessory_copy = new Dictionary<string, object>();
+
             foreach (K12.Data.PeriodMappingInfo each in K12.Data.PeriodMapping.SelectAll())
-            {
-                if (!periodList.Contains(each.Name))
-                    periodList.Add(each.Name);
-
+            {                
                 if (!TestPeriodList.ContainsKey(each.Name)) //節次<-->類別
-                    TestPeriodList.Add(each.Name, each.Type);
-
-                Allmapping.Add("節次" + PeriodX, each.Name);
-                mappingAccessory_copy.Add("節次" + PeriodX, each.Name);
-                ReversionDic.Add(each.Name, "節次" + PeriodX);
-                PeriodX++;
+                    TestPeriodList.Add(each.Name, each.Type);                
             }
             #endregion
 
@@ -190,28 +188,28 @@ namespace hwhs.epost.定期評量通知單
             #endregion
 
             //????使用者所選取的所有假別種類????
-            List<string> userDefinedAbsenceList = new List<string>();
+            //List<string> userDefinedAbsenceList = new List<string>();
 
-            int DefinedType = 1;
-            foreach (string kind in configkeylist)
-            {
-                int DefinedAbsence = 1;
-                Allmapping.Add("類型" + DefinedType, kind);
+            //int DefinedType = 1;
+            //foreach (string kind in configkeylist)
+            //{
+            //    int DefinedAbsence = 1;
+            //    Allmapping.Add("類型" + DefinedType, kind);
 
-                foreach (string type in config[kind])
-                {
-                    Allmapping.Add("類型" + DefinedType + "缺曠" + DefinedAbsence, type);
-                    Allmapping.Add("類型" + DefinedType + "縮寫" + DefinedAbsence, absenceList[type]);
-                    DefinedAbsence++;
+            //    foreach (string type in config[kind])
+            //    {
+            //        Allmapping.Add("類型" + DefinedType + "缺曠" + DefinedAbsence, type);
+            //        Allmapping.Add("類型" + DefinedType + "縮寫" + DefinedAbsence, absenceList[type]);
+            //        DefinedAbsence++;
 
-                    if (!userDefinedAbsenceList.Contains(type))
-                    {
-                        userDefinedAbsenceList.Add(type);
-                    }
-                }
+            //        if (!userDefinedAbsenceList.Contains(type))
+            //        {
+            //            userDefinedAbsenceList.Add(type);
+            //        }
+            //    }
 
-                DefinedType++;
-            }
+            //    DefinedType++;
+            //}
 
             #region 取得所有學生ID
             foreach (StudentRecord aStudent in SelectedStudents)
@@ -306,91 +304,7 @@ namespace hwhs.epost.定期評量通知單
             #endregion
 
             List<string> DelStudent = new List<string>(); //列印的學生
-
-            #region 條件1
-            if (obj.ConditionName != "") //如果不等於空就是要判斷啦
-            {
-                foreach (string each1 in StudentSuperOBJ.Keys) //取出一個學生
-                {
-                    int AbsenceCount = 0;
-                    bool AbsenceBOOL = false;
-                    foreach (string each2 in StudentSuperOBJ[each1].studentAbsenceDetail.Keys) //取出一天
-                    {
-                        foreach (string each3 in StudentSuperOBJ[each1].studentAbsenceDetail[each2].Keys) //取出一節內容
-                        {
-                            string each4 = StudentSuperOBJ[each1].studentAbsenceDetail[each2][each3];
-
-                            if (TestPeriodList.ContainsKey(each3))
-                            {
-                                if (config.ContainsKey(TestPeriodList[each3]))
-                                {
-                                    if (obj.ConditionName == each4)
-                                    {
-                                        AbsenceCount++;
-                                    }
-
-                                    if (AbsenceCount >= int.Parse(obj.ConditionNumber))
-                                    {
-                                        AbsenceBOOL = true;
-                                        if (!DelStudent.Contains(each1))
-                                        {
-                                            DelStudent.Add(each1); //把學生ID記下
-                                        }
-                                    }
-
-                                    if (AbsenceBOOL)
-                                        break;
-                                }
-                            }
-                        }
-                        if (AbsenceBOOL)
-                            break;
-                    }
-                }
-            }
-            #endregion
-
-            #region 條件2
-            if (obj.ConditionName2 != "") //如果等於空就是直接全部印啦!!
-            {
-                foreach (string each1 in StudentSuperOBJ.Keys) //取出一個學生
-                {
-                    int AbsenceCount = 0;
-                    bool AbsenceBOOL = false;
-                    foreach (string each2 in StudentSuperOBJ[each1].studentAbsenceDetail.Keys) //取出一天
-                    {
-                        foreach (string each3 in StudentSuperOBJ[each1].studentAbsenceDetail[each2].Keys) //取出一節內容
-                        {
-                            string each4 = StudentSuperOBJ[each1].studentAbsenceDetail[each2][each3];
-
-                            if (TestPeriodList.ContainsKey(each3))
-                            {
-                                if (config.ContainsKey(TestPeriodList[each3]))
-                                {
-                                    if (obj.ConditionName2 == each4)
-                                    {
-                                        AbsenceCount++;
-                                    }
-
-                                    if (AbsenceCount >= int.Parse(obj.ConditionNumber2))
-                                    {
-                                        AbsenceBOOL = true;
-
-                                        DelStudent.Add(each1); //把學生ID記下
-                                    }
-
-                                    if (AbsenceBOOL)
-                                        break;
-                                }
-                                if (AbsenceBOOL)
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-            #endregion
-
+           
             #region 無條件則全部列印
             if (obj.ConditionName == "" && obj.ConditionName2 == "")
             {
@@ -525,7 +439,203 @@ namespace hwhs.epost.定期評量通知單
 
             #endregion
 
-            Document template = new Document(obj.Template);
+            #region 通用資料
+
+            Allmapping.Add("學年度",obj.SchoolYear);
+            Allmapping.Add("學期", obj.Semester);
+            Allmapping.Add("試別", obj.ExamName);
+            Allmapping.Add("缺曠獎懲統計期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
+            Allmapping.Add("校長", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorChineseName").InnerText);
+            Allmapping.Add("教務主任", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText);
+
+            
+            Allmapping.Add("科目名稱1", "");
+            Allmapping.Add("科目名稱2", "");
+            Allmapping.Add("科目名稱3", "");
+            Allmapping.Add("科目名稱4", "");
+            Allmapping.Add("科目名稱5", "");
+            Allmapping.Add("科目節數1", "");
+            Allmapping.Add("科目節數2", "");
+            Allmapping.Add("科目節數3", "");
+            Allmapping.Add("科目節數4", "");
+            Allmapping.Add("科目節數5", "");
+            Allmapping.Add("CN", "");
+            Allmapping.Add("POSTALCODE", "");
+            Allmapping.Add("POSTALADDRESS", "");
+            Allmapping.Add("學號", "");
+            Allmapping.Add("班級", "");
+            Allmapping.Add("座號", "");
+            Allmapping.Add("學生姓名", "");
+            Allmapping.Add("成績1", "");
+            Allmapping.Add("成績2", "");
+            Allmapping.Add("成績3", "");
+            Allmapping.Add("成績4", "");
+            Allmapping.Add("成績5", "");
+            Allmapping.Add("加權平均", "");
+            Allmapping.Add("加權總分", "");
+            Allmapping.Add("名次", "");
+            Allmapping.Add("年排名", "");
+            Allmapping.Add("平時成績1", "");
+            Allmapping.Add("平時成績2", "");
+            Allmapping.Add("平時成績3", "");
+            Allmapping.Add("平時成績4", "");
+            Allmapping.Add("平時成績5", "");
+            Allmapping.Add("平時加權平均", "");
+            Allmapping.Add("評量總成績1", "");
+            Allmapping.Add("評量總成績2", "");
+            Allmapping.Add("評量總成績3", "");
+            Allmapping.Add("評量總成績4", "");
+            Allmapping.Add("評量總成績5", "");
+            Allmapping.Add("評量總加權平均", "");
+            Allmapping.Add("大功", "");
+            Allmapping.Add("小功", "");
+            Allmapping.Add("嘉獎", "");
+            Allmapping.Add("大過", "");
+            Allmapping.Add("小過", "");
+            Allmapping.Add("警告", "");
+            Allmapping.Add("曠課", "");
+            Allmapping.Add("事假", "");
+            Allmapping.Add("病假", "");
+            Allmapping.Add("喪假", "");
+            Allmapping.Add("公假", "");
+            Allmapping.Add("家長代碼", "");
+
+            #endregion
+
+            //2019/12/05 穎驊註解，弘文epost 這個case 比較特別，經過業務PM嘉詮確認，它們學校是已經跟郵局談好CSV檔的格式(先前都是行政手動產生)
+            //然後我們要來接，它一份CSV檔的格式 同時包括了定期、學期資料，因此將本程式設計模式，能夠依不同的需求分別產生對應的資料
+            // EX: 產生定期資料時，學期資料資料就是空白
+            #region 學期資料
+            Allmapping.Add("國文百分成績", "");
+            Allmapping.Add("英語百分成績", "");
+            Allmapping.Add("數學百分成績", "");
+            Allmapping.Add("社會百分成績", "");
+            Allmapping.Add("自然科學百分成績", "");
+            Allmapping.Add("理化百分成績", "");
+            Allmapping.Add("自然百分成績", "");
+            Allmapping.Add("資訊科技百分成績", "");
+            Allmapping.Add("生活科技百分成績", "");
+            Allmapping.Add("音樂百分成績", "");
+            Allmapping.Add("視覺藝術百分成績", "");
+            Allmapping.Add("表演藝術百分成績", "");
+            Allmapping.Add("家政百分成績", "");
+            Allmapping.Add("童軍百分成績", "");
+            Allmapping.Add("輔導百分成績", "");
+            Allmapping.Add("健康教育百分成績", "");
+            Allmapping.Add("體育百分成績", "");
+            Allmapping.Add("英語聽講百分成績", "");
+            Allmapping.Add("資訊應用百分成績", "");
+            Allmapping.Add("ESL百分成績", "");
+            Allmapping.Add("地球科學百分成績", "");
+            Allmapping.Add("閱讀理解百分成績", "");
+            Allmapping.Add("閱讀與寫作百分成績", "");
+            Allmapping.Add("語文表達百分成績", "");
+            Allmapping.Add("國文節數", "");
+            Allmapping.Add("英語節數", "");
+            Allmapping.Add("數學節數", "");
+            Allmapping.Add("社會節數", "");
+            Allmapping.Add("自然科學節數", "");
+            Allmapping.Add("理化節數", "");
+            Allmapping.Add("自然節數", "");
+            Allmapping.Add("資訊科技節數", "");
+            Allmapping.Add("生活科技節數", "");
+            Allmapping.Add("音樂節數", "");
+            Allmapping.Add("視覺藝術節數", "");
+            Allmapping.Add("表演藝術節數", "");
+            Allmapping.Add("家政節數", "");
+            Allmapping.Add("童軍節數", "");
+            Allmapping.Add("輔導節數", "");
+            Allmapping.Add("健康教育節數", "");
+            Allmapping.Add("體育節數", "");
+            Allmapping.Add("英語聽講節數", "");
+            Allmapping.Add("資訊應用節數", "");
+            Allmapping.Add("ESL節數", "");
+            Allmapping.Add("地球科學節數", "");
+            Allmapping.Add("閱讀理解節數", "");
+            Allmapping.Add("閱讀與寫作節數", "");
+            Allmapping.Add("語文表達節數", "");
+            Allmapping.Add("國文等第", "");
+            Allmapping.Add("英語等第", "");
+            Allmapping.Add("數學等第", "");
+            Allmapping.Add("社會等第", "");
+            Allmapping.Add("自然科學等第", "");
+            Allmapping.Add("理化等第", "");
+            Allmapping.Add("自然等第", "");
+            Allmapping.Add("資訊科技等第", "");
+            Allmapping.Add("生活科技等第", "");
+            Allmapping.Add("音樂等第", "");
+            Allmapping.Add("視覺藝術等第", "");
+            Allmapping.Add("表演藝術等第", "");
+            Allmapping.Add("家政等第", "");
+            Allmapping.Add("童軍等第", "");
+            Allmapping.Add("輔導等第", "");
+            Allmapping.Add("健康教育等第", "");
+            Allmapping.Add("體育等第", "");
+            Allmapping.Add("英語聽講等第", "");
+            Allmapping.Add("資訊應用等第", "");
+            Allmapping.Add("ESL等第", "");
+            Allmapping.Add("地球科學等第", "");
+            Allmapping.Add("閱讀理解等第", "");
+            Allmapping.Add("閱讀與寫作等第", "");
+            Allmapping.Add("語文表達等第", "");
+            Allmapping.Add("國文文字描述", "");
+            Allmapping.Add("英語文字描述", "");
+            Allmapping.Add("數學文字描述", "");
+            Allmapping.Add("社會文字描述", "");
+            Allmapping.Add("自然科學文字描述", "");
+            Allmapping.Add("理化文字描述", "");
+            Allmapping.Add("自然文字描述", "");
+            Allmapping.Add("資訊科技文字描述", "");
+            Allmapping.Add("生活科技文字描述", "");
+            Allmapping.Add("音樂文字描述", "");
+            Allmapping.Add("視覺藝術文字描述", "");
+            Allmapping.Add("表演藝術文字描述", "");
+            Allmapping.Add("家政文字描述", "");
+            Allmapping.Add("童軍文字描述", "");
+            Allmapping.Add("輔導文字描述", "");
+            Allmapping.Add("健康教育文字描述", "");
+            Allmapping.Add("體育文字描述", "");
+            Allmapping.Add("英語聽講文字描述", "");
+            Allmapping.Add("資訊應用文字描述", "");
+            Allmapping.Add("ESL文字描述", "");
+            Allmapping.Add("地球科學文字描述", "");
+            Allmapping.Add("閱讀理解文字描述", "");
+            Allmapping.Add("閱讀與寫作文字描述", "");
+            Allmapping.Add("語文表達文字描述", "");
+            Allmapping.Add("學期大功", "");
+            Allmapping.Add("學期小功", "");
+            Allmapping.Add("學期嘉獎", "");
+            Allmapping.Add("學期大過", "");
+            Allmapping.Add("學期小過", "");
+            Allmapping.Add("學期警告", "");
+            Allmapping.Add("學期曠課", "");
+            Allmapping.Add("學期事假", "");
+            Allmapping.Add("學期病假", "");
+            Allmapping.Add("學期喪假", "");
+            Allmapping.Add("學期公假", "");
+            Allmapping.Add("學期遲到", "");
+            Allmapping.Add("愛整潔", "");
+            Allmapping.Add("有禮貌", "");
+            Allmapping.Add("守秩序", "");
+            Allmapping.Add("責任心", "");
+            Allmapping.Add("公德心", "");
+            Allmapping.Add("友愛關懷", "");
+            Allmapping.Add("團隊合作", "");
+            Allmapping.Add("團體活動表現", "");
+            Allmapping.Add("導師評語", "");
+            Allmapping.Add("服務學習時數", "");
+            Allmapping.Add("科目班級平均", "");
+            Allmapping.Add("科目排名", "");
+            Allmapping.Add("班級加權總分", "");
+            Allmapping.Add("班級加權平均", "");
+            Allmapping.Add("學期科目班級平均", "");
+            Allmapping.Add("學期科目排名", "");
+            Allmapping.Add("學期班級加權總分", "");
+            Allmapping.Add("學期班級加權平均", "");
+            Allmapping.Add("班級人數", "");
+            Allmapping.Add("年級人數", "");
+            Allmapping.Add("科目PR值", "");
+            #endregion
 
             #region 缺曠類別部份
             int columnNumber = 0;
@@ -545,12 +655,7 @@ namespace hwhs.epost.定期評量通知單
 
             foreach (string studentID in StudentSuperOBJ.Keys)
             {
-                Dictionary<string, object> mappingAccessory = new Dictionary<string, object>();
-                foreach (string each in mappingAccessory_copy.Keys)
-                {
-                    mappingAccessory.Add(each, mappingAccessory_copy[each]);
-                }
-
+                
                 StudentOBJ eachStudentInfo = StudentSuperOBJ[studentID];
 
                 //合併列印的資料
@@ -567,31 +672,20 @@ namespace hwhs.epost.定期評量通知單
                         currentStudentCount++;
                         continue;
                     }
-                }
-                                
-                //學生資料
-                mappingAccessory.Add("學生姓名", eachStudentInfo.student.Name);
-                mappingAccessory.Add("班級", eachStudentInfo.ClassName);
-                mappingAccessory.Add("座號", eachStudentInfo.SeatNo);
-                mappingAccessory.Add("學號", eachStudentInfo.StudentNumber);
-                mappingAccessory.Add("導師", eachStudentInfo.TeacherName);
-                mappingAccessory.Add("學年度", School.DefaultSchoolYear);
-                mappingAccessory.Add("學期", School.DefaultSemester);
-                mappingAccessory.Add("資料期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
-                //懲戒明細
-                bool IsAccessory = false;
-
-                //學校資訊
-                mapping.Add("學校名稱", School.ChineseName);
-                mapping.Add("學校地址", School.Address);
-                mapping.Add("學校電話", School.Telephone);
+                }                                                
+                
+                // 弘文高中國中部 CSV 規格 沒有要用到這些
+                ////學校資訊
+                //mapping.Add("學校名稱", School.ChineseName);
+                //mapping.Add("學校地址", School.Address);
+                //mapping.Add("學校電話", School.Telephone);
 
                 //學生資料
                 mapping.Add("學生姓名", eachStudentInfo.student.Name);
                 mapping.Add("班級", eachStudentInfo.ClassName);
                 mapping.Add("座號", eachStudentInfo.SeatNo);
                 mapping.Add("學號", eachStudentInfo.StudentNumber);
-                mapping.Add("導師", eachStudentInfo.TeacherName);                
+                mapping.Add("班級導師", eachStudentInfo.TeacherName);                
                 mapping.Add("資料期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
 
                 // 2019/11/12 穎驊註解 本專案為弘文於本學期提出來的需求，增加家長代碼
@@ -619,49 +713,59 @@ namespace hwhs.epost.定期評量通知單
                 mapping.Add("學年度", School.DefaultSchoolYear);
                 mapping.Add("學期", School.DefaultSemester);
 
-                //缺曠學期統計部份
-                int columnIndex = 1;
-                int DefinedTypeCount = 1;
+                // 作為統計全部缺曠
+                Dictionary<string, int> absenceTotalDict = new Dictionary<string, int>();
+
+                //缺曠學期統計部份                          
                 foreach (string attendanceType in configkeylist)
                 {
-                    int DefinedAbsenceCount = 1;
 
                     foreach (string absenceType in config[attendanceType])
                     {
-                        string dataValue = "0";
-                        string semesterDataValue = "0";
+                        int dataValue = 0;
+                        int semesterDataValue = 0;
                         string PeriodAndAbsence = attendanceType + "," + absenceType;
                         //本期統計
                         if (eachStudentInfo.studentAbsence.ContainsKey(PeriodAndAbsence))
                         {
-                            dataValue = eachStudentInfo.studentAbsence[PeriodAndAbsence].ToString();
+                            dataValue = eachStudentInfo.studentAbsence[PeriodAndAbsence];
                         }
                         //學期統計
                         if (eachStudentInfo.studentSemesterAbsence.ContainsKey(PeriodAndAbsence))
                         {
-                            semesterDataValue = eachStudentInfo.studentSemesterAbsence[PeriodAndAbsence].ToString();
+                            semesterDataValue = eachStudentInfo.studentSemesterAbsence[PeriodAndAbsence];
                         }
 
-                        mapping.Add("類型" + DefinedTypeCount + "本期" + DefinedAbsenceCount, dataValue);
-                        mapping.Add("類型" + DefinedTypeCount + "學期" + DefinedAbsenceCount, semesterDataValue);
-                        DefinedAbsenceCount++;
-                        columnIndex++;
+                        if (!absenceTotalDict.ContainsKey(absenceType))
+                        {
+                            absenceTotalDict.Add(absenceType, dataValue);
+                        }
+                        else
+                        {
+                            absenceTotalDict[absenceType] += dataValue;
+                        }
+
+                        if (!absenceTotalDict.ContainsKey("學期" + absenceType))
+                        {
+                            absenceTotalDict.Add("學期" + absenceType, semesterDataValue);
+                        }
+                        else
+                        {
+                            absenceTotalDict["學期" + absenceType] += semesterDataValue;
+                        }
+                       
                     }
-                    DefinedTypeCount++;
                 }
 
-                
+                foreach (string absence in absenceTotalDict.Keys)
+                {
+                    mapping.Add(absence, "" +absenceTotalDict[absence]);                    
+                }
+
+
                 #region epost 使用
 
                 // 將對應功能變數 套入dt
-                foreach (string key in mapping.Keys)
-                {
-                    if (!dt.Columns.Contains(key))
-                    {
-                        dt.Columns.Add(key);
-                    }
-                }
-
                 foreach (string key in Allmapping.Keys)
                 {
                     if (!dt.Columns.Contains(key))
@@ -670,18 +774,30 @@ namespace hwhs.epost.定期評量通知單
                     }
                 }
 
-                DataRow row = dt.NewRow();
 
                 foreach (string key in mapping.Keys)
                 {
-                    row[key] = mapping[key];
+                    if (!dt.Columns.Contains(key))
+                    {
+                        dt.Columns.Add(key);
+                    }
                 }
+
+
+
+                DataRow row = dt.NewRow();
 
                 foreach (string key in Allmapping.Keys)
                 {
                     row[key] = Allmapping[key];
                 }
 
+                foreach (string key in mapping.Keys)
+                {
+                    row[key] = mapping[key];
+                }
+
+                
                 dt.Rows.Add(row);
                 #endregion
 
@@ -768,3 +884,4 @@ namespace hwhs.epost.定期評量通知單
         }
     }
 }
+

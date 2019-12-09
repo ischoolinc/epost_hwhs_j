@@ -44,10 +44,10 @@ namespace hwhs.epost.定期評量通知單
         private string _DefalutSchoolYear = "";
         private string _DefaultSemester = "";
 
-        private int _SelSchoolYear;
-        private int _SelSemester;
-        private string _SelExamName = "";
-        private string _SelExamID = "";
+        public int _SelSchoolYear;
+        public int _SelSemester;
+        public string _SelExamName = "";
+        public string _SelExamID = "";
 
         public string ReceiveName
         {
@@ -617,6 +617,66 @@ namespace hwhs.epost.定期評量通知單
             foreach (ListViewItem lvi in lvSubject.Items)
             {
                 lvi.Checked = chkSubjSelAll.Checked;
+            }
+        }
+
+        private void buttonX1_Click_1(object sender, EventArgs e)
+        {
+            if (dateTimeInput1.IsEmpty || dateTimeInput2.IsEmpty)
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("日期區間必須輸入!");
+                return;
+            }
+
+            if (dateTimeInput1.Value > dateTimeInput2.Value)
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("開始日期必須小於或等於結束日期!!");
+                return;
+            }
+
+            int sc, ss;
+            if (int.TryParse(cboSchoolYear.Text, out sc))
+            {
+                _SelSchoolYear = sc;
+            }
+            else
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("學年度必填!");
+                return;
+            }
+
+            if (int.TryParse(cboSemester.Text, out ss))
+            {
+                _SelSemester = ss;
+            }
+            else
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("學期必填!");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(cboExam.Text))
+            {
+                FISCA.Presentation.Controls.MsgBox.Show("請選擇試別!");
+                return;
+            }
+            else
+            {
+                bool isEr = true;
+                foreach (ExamRecord ex in _exams)
+                    if (ex.Name == cboExam.Text)
+                    {
+                        _SelExamID = ex.ID;
+                        _SelExamName = ex.Name;
+                        isEr = false;
+                        break;
+                    }
+
+                if (isEr)
+                {
+                    FISCA.Presentation.Controls.MsgBox.Show("試別錯誤，請重新選擇!");
+                    return;
+                }
             }
         }
     }

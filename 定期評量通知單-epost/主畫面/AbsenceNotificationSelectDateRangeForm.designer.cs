@@ -85,6 +85,7 @@
             this.buttonX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonX1.Location = new System.Drawing.Point(247, 386);
             this.buttonX1.TabIndex = 11;
+            this.buttonX1.Click += new System.EventHandler(this.buttonX1_Click_1);
             // 
             // dateTimeInput2
             // 
