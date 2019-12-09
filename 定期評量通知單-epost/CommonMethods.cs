@@ -26,123 +26,35 @@ namespace hwhs.epost.定期評量通知單
 
                     object[] result = (object[])e.Result;
 
-                    string reportName = (string)result[0];
-                    string path = (string)result[1];
-                    Aspose.Words.Document doc = (Aspose.Words.Document)result[2];
-                    string path2 = (string)result[3];
-                    bool PrintStudetnList = (bool)result[4];
-                    Aspose.Cells.Workbook wb = (Aspose.Cells.Workbook)result[5];
-
-                    DataTable dt = (DataTable)result[6];
-
-                    if (File.Exists(path))
-                    {
-                        int i = 1;
-                        while (true)
-                        {
-                            string newPath = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + (i++) + Path.GetExtension(path);
-                            if (!File.Exists(newPath))
-                            {
-                                path = newPath;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (File.Exists(path2))
-                    {
-                        int i = 1;
-                        while (true)
-                        {
-                            string newPath = Path.GetDirectoryName(path2) + "\\" + Path.GetFileNameWithoutExtension(path2) + (i++) + Path.GetExtension(path2);
-                            if (!File.Exists(newPath))
-                            {
-                                path2 = newPath;
-                                break;
-                            }
-                        }
-                    }
-
+                    DataTable dt = (DataTable)result[0];
+                    
                     try
                     {
-                        if (PrintStudetnList)
+                        #region 產生CSV 檔
+                        DateTime now = DateTime.Now;
+
+                        String workingFolder = $"{System.Windows.Forms.Application.StartupPath}\\Reports";
+                        if (!Directory.Exists(workingFolder))
                         {
-                            doc.Save(path, Aspose.Words.SaveFormat.Docx);
-                            wb.Save(path2);
-                            FISCA.Presentation.MotherForm.SetStatusBarMessage(reportName + "產生完成");
-
-                            #region 產生CSV 檔
-                            DateTime now = DateTime.Now;
-
-                            String workingFolder = $"{System.Windows.Forms.Application.StartupPath}\\Reports";
-                            if (!Directory.Exists(workingFolder))
-                            {
-                                Directory.CreateDirectory(workingFolder);
-                            }
-                            string csvfilePath = $"{workingFolder}\\缺曠通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.csv";
-
-                            exportToCSV(dt, csvfilePath);
-
-                            //this.circularProgress1.Visible = false;
-                            //this.circularProgress1.IsRunning = false;
-
-                            if (MessageBox.Show("已成功匯出 CSV 檔案，是否要開啟檔案？", "完成", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                            {
-                                System.Diagnostics.Process.Start(csvfilePath);
-                            } 
-                            #endregion
-
-                            System.Diagnostics.Process.Start(path);
-                            System.Diagnostics.Process.Start(path2);
+                            Directory.CreateDirectory(workingFolder);
                         }
-                        else
+                        string csvfilePath = $"{workingFolder}\\缺曠通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.csv";
+
+                        exportToCSV(dt, csvfilePath);
+
+                        if (MessageBox.Show("已成功匯出 CSV 檔案，是否要開啟檔案？", "完成", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            #region 產生CSV 檔
-                            DateTime now = DateTime.Now;
-
-                            String workingFolder = $"{System.Windows.Forms.Application.StartupPath}\\Reports";
-                            if (!Directory.Exists(workingFolder))
-                            {
-                                Directory.CreateDirectory(workingFolder);
-                            }
-                            string csvfilePath = $"{workingFolder}\\缺曠通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.csv";
-
-                            exportToCSV(dt, csvfilePath);
-
-                            //this.circularProgress1.Visible = false;
-                            //this.circularProgress1.IsRunning = false;
-
-                            if (MessageBox.Show("已成功匯出 CSV 檔案，是否要開啟檔案？", "完成", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                            {
-                                System.Diagnostics.Process.Start(csvfilePath);
-                            }
-                            #endregion
-
-                            doc.Save(path, Aspose.Words.SaveFormat.Docx);
-                            FISCA.Presentation.MotherForm.SetStatusBarMessage(reportName + "產生完成");
-                            System.Diagnostics.Process.Start(path);
+                            System.Diagnostics.Process.Start(csvfilePath);
                         }
+                        #endregion
+
                     }
                     catch
                     {
-                        SaveFileDialog sd = new SaveFileDialog();
-                        sd.Title = "另存新檔";
-                        sd.FileName = reportName + ".docx";
-                        sd.Filter = "Word檔案 (*.docx)|*.docx|所有檔案 (*.*)|*.*";
-                        if (sd.ShowDialog() == DialogResult.OK)
-                        {
-                            try
-                            {
-                                doc.Save(sd.FileName, Aspose.Words.SaveFormat.Docx);
-
-                            }
-                            catch
-                            {
-                                MsgBox.Show("指定路徑無法存取。", "建立檔案失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
-                            }
-                        }
+                        MsgBox.Show("指定路徑無法存取。", "建立檔案失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
                     }
+
 
                     #endregion
                 }

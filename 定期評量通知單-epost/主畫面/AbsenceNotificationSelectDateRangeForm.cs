@@ -14,6 +14,8 @@ namespace hwhs.epost.定期評量通知單
         private Dictionary<string, List<string>> _ExamSubjects = new Dictionary<string, List<string>>();
         private Dictionary<string, List<string>> _ExamSubjectFull = new Dictionary<string, List<string>>();
 
+        public List<string> _SelSubjNameList = new List<string>();
+
         List<string> _StudentIDList;
 
         private MemoryStream _template = null;
@@ -678,6 +680,24 @@ namespace hwhs.epost.定期評量通知單
                     return;
                 }
             }
+
+            // 使用者勾選科目
+            foreach (ListViewItem item in lvSubject.Items)
+            {
+                if (item.Checked)
+                {
+                    if (!_SelSubjNameList.Contains(item.Text))
+                        _SelSubjNameList.Add(item.Text);
+                }
+                else
+                {
+                    if (_SelSubjNameList.Contains(item.Text))
+                        _SelSubjNameList.Remove(item.Text);
+                }
+            }
+
+
+
         }
     }
 }

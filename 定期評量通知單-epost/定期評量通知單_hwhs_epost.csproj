@@ -82,11 +82,17 @@
       <HintPath>Library\FISCA.UDT.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="HsinChu.JHEvaluation.Data">
+      <HintPath>Library\HsinChu.JHEvaluation.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JHSchool.Data">
       <HintPath>Library\JHSchool.Data.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JHSchool.Evaluation">
       <HintPath>Library\JHSchool.Evaluation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="K12.Data">
       <HintPath>..\..\..\ischool_Senior with FISCA\LibraryProject\K12.Data.dll</HintPath>

@@ -85,6 +85,10 @@ namespace hwhs.epost.定期評量通知單
         /// </summary>
         public string ExamID { get; set; }
 
+        /// <summary>
+        /// 使用者選擇的科目名稱
+        /// </summary>
+        public List<string> SelSubjNameList { get; set; }
 
     }
 }

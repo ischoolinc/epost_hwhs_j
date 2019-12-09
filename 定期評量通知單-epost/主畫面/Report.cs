@@ -12,6 +12,9 @@ using K12.Data;
 using K12.Data.Configuration;
 using SmartSchool.ePaper;
 using FISCA.Data;
+using JHSchool.Data;
+using HsinChu.JHEvaluation.Data;
+using System.Linq;
 
 namespace hwhs.epost.定期評量通知單
 {
@@ -79,6 +82,10 @@ namespace hwhs.epost.定期評量通知單
 
                 FISCA.Presentation.MotherForm.SetStatusBarMessage("正在初始化定期評量通知單CSV檔...");
 
+                
+
+                
+
                 #region 建立設定檔
                 obj = new ConfigOBJ();
 
@@ -86,12 +93,12 @@ namespace hwhs.epost.定期評量通知單
                 obj.Semester = "" + form._SelSemester;
                 obj.ExamName = "" + form._SelExamName;
                 obj.ExamID = "" + form._SelExamID;
+                obj.SelSubjNameList = form._SelSubjNameList; // 使用者勾選科目
 
                 obj.StartDate = form.StartDate;
                 obj.EndDate = form.EndDate;
                 obj.PrintHasRecordOnly = form.PrintHasRecordOnly;
                 obj.Template = form.Template;
-
 
                 obj.ReceiveName = form.ReceiveName;
                 obj.ReceiveAddress = form.ReceiveAddress;
@@ -138,7 +145,7 @@ namespace hwhs.epost.定期評量通知單
             SelectedStudents.Sort(new Comparison<StudentRecord>(CommonMethods.ClassSeatNoComparer));
 
             #endregion
-            string reportName = "缺曠通知單";
+            
 
             #region 快取資料
 
@@ -781,10 +788,29 @@ namespace hwhs.epost.定期評量通知單
             Allmapping.Add("科目PR值", "");
             #endregion
 
-            #region 產生報表
 
-            Document doc = new Document();
-            doc.Sections.Clear();
+            // 課程資料
+            Dictionary<string, JHCourseRecord> CourseDict = new Dictionary<string, JHCourseRecord>();
+
+            foreach (JHCourseRecord co in JHCourse.SelectBySchoolYearAndSemester(int.Parse(obj.SchoolYear), int.Parse(obj.Semester)))
+            {
+                CourseDict.Add(co.ID, co);
+            }
+
+            // 取評量成績
+            Dictionary<string, List<HC.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<HC.JHSCETakeRecord>>();
+            foreach (JHSCETakeRecord record in JHSCETake.SelectByStudentAndCourse(allStudentID, CourseDict.Keys.ToList()))
+            {
+                if (record.RefExamID == obj.ExamID)
+                {
+                    if (!Score1Dict.ContainsKey(record.RefStudentID))
+                        Score1Dict.Add(record.RefStudentID, new List<HC.JHSCETakeRecord>());
+
+                    Score1Dict[record.RefStudentID].Add(new HC.JHSCETakeRecord(record));
+                }
+            }
+
+            #region 產生報表
 
             DataTable dt = new DataTable();
 
@@ -958,65 +984,8 @@ namespace hwhs.epost.定期評量通知單
 
             #endregion
 
-            #region 產生學生清單
-
-            Aspose.Cells.Workbook wb = new Aspose.Cells.Workbook();
-            if (obj.PrintStudentList)
-            {
-                int CountRow = 0;
-                wb.Worksheets[0].Cells[CountRow, 0].PutValue("班級");
-                wb.Worksheets[0].Cells[CountRow, 1].PutValue("座號");
-                wb.Worksheets[0].Cells[CountRow, 2].PutValue("學號");
-                wb.Worksheets[0].Cells[CountRow, 3].PutValue("學生姓名");
-                wb.Worksheets[0].Cells[CountRow, 4].PutValue("收件人姓名");
-                wb.Worksheets[0].Cells[CountRow, 5].PutValue("地址");
-                wb.Worksheets[0].Cells[CountRow, 6].PutValue("家長代碼");
-                CountRow++;
-                foreach (string each in StudentSuperOBJ.Keys)
-                {
-                    if (!DelStudent.Contains(each)) //如果不包含在內,就離開
-                        continue;
-
-                    if (obj.PrintHasRecordOnly)
-                    {
-                        //明細等於0
-                        if (StudentSuperOBJ[each].studentAbsenceDetail.Count == 0)
-                        {
-                            currentStudentCount++;
-                            continue;
-                        }
-                    }
-
-                    wb.Worksheets[0].Cells[CountRow, 0].PutValue(StudentSuperOBJ[each].ClassName);
-                    wb.Worksheets[0].Cells[CountRow, 1].PutValue(StudentSuperOBJ[each].SeatNo);
-                    wb.Worksheets[0].Cells[CountRow, 2].PutValue(StudentSuperOBJ[each].StudentNumber);
-                    wb.Worksheets[0].Cells[CountRow, 3].PutValue(StudentSuperOBJ[each].student.Name);
-                    //收件人資料
-                    if (obj.ReceiveName == "監護人姓名")
-                        wb.Worksheets[0].Cells[CountRow, 4].PutValue(StudentSuperOBJ[each].CustodianName);
-                    else if (obj.ReceiveName == "父親姓名")
-                        wb.Worksheets[0].Cells[CountRow, 4].PutValue(StudentSuperOBJ[each].FatherName);
-                    else if (obj.ReceiveName == "母親姓名")
-                        wb.Worksheets[0].Cells[CountRow, 4].PutValue(StudentSuperOBJ[each].MotherName);
-                    else
-                        wb.Worksheets[0].Cells[CountRow, 4].PutValue(StudentSuperOBJ[each].student.Name);
-
-                    wb.Worksheets[0].Cells[CountRow, 5].PutValue(StudentSuperOBJ[each].ZipCode + " " + StudentSuperOBJ[each].address);
-                    wb.Worksheets[0].Cells[CountRow, 6].PutValue(StudentSuperOBJ[each].ParentCode);
-                    CountRow++;
-                }
-                wb.Worksheets[0].AutoFitColumns();
-            }
-            #endregion
-
-
-            string path = Path.Combine(Application.StartupPath, "Reports");
-            string path2 = Path.Combine(Application.StartupPath, "Reports");
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-            path = Path.Combine(path, reportName + ".docx");
-            path2 = Path.Combine(path2, reportName + "(學生清單).xlsx");
-            e.Result = new object[] { reportName, path, doc, path2, obj.PrintStudentList, wb, dt };
+            
+            e.Result = new object[] {dt};
         }
 
         /// <summary>
