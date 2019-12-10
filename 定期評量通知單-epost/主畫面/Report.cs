@@ -15,6 +15,7 @@ using FISCA.Data;
 using JHSchool.Data;
 using HsinChu.JHEvaluation.Data;
 using System.Linq;
+using JHSchool.Evaluation.Calculation;
 
 namespace hwhs.epost.定期評量通知單
 {
@@ -788,6 +789,33 @@ namespace hwhs.epost.定期評量通知單
             Allmapping.Add("科目PR值", "");
             #endregion
 
+            #region 取得學生成績計算規則
+            ScoreCalculator defaultScoreCalculator = new ScoreCalculator(null);
+
+            //key: ScoreCalcRuleID
+            Dictionary<string, ScoreCalculator> calcCache = new Dictionary<string, ScoreCalculator>();
+            //key: StudentID, val: ScoreCalcRuleID
+            Dictionary<string, string> calcIDCache = new Dictionary<string, string>();
+            List<string> scoreCalcRuleIDList = new List<string>();
+            foreach (StudentRecord student in SelectedStudents)
+            {
+                //calcCache.Add(student.ID, new ScoreCalculator(student.ScoreCalcRule));
+                string calcID = string.Empty;
+                if (!string.IsNullOrEmpty(student.OverrideScoreCalcRuleID))
+                    calcID = student.OverrideScoreCalcRuleID;
+                else if (student.Class != null && !string.IsNullOrEmpty(student.Class.RefScoreCalcRuleID))
+                    calcID = student.Class.RefScoreCalcRuleID;
+
+                if (!string.IsNullOrEmpty(calcID))
+                    calcIDCache.Add(student.ID, calcID);
+            }
+            foreach (JHScoreCalcRuleRecord record in JHScoreCalcRule.SelectByIDs(calcIDCache.Values))
+            {
+                if (!calcCache.ContainsKey(record.ID))
+                    calcCache.Add(record.ID, new ScoreCalculator(record));
+            }
+
+            #endregion
 
             // 課程資料
             Dictionary<string, JHCourseRecord> CourseDict = new Dictionary<string, JHCourseRecord>();
@@ -808,6 +836,118 @@ namespace hwhs.epost.定期評量通知單
 
                     Score1Dict[record.RefStudentID].Add(new HC.JHSCETakeRecord(record));
                 }
+            }
+
+            // 取得這次該修課程
+            Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> StudCourseDict = Utility.GetStudentSCAttendCourse(allStudentID, CourseDict.Keys.ToList(), obj.ExamID);
+
+            // 取得評量設定比例
+            Dictionary<string, decimal> ScorePercentageHSDict = Utility.GetScorePercentageHS();
+
+            // 處理評量成績科目
+            Dictionary<string, DAO.StudExamScore> studExamScoreDict = new Dictionary<string, DAO.StudExamScore>();
+            foreach (string studID in allStudentID)
+            {
+                // 成績計算規則
+                ScoreCalculator studentCalculator = defaultScoreCalculator;
+                if (calcIDCache.ContainsKey(studID) && calcCache.ContainsKey(calcIDCache[studID]))
+                    studentCalculator = calcCache[calcIDCache[studID]];
+
+                if (Score1Dict.ContainsKey(studID))
+                {
+                    if (!studExamScoreDict.ContainsKey(studID))
+                        studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
+
+                    foreach (HC.JHSCETakeRecord rec in Score1Dict[studID])
+                    {
+                        if (rec.RefExamID == obj.ExamID && CourseDict.ContainsKey(rec.RefCourseID))
+                        {
+                            JHCourseRecord cr = CourseDict[rec.RefCourseID];
+
+                            string SubjecName = cr.Subject;
+
+                            // 勾選科目
+                            if (obj.SelSubjNameList.Contains(SubjecName))
+                            {
+                                if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(SubjecName))
+                                {
+                                    DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
+                                    ess.DomainName = cr.Domain;
+                                    ess.SubjectName = SubjecName;
+                                    ess.ScoreA = rec.AssignmentScore;
+                                    ess.ScoreF = rec.Score;
+
+                                    if (ess.ScoreA.HasValue && ess.ScoreF.HasValue)
+                                    {
+                                        if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
+                                        {
+                                            // 取得定期，評量由100-定期
+                                            decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
+                                            decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
+                                            ess.ScoreT = ess.ScoreA.Value * a + ess.ScoreF.Value * f;
+                                        }
+                                        else
+                                            ess.ScoreT = ess.ScoreA.Value * 0.5M + ess.ScoreF.Value * 0.5M; // 沒有設定預設50,50
+
+                                        // 原本
+                                        //ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
+                                    }
+                                    if (ess.ScoreA.HasValue && ess.ScoreF.HasValue == false)
+                                        ess.ScoreT = ess.ScoreA.Value;
+
+                                    if (ess.ScoreA.HasValue == false && ess.ScoreF.HasValue)
+                                        ess.ScoreT = ess.ScoreF.Value;
+
+                                    // 依照成績計算規則科目方式處理進位，只有總成績。
+                                    // 平時
+                                    //if(ess.ScoreA.HasValue)
+                                    //    ess.ScoreA = studentCalculator.ParseSubjectScore(ess.ScoreA.Value);
+
+                                    // 定期
+                                    //if (ess.ScoreF.HasValue)
+                                    //    ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
+
+                                    if (ess.ScoreT.HasValue)
+                                        ess.ScoreT = studentCalculator.ParseSubjectScore(ess.ScoreT.Value);
+
+                                    ess.Text = rec.Text;
+                                    ess.Credit = cr.Credit;
+                                    studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, ess);
+                                }
+                            }
+                        }
+                    }
+                    // 計算領域成績
+                    studExamScoreDict[studID].CalcSubjectToDomain();
+                }
+
+                if (StudCourseDict.ContainsKey(studID))
+                {
+                    if (!studExamScoreDict.ContainsKey(studID))
+                        studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
+                    if (studExamScoreDict[studID]._ExamSubjectScoreDict == null)
+                    {
+                        studExamScoreDict[studID]._ExamSubjectScoreDict = new Dictionary<string, DAO.ExamSubjectScore>();
+                        studExamScoreDict[studID]._ExamDomainScoreDict = new Dictionary<string, DAO.ExamDomainScore>();
+                    }
+                    foreach (KeyValuePair<string, DAO.SubjectDomainName> data in StudCourseDict[studID])
+                    {
+                        // 沒有勾選不加入
+                        if (!obj.SelSubjNameList.Contains(data.Key))
+                            continue;
+
+                        // 加入有修課沒有成績空科目
+                        if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(data.Key))
+                        {
+                            DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
+                            ess.SubjectName = data.Key;
+                            ess.DomainName = data.Value.DomainName;
+                            ess.Credit = data.Value.Credit;
+                            studExamScoreDict[studID]._ExamSubjectScoreDict.Add(data.Key, ess);
+                        }
+                    }
+                }
+
             }
 
             #region 產生報表
@@ -937,6 +1077,39 @@ namespace hwhs.epost.定期評量通知單
                     }
 
                 }
+
+                // 定期評量成績
+                if (studExamScoreDict.ContainsKey(studentID))
+                {
+                    int subjectIndex = 1;
+
+                    foreach (string subject in obj.SelSubjNameList)
+                    {
+                        // 2019/12/10 弘文國中開的科目數，以五個為上限
+                        if (subjectIndex >= 5)
+                        {
+                            break;
+                        }
+                        if (studExamScoreDict[studentID]._ExamSubjectScoreDict.ContainsKey(subject))
+                        {
+                            mapping.Add("科目名稱" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].SubjectName);
+
+                            mapping.Add("科目節數" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].Credit);
+
+                            mapping.Add("成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreF);
+
+                            mapping.Add("平時成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreA);
+
+                            mapping.Add("評量總成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreT);
+                        }
+                        subjectIndex++;
+                    }
+
+                }
+
+                
+  
+
 
 
                 #region epost 使用
