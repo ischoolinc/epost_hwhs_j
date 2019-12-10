@@ -171,7 +171,7 @@ namespace hwhs.epost.定期評量通知單
                 if (receive != null)
                 {
                     _receiveName = receive.GetAttribute("Name");
-                    _receiveAddress = receive.GetAttribute("Address");
+                    _receiveAddress = receive.GetAttribute("Address");      
                 }
                 else
                 {

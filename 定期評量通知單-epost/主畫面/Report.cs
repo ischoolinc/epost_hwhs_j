@@ -83,9 +83,9 @@ namespace hwhs.epost.定期評量通知單
 
                 FISCA.Presentation.MotherForm.SetStatusBarMessage("正在初始化定期評量通知單CSV檔...");
 
-                
 
-                
+
+
 
                 #region 建立設定檔
                 obj = new ConfigOBJ();
@@ -102,7 +102,7 @@ namespace hwhs.epost.定期評量通知單
                 obj.Template = form.Template;
 
                 obj.ReceiveName = form.ReceiveName;
-                obj.ReceiveAddress = form.ReceiveAddress;
+                obj.ReceiveAddress = form.ReceiveAddress !=""? form.ReceiveAddress: "聯絡地址";
                 obj.ConditionName = form.ConditionName;
                 obj.ConditionNumber = form.ConditionNumber;
                 obj.ConditionName2 = form.ConditionName2;
@@ -144,9 +144,11 @@ namespace hwhs.epost.定期評量通知單
                 throw new NotImplementedException();
 
             SelectedStudents.Sort(new Comparison<StudentRecord>(CommonMethods.ClassSeatNoComparer));
+            
+            _BGWAbsenceNotification.ReportProgress(10);
 
             #endregion
-            
+
 
             #region 快取資料
 
@@ -267,6 +269,8 @@ namespace hwhs.epost.定期評量通知單
                     StudentSuperOBJ["" + row["id"]].ParentCode = "" + row["parent_code"];
                 }
             }
+
+            _BGWAbsenceNotification.ReportProgress(20);
             #endregion
 
 
@@ -321,6 +325,8 @@ namespace hwhs.epost.定期評量通知單
                 }
             }
 
+            _BGWAbsenceNotification.ReportProgress(30);
+
             #endregion
 
             List<string> DelStudent = new List<string>(); //列印的學生
@@ -366,7 +372,7 @@ namespace hwhs.epost.定期評量通知單
                     studentOBJ.studentSemesterAbsence[PeriodAndAbsence]++;
                 }
             }
-
+            _BGWAbsenceNotification.ReportProgress(40);
             #endregion
 
             #region 取得所有學生獎懲紀錄，日期區間
@@ -429,6 +435,7 @@ namespace hwhs.epost.定期評量通知單
                 studentOBJ.studentMerit["警告"] += (int)(int.TryParse("" + demerit.DemeritC, out DemeritC) ? int.Parse("" + demerit.DemeritC) : 0);
             }
 
+            _BGWAbsenceNotification.ReportProgress(50);
             #endregion
 
             #region 取得所有學生獎懲紀錄，學期累計
@@ -499,6 +506,7 @@ namespace hwhs.epost.定期評量通知單
                 studentOBJ.studentSemesterMerit["警告"] += (int)(int.TryParse("" + demerit.DemeritC, out demeritC) ? int.Parse("" + demerit.DemeritC) : 0);
             }
 
+            _BGWAbsenceNotification.ReportProgress(60);
             #endregion
 
             #region 取得學生通訊地址資料
@@ -569,6 +577,7 @@ namespace hwhs.epost.定期評量通知單
                     }
                 }
             }
+            _BGWAbsenceNotification.ReportProgress(70);
             #endregion
 
             #region 取得學生監護人父母親資料
@@ -587,6 +596,8 @@ namespace hwhs.epost.定期評量通知單
             //    studentInfo[studentID].Add("FatherName", var.SelectSingleNode("FatherName").InnerText);
             //    studentInfo[studentID].Add("MotherName", var.SelectSingleNode("MotherName").InnerText);
             //}
+
+            _BGWAbsenceNotification.ReportProgress(80);
             #endregion
 
             #endregion
@@ -639,17 +650,17 @@ namespace hwhs.epost.定期評量通知單
             Allmapping.Add("評量總成績4", "");
             Allmapping.Add("評量總成績5", "");
             Allmapping.Add("評量總加權平均", "");
-            Allmapping.Add("大功", "");
-            Allmapping.Add("小功", "");
-            Allmapping.Add("嘉獎", "");
-            Allmapping.Add("大過", "");
-            Allmapping.Add("小過", "");
-            Allmapping.Add("警告", "");
-            Allmapping.Add("曠課", "");
-            Allmapping.Add("事假", "");
-            Allmapping.Add("病假", "");
-            Allmapping.Add("喪假", "");
-            Allmapping.Add("公假", "");
+            Allmapping.Add("大功", "0");
+            Allmapping.Add("小功", "0");
+            Allmapping.Add("嘉獎", "0");
+            Allmapping.Add("大過", "0");
+            Allmapping.Add("小過", "0");
+            Allmapping.Add("警告", "0");
+            Allmapping.Add("曠課", "0");
+            Allmapping.Add("事假", "0");
+            Allmapping.Add("病假", "0");
+            Allmapping.Add("喪假", "0");
+            Allmapping.Add("公假", "0");
             Allmapping.Add("家長代碼", "");
 
             #endregion
@@ -817,6 +828,7 @@ namespace hwhs.epost.定期評量通知單
 
             #endregion
 
+            #region 取得定期評量資料
             // 課程資料
             Dictionary<string, JHCourseRecord> CourseDict = new Dictionary<string, JHCourseRecord>();
 
@@ -950,6 +962,163 @@ namespace hwhs.epost.定期評量通知單
 
             }
 
+            _BGWAbsenceNotification.ReportProgress(90);
+            #endregion
+
+            #region 取得固定排名資料
+
+            //抓取固定排名資料
+            string sql_rank = @"
+SELECT 
+	rank_matrix.id AS rank_matrix_id
+	, rank_matrix.school_year
+	, rank_matrix.semester
+	, rank_matrix.grade_year
+	, rank_matrix.item_type
+	, rank_matrix.ref_exam_id
+	, rank_matrix.item_name
+	, rank_matrix.rank_type
+	, rank_matrix.rank_name
+	, class.class_name
+	, student.seat_no
+	, student.student_number
+	, student.name
+	, rank_detail.ref_student_id
+    , rank_detail.score
+	, rank_detail.rank
+	, rank_detail.pr
+	, rank_detail.percentile
+    , rank_matrix.avg_top_25
+    , rank_matrix.avg_top_50
+    , rank_matrix.avg
+    , rank_matrix.avg_bottom_50
+    , rank_matrix.avg_bottom_25
+FROM 
+	rank_matrix
+	LEFT OUTER JOIN rank_detail
+		ON rank_detail.ref_matrix_id = rank_matrix.id
+	LEFT OUTER JOIN student
+		ON student.id = rank_detail.ref_student_id
+	LEFT OUTER JOIN class
+		ON class.id = student.ref_class_id
+WHERE
+	rank_matrix.is_alive = true
+	AND rank_matrix.school_year = '" + obj.SchoolYear + @"'
+    AND rank_matrix.semester = '" + obj.Semester + @"'
+	AND rank_matrix.item_type like '定期評量%'
+	AND rank_matrix.ref_exam_id = '" + obj.ExamID + @"'
+    AND ref_student_id IN ('" + string.Join("','", allStudentID) + @"') 
+ORDER BY 
+	rank_matrix.id
+	, rank_detail.rank
+	, class.grade_year
+	, class.display_order
+	, class.class_name
+	, student.seat_no
+	, student.id";
+
+            QueryHelper qh = new QueryHelper();
+
+            DataTable datatableRank = qh.Select(sql_rank);
+
+            // 處理 固定排名 (2019/12/10目前沒有平時評量的固定排名，與業務嘉詮佳樺討論後，他們說先暫時不用 )
+            Dictionary<string, Dictionary<string, string>> studScoreRankDict = new Dictionary<string, Dictionary<string, string>>();
+
+            foreach (DataRow dr in datatableRank.Rows)
+            {
+                if (!studScoreRankDict.ContainsKey("" + dr["ref_student_id"]))
+                {
+                    studScoreRankDict.Add("" + dr["ref_student_id"], new Dictionary<string, string>());
+
+                    if ("" + dr["item_type"] == "定期評量/總計成績" && "" + dr["item_name"] == "加權平均")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("評量總加權平均"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + dr["score"]);
+                        }
+                    }
+
+                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權平均")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權平均"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + dr["score"]);
+                        }
+                    }
+
+                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權總分"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權總分", "" + dr["score"]);
+                        }
+                    }
+
+                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "班排名")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("名次"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("名次", "" + dr["rank"]);
+                        }
+                    }
+
+                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "年排名")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("年排名"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("年排名", "" + dr["rank"]);
+                        }
+                    }
+
+                }
+                else
+                {
+                    if ("" + dr["item_type"] == "定期評量/總計成績" && "" + dr["item_name"] == "加權平均")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("評量總加權平均"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + dr["score"]);
+                        }
+                    }
+
+                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權平均")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權平均"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + dr["score"]);
+                        }
+                    }
+
+                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權總分"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權總分", "" + dr["score"]);
+                        }
+                    }
+
+                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "班排名")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("名次"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("名次", "" + dr["rank"]);
+                        }
+                    }
+
+                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "年排名")
+                    {
+                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("年排名"))
+                        {
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("年排名", "" + dr["rank"]);
+                        }
+                    }
+                }
+            }
+
+            _BGWAbsenceNotification.ReportProgress(100);
+            #endregion
+
+
             #region 產生報表
 
             DataTable dt = new DataTable();
@@ -993,23 +1162,36 @@ namespace hwhs.epost.定期評量通知單
                 mapping.Add("家長代碼", eachStudentInfo.ParentCode);
 
                 //收件人資料
+                //if (obj.ReceiveName == "監護人姓名")
+                //    mapping.Add("收件人姓名", eachStudentInfo.CustodianName);
+                //else if (obj.ReceiveName == "父親姓名")
+                //    mapping.Add("收件人姓名", eachStudentInfo.FatherName);
+                //else if (obj.ReceiveName == "母親姓名")
+                //    mapping.Add("收件人姓名", eachStudentInfo.MotherName);
+                //else
+                //    mapping.Add("收件人姓名", eachStudentInfo.student.Name);
+
                 if (obj.ReceiveName == "監護人姓名")
-                    mapping.Add("收件人姓名", eachStudentInfo.CustodianName);
+                    mapping.Add("CN", eachStudentInfo.CustodianName);
                 else if (obj.ReceiveName == "父親姓名")
-                    mapping.Add("收件人姓名", eachStudentInfo.FatherName);
+                    mapping.Add("CN", eachStudentInfo.FatherName);
                 else if (obj.ReceiveName == "母親姓名")
-                    mapping.Add("收件人姓名", eachStudentInfo.MotherName);
+                    mapping.Add("CN", eachStudentInfo.MotherName);
                 else
-                    mapping.Add("收件人姓名", eachStudentInfo.student.Name);
+                    mapping.Add("CN", eachStudentInfo.student.Name);
 
                 //收件人地址資料
-                mapping.Add("收件人地址", eachStudentInfo.address);
-                mapping.Add("郵遞區號", eachStudentInfo.ZipCode);
-                mapping.Add("0", eachStudentInfo.ZipCode1);
-                mapping.Add("1", eachStudentInfo.ZipCode2);
-                mapping.Add("2", eachStudentInfo.ZipCode3);
-                mapping.Add("4", eachStudentInfo.ZipCode4);
-                mapping.Add("5", eachStudentInfo.ZipCode5);
+                //mapping.Add("收件人地址", eachStudentInfo.address);
+                //mapping.Add("郵遞區號", eachStudentInfo.ZipCode);
+
+                mapping.Add("POSTALADDRESS", eachStudentInfo.address);
+                mapping.Add("POSTALCODE", eachStudentInfo.ZipCode);
+
+                //mapping.Add("0", eachStudentInfo.ZipCode1);
+                //mapping.Add("1", eachStudentInfo.ZipCode2);
+                //mapping.Add("2", eachStudentInfo.ZipCode3);
+                //mapping.Add("4", eachStudentInfo.ZipCode4);
+                //mapping.Add("5", eachStudentInfo.ZipCode5);
 
                 mapping.Add("學年度", School.DefaultSchoolYear);
                 mapping.Add("學期", School.DefaultSemester);
@@ -1107,9 +1289,14 @@ namespace hwhs.epost.定期評量通知單
 
                 }
 
-                
-  
-
+                //固定排名
+                if (studScoreRankDict.ContainsKey(studentID))
+                {
+                    foreach (string rankName in studScoreRankDict[studentID].Keys)
+                    {
+                        mapping.Add(rankName, studScoreRankDict[studentID][rankName]);
+                    }
+                }
 
 
                 #region epost 使用
@@ -1123,7 +1310,6 @@ namespace hwhs.epost.定期評量通知單
                     }
                 }
 
-
                 foreach (string key in mapping.Keys)
                 {
                     if (!dt.Columns.Contains(key))
@@ -1131,8 +1317,6 @@ namespace hwhs.epost.定期評量通知單
                         dt.Columns.Add(key);
                     }
                 }
-
-
 
                 DataRow row = dt.NewRow();
 
@@ -1146,10 +1330,8 @@ namespace hwhs.epost.定期評量通知單
                     row[key] = mapping[key];
                 }
 
-
                 dt.Rows.Add(row);
                 #endregion
-
 
                 //回報進度
                 _BGWAbsenceNotification.ReportProgress((int)(((double)currentStudentCount++ * 100.0) / (double)totalStudentNumber));
@@ -1157,8 +1339,8 @@ namespace hwhs.epost.定期評量通知單
 
             #endregion
 
-            
-            e.Result = new object[] {dt};
+
+            e.Result = new object[] { dt };
         }
 
         /// <summary>
