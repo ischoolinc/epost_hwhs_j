@@ -89,7 +89,11 @@ namespace K12.缺曠通知單2015
                 obj = new ConfigOBJ();
                 obj.StartDate = form.StartDate;
                 obj.EndDate = form.EndDate;
-                obj.PrintHasRecordOnly = form.PrintHasRecordOnly;
+                //2019/12/19 經由業務們測試討論後 決定 預設 為只產生有缺曠的名單，且不給更動
+                //obj.PrintHasRecordOnly = form.PrintHasRecordOnly;
+
+                obj.PrintHasRecordOnly = true;
+
                 obj.Template = form.Template;
                 //obj.userDefinedConfig = config;
                 obj.ReceiveName = form.ReceiveName;
