@@ -98,7 +98,12 @@ namespace hwhs.epost.定期評量通知單
 
                 obj.StartDate = form.StartDate;
                 obj.EndDate = form.EndDate;
-                obj.PrintHasRecordOnly = form.PrintHasRecordOnly;
+
+                //2019/12/19 經由業務們測試討論後 決定 預設 為只產生有缺曠的名單，且不給更動
+                //obj.PrintHasRecordOnly = form.PrintHasRecordOnly;
+
+                obj.PrintHasRecordOnly = true;
+
                 obj.Template = form.Template;
 
                 obj.ReceiveName = form.ReceiveName;

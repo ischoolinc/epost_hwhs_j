@@ -148,6 +148,7 @@ namespace K12.缺曠通知單2015
             this.checkBoxX1.Size = new System.Drawing.Size(174, 21);
             this.checkBoxX1.TabIndex = 3;
             this.checkBoxX1.Text = "只列印有缺曠紀錄的學生";
+            this.checkBoxX1.Visible = false;
             this.checkBoxX1.CheckedChanged += new System.EventHandler(this.checkBoxX1_CheckedChanged);
             // 
             // buttonX1
@@ -538,6 +539,7 @@ namespace K12.缺曠通知單2015
             this.groupPanel3.StyleMouseOver.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.groupPanel3.TabIndex = 15;
             this.groupPanel3.Text = "日期區間模式";
+            this.groupPanel3.Visible = false;
             // 
             // checkBoxX2
             // 

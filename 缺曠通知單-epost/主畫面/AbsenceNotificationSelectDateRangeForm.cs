@@ -52,7 +52,8 @@ namespace K12.缺曠通知單2015
             }
         }
 
-        private AbsenceNotificationConfigForm.DateRangeMode _mode = AbsenceNotificationConfigForm.DateRangeMode.Month;
+        //2019/12/19 經由業務們測試討論後 決定 預設 為自訂，且不給更動
+        private AbsenceNotificationConfigForm.DateRangeMode _mode = AbsenceNotificationConfigForm.DateRangeMode.Custom;
 
         private bool _useDefaultTemplate = true;
 
@@ -198,7 +199,10 @@ namespace K12.缺曠通知單2015
 
                 if (dateRangeMode != null)
                 {
-                    _mode = (AbsenceNotificationConfigForm.DateRangeMode)int.Parse(dateRangeMode.InnerText);
+                    _mode = AbsenceNotificationConfigForm.DateRangeMode.Custom;
+                    
+                    //_mode = (AbsenceNotificationConfigForm.DateRangeMode)int.Parse(dateRangeMode.InnerText);
+
                     if (_mode != AbsenceNotificationConfigForm.DateRangeMode.Custom)
                         dateTimeInput2.Enabled = false;
                     else
