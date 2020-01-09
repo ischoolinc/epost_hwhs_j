@@ -740,6 +740,11 @@ namespace K12.缺曠通知單2015
 
                 #region epost 使用
 
+                // 2020/01/09 穎驊修正，因應郵局格式要求說明文件中，收件人的姓名、郵遞區號和地址，有規定的欄位名稱(CN,POSTALCODE,POSTALADDRESS)，手動填入
+                dt.Columns.Add("CN");
+                dt.Columns.Add("POSTALCODE");
+                dt.Columns.Add("POSTALADDRESS");
+
                 // 將對應功能變數 套入dt
                 foreach (string key in mapping.Keys)
                 {
@@ -759,6 +764,10 @@ namespace K12.缺曠通知單2015
 
                 DataRow row = dt.NewRow();
 
+                row["CN"] = mapping["收件人姓名"];
+                row["POSTALCODE"] = mapping["郵遞區號"];
+                row["POSTALADDRESS"] = mapping["收件人地址"];
+
                 foreach (string key in mapping.Keys)
                 {
                     row[key] = mapping[key];
@@ -768,6 +777,8 @@ namespace K12.缺曠通知單2015
                 {
                     row[key] = Allmapping[key];
                 }
+
+                
 
                 dt.Rows.Add(row);
                 #endregion

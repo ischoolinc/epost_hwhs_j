@@ -149,7 +149,7 @@ namespace K12.缺曠通知單2015
                             {
                                 Directory.CreateDirectory(workingFolder);
                             }
-                            string csvfilePath = $"{workingFolder}\\缺曠通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.csv";
+                            string csvfilePath = $"{workingFolder}\\缺曠通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.txt";
 
                             exportToCSV(dt, csvfilePath);
 
@@ -175,7 +175,7 @@ namespace K12.缺曠通知單2015
                             {
                                 Directory.CreateDirectory(workingFolder);
                             }
-                            string csvfilePath = $"{workingFolder}\\缺曠通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.csv";
+                            string csvfilePath = $"{workingFolder}\\缺曠通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.txt";
 
                             exportToCSV(dt, csvfilePath);
 
@@ -246,7 +246,11 @@ namespace K12.缺曠通知單2015
                 sb.AppendLine(string.Join(",", fields));
             }
 
-            File.WriteAllText(csvFilePath, sb.ToString(), Encoding.GetEncoding("Big5"));
+            // Big5 編碼
+            //File.WriteAllText(csvFilePath, sb.ToString(), Encoding.GetEncoding("Big5"));
+
+            // Unicode 編碼  
+            File.WriteAllText(csvFilePath, sb.ToString(), Encoding.GetEncoding("Unicode"));
         }
 
         //回報進度

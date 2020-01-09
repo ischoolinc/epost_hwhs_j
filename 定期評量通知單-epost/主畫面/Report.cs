@@ -1269,7 +1269,7 @@ ORDER BY
                     foreach (string subject in obj.SelSubjNameList)
                     {
                         // 2019/12/10 弘文國中開的科目數，以五個為上限
-                        if (subjectIndex >= 5)
+                        if (subjectIndex > 5)
                         {
                             break;
                         }

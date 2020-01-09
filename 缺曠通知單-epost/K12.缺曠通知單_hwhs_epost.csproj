@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\boolean_field_fav_64.png" />
+    <None Include="Resources\收件人csv或txt檔案格式說明.pdf" />
     <None Include="Resources\缺曠通知單_住址中間版.docx" />
     <None Include="Resources\缺曠通知單_功能變數總表.docx" />
     <None Include="Resources\缺曠通知單_附件一.docx" />
