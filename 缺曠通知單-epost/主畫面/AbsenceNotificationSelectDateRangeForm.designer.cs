@@ -253,7 +253,7 @@
             this.labelX3.Name = "labelX3";
             this.labelX3.Size = new System.Drawing.Size(297, 56);
             this.labelX3.TabIndex = 7;
-            this.labelX3.Text = "說明:\r\n本報表為專門支援弘文高中產生缺曠通知單epost \r\n最後額外產生CSV檔\r\n";
+            this.labelX3.Text = "說明:\r\n本報表為專門支援弘文高中產生缺曠通知單epost \r\n最後額外產生.txt檔\r\n";
             // 
             // cbUpdate
             // 

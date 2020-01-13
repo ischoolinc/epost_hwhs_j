@@ -7,8 +7,8 @@ namespace K12.缺曠通知單2015
 {
     class Permissions
     {
-        public static string 學生缺曠通知單 { get { return "K12.Behavior.Student.AbsenceNotificationSelectDateRangeForm.2013"; } }
-        public static string 班級缺曠通知單 { get { return "K12.Behavior.Class.AbsenceNotificationSelectDateRangeForm.2013"; } }
+        public static string 學生缺曠通知單 { get { return "K12.Behavior.Student.AbsenceNotificationSelectDateRangeForm.2013.hwhs_epost"; } }
+        public static string 班級缺曠通知單 { get { return "K12.Behavior.Class.AbsenceNotificationSelectDateRangeForm.2013.hwhs_epost"; } }
 
         public static bool 學生缺曠通知單權限
         {

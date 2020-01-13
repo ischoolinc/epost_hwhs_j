@@ -558,7 +558,11 @@ namespace K12.缺曠通知單2015
             paperForStudent = new SmartSchool.ePaper.ElectronicPaper("缺曠通知單_" + DateTime.Now.Year + DateTime.Now.Month.ToString().PadLeft(2, '0') + DateTime.Now.Day.ToString().PadLeft(2, '0'), School.DefaultSchoolYear, School.DefaultSemester, SmartSchool.ePaper.ViewerType.Student);
 
             DataTable dt = new DataTable();
-
+            
+            // 2020/01/09 穎驊修正，因應郵局格式要求說明文件中，收件人的姓名、郵遞區號和地址，有規定的欄位名稱(CN,POSTALCODE,POSTALADDRESS)，手動填入
+            dt.Columns.Add("CN");
+            dt.Columns.Add("POSTALCODE");
+            dt.Columns.Add("POSTALADDRESS");
 
             foreach (string studentID in StudentSuperOBJ.Keys)
             {
@@ -740,10 +744,7 @@ namespace K12.缺曠通知單2015
 
                 #region epost 使用
 
-                // 2020/01/09 穎驊修正，因應郵局格式要求說明文件中，收件人的姓名、郵遞區號和地址，有規定的欄位名稱(CN,POSTALCODE,POSTALADDRESS)，手動填入
-                dt.Columns.Add("CN");
-                dt.Columns.Add("POSTALCODE");
-                dt.Columns.Add("POSTALADDRESS");
+               
 
                 // 將對應功能變數 套入dt
                 foreach (string key in mapping.Keys)

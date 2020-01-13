@@ -156,7 +156,7 @@ namespace K12.缺曠通知單2015
                             //this.circularProgress1.Visible = false;
                             //this.circularProgress1.IsRunning = false;
 
-                            if (MessageBox.Show("已成功匯出 CSV 檔案，是否要開啟檔案？", "完成", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                            if (MessageBox.Show("已成功匯出 .txt 檔案，是否要開啟檔案？", "完成", MessageBoxButtons.YesNo) == DialogResult.Yes)
                             {
                                 System.Diagnostics.Process.Start(csvfilePath);
                             } 
@@ -182,7 +182,7 @@ namespace K12.缺曠通知單2015
                             //this.circularProgress1.Visible = false;
                             //this.circularProgress1.IsRunning = false;
 
-                            if (MessageBox.Show("已成功匯出 CSV 檔案，是否要開啟檔案？", "完成", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                            if (MessageBox.Show("已成功匯出 .txt 檔案，是否要開啟檔案？", "完成", MessageBoxButtons.YesNo) == DialogResult.Yes)
                             {
                                 System.Diagnostics.Process.Start(csvfilePath);
                             }
