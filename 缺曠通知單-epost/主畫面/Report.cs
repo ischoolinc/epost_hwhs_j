@@ -678,15 +678,40 @@ namespace K12.缺曠通知單2015
                     DefinedTypeCount++;
                 }
 
+                // 2020/02/07 嘉詮與學校後 確立 格式固定要有 日期1~日期12 且每日節次1~11，故總變數為日期1節次1 ~ 日期12節次11
+                for (int date =1; date <= 12; date++)
+                {
+                    mapping.Add("日期" + date, "");
+
+                    for (int peroid = 1; peroid <= 11; peroid++)
+                    {
+                        mapping.Add("日期" + date + "節次" + peroid, "");
+                    }                   
+                }
+
+
                 //缺曠明細
                 int DateCount = 1;
                 foreach (string each in eachStudentInfo.studentAbsenceDetail.Keys)
                 {
                     int Period = 1;
-                    if (DateCount <= 12) //資料數大於10,透過附件列印
-                        mapping.Add("日期" + DateCount, Switching(each));
-                    else
+                    //資料數大於10,透過附件列印
+                    if (DateCount <= 12)
+                    {
+                        if (mapping.ContainsKey("日期" + DateCount))
+                        {
+                            mapping["日期" + DateCount] = Switching(each);
+                        }
+                        else
+                        {
+                            mapping.Add("日期" + DateCount, Switching(each));
+                        }                        
+                    }
+
+                    else {
                         mappingAccessory.Add("日期" + DateCount, Switching(each));
+                    }
+                    
 
                     //取得節次清單,一一檢查是否有資料要填
                     foreach (string Date in eachStudentInfo.studentAbsenceDetail[each].Keys)
@@ -699,7 +724,15 @@ namespace K12.缺曠通知單2015
                             {
                                 if (DateCount <= 12) //資料數大於10,透過附件列印
                                 {
-                                    mapping.Add("日期" + DateCount + ReversionDic[Date], absenceList[detail]);
+                                    if (mapping.ContainsKey("日期" + DateCount + ReversionDic[Date]))
+                                    {
+                                        mapping["日期" + DateCount + ReversionDic[Date]] = absenceList[detail];
+                                    }
+                                    else
+                                    {
+                                        mapping.Add("日期" + DateCount + ReversionDic[Date],absenceList[detail]);
+                                    }
+                                    
                                     Period++;
                                 }
                                 else
