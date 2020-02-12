@@ -678,12 +678,12 @@ namespace K12.缺曠通知單2015
                     DefinedTypeCount++;
                 }
 
-                // 2020/02/07 嘉詮與學校後 確立 格式固定要有 日期1~日期12 且每日節次1~11，故總變數為日期1節次1 ~ 日期12節次11
+                // 2020/02/07 嘉詮與學校後 確立 格式固定要有 日期1~日期12 且每日節次1~12，故總變數為日期1節次1 ~ 日期12節次12
                 for (int date =1; date <= 12; date++)
                 {
                     mapping.Add("日期" + date, "");
 
-                    for (int peroid = 1; peroid <= 11; peroid++)
+                    for (int peroid = 1; peroid <= 12; peroid++)
                     {
                         mapping.Add("日期" + date + "節次" + peroid, "");
                     }                   
