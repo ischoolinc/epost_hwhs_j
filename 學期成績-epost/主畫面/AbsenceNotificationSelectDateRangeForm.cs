@@ -7,7 +7,7 @@ using System.ComponentModel;
 using K12.Data;
 using System.Collections.Generic;
 
-namespace hwhs.epost.定期評量通知單
+namespace hwhs.epost.學期成績通知單
 {
     public partial class AbsenceNotificationSelectDateRangeForm : SelectDateRangeForm
     {
@@ -37,8 +37,8 @@ namespace hwhs.epost.定期評量通知單
         public string ConditionName2 { get { return _conditionName2; } }
         public string ConditionNumber2 { get { return _conditionNumber2; } }
 
-        string configName = "定期評量通知單_2019_弘文epost";
-        string addconfigName = "定期評量通知單_缺曠別設定_2019_弘文epost";
+        string configName = "學期成績通知單_2019_弘文epost";
+        string addconfigName = "學期成績通知單_缺曠別設定_2019_弘文epost";
 
         private BackgroundWorker bkw;
         private List<ExamRecord> _exams = new List<ExamRecord>();
@@ -91,7 +91,7 @@ namespace hwhs.epost.定期評量通知單
         public AbsenceNotificationSelectDateRangeForm(List<string> StudIDList)
         {
             InitializeComponent();
-            Text = "定期評量通知單(弘文epsot)";
+            Text = "學期成績通知單(弘文epsot)";
             LoadPreference();
             InitialDateRange();
 

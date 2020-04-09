@@ -8,7 +8,7 @@ using FISCA.DSAUtil;
 using FISCA.Presentation.Controls;
 using K12.Data.Configuration;
 
-namespace hwhs.epost.定期評量通知單
+namespace hwhs.epost.學期成績通知單
 {
     public partial class AbsenceNotificationConfigForm : BaseForm
     {
@@ -20,8 +20,8 @@ namespace hwhs.epost.定期評量通知單
         private DateRangeMode _mode = DateRangeMode.Month;
         private bool _printStudentList;
 
-        string configName = "定期評量通知單_2019_弘文epost";
-        string addconfigName = "定期評量通知單_缺曠別設定_2019_弘文epost";
+        string configName = "學期成績通知單_2019_弘文epost";
+        string addconfigName = "學期成績通知單_缺曠別設定_2019_弘文epost";
 
         public AbsenceNotificationConfigForm(bool defaultTemplate, bool printHasRecordOnly, DateRangeMode mode, byte[] buffer, string name, string address, string conditionName, string conditionNumber, string conditionName2, string conditionNumber2, bool printStudentList)
         {

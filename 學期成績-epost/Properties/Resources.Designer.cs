@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace hwhs.epost.定期評量通知單.Properties {
+namespace hwhs.epost.學期成績通知單.Properties {
     using System;
     
     

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace hwhs.epost.定期評量通知單.DAO
+namespace hwhs.epost.學期成績通知單.DAO
 {
     public class SubjectRangeCount
     {

@@ -17,7 +17,7 @@ using HsinChu.JHEvaluation.Data;
 using System.Linq;
 using JHSchool.Evaluation.Calculation;
 
-namespace hwhs.epost.定期評量通知單
+namespace hwhs.epost.學期成績通知單
 {
     internal class Report : IReport
     {
