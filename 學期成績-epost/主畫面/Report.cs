@@ -97,13 +97,13 @@ namespace hwhs.epost.學期成績通知單
                 obj.SelSubjNameList = form._SelSubjNameList; // 使用者勾選科目
 
                 obj.StartDate = form.StartDate;
-                obj.EndDate = form.EndDate;                
+                obj.EndDate = form.EndDate;
                 obj.PrintHasRecordOnly = form.PrintHasRecordOnly;
-                
+
                 obj.Template = form.Template;
 
                 obj.ReceiveName = form.ReceiveName;
-                obj.ReceiveAddress = form.ReceiveAddress !=""? form.ReceiveAddress: "聯絡地址";
+                obj.ReceiveAddress = form.ReceiveAddress != "" ? form.ReceiveAddress : "聯絡地址";
                 obj.ConditionName = form.ConditionName;
                 obj.ConditionNumber = form.ConditionNumber;
                 obj.ConditionName2 = form.ConditionName2;
@@ -145,7 +145,7 @@ namespace hwhs.epost.學期成績通知單
                 throw new NotImplementedException();
 
             SelectedStudents.Sort(new Comparison<StudentRecord>(CommonMethods.ClassSeatNoComparer));
-            
+
             _BGWAbsenceNotification.ReportProgress(10);
 
             #endregion
@@ -274,57 +274,57 @@ namespace hwhs.epost.學期成績通知單
             _BGWAbsenceNotification.ReportProgress(20);
             #endregion
 
-
+            // 學期成績單不需要
             #region 取得所有學生缺曠紀錄，日期區間
 
-            List<AttendanceRecord> attendanceList = K12.Data.Attendance.SelectByDate(SelectedStudents, obj.StartDate, obj.EndDate);
+            //List<AttendanceRecord> attendanceList = K12.Data.Attendance.SelectByDate(SelectedStudents, obj.StartDate, obj.EndDate);
 
-            foreach (AttendanceRecord attendance in attendanceList)
-            {
-                if (!allStudentID.Contains(attendance.RefStudentID)) //如果是選取班級的學生
-                    continue;
+            //foreach (AttendanceRecord attendance in attendanceList)
+            //{
+            //    if (!allStudentID.Contains(attendance.RefStudentID)) //如果是選取班級的學生
+            //        continue;
 
-                string studentID = attendance.RefStudentID;
-                DateTime occurDate = attendance.OccurDate;
-                StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
+            //    string studentID = attendance.RefStudentID;
+            //    DateTime occurDate = attendance.OccurDate;
+            //    StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
 
-                foreach (AttendancePeriod attendancePeriod in attendance.PeriodDetail)
-                {
-                    string absenceType = attendancePeriod.AbsenceType; //假別
-                    string periodName = attendancePeriod.Period; //節次
+            //    foreach (AttendancePeriod attendancePeriod in attendance.PeriodDetail)
+            //    {
+            //        string absenceType = attendancePeriod.AbsenceType; //假別
+            //        string periodName = attendancePeriod.Period; //節次
 
-                    //是否為設定檔節次清單之中
-                    if (!TestPeriodList.ContainsKey(periodName))
-                        continue;
+            //        //是否為設定檔節次清單之中
+            //        if (!TestPeriodList.ContainsKey(periodName))
+            //            continue;
 
-                    //是否為使用者選取之假別&類型
-                    if (config.ContainsKey(TestPeriodList[periodName]))
-                    {
-                        if (config[TestPeriodList[periodName]].Contains(absenceType))
-                        {
-                            string PeriodAndAbsence = TestPeriodList[periodName] + "," + absenceType;
-                            //區間統計
-                            if (!studentOBJ.studentAbsence.ContainsKey(PeriodAndAbsence))
-                            {
-                                studentOBJ.studentAbsence.Add(PeriodAndAbsence, 0);
-                            }
+            //        //是否為使用者選取之假別&類型
+            //        if (config.ContainsKey(TestPeriodList[periodName]))
+            //        {
+            //            if (config[TestPeriodList[periodName]].Contains(absenceType))
+            //            {
+            //                string PeriodAndAbsence = TestPeriodList[periodName] + "," + absenceType;
+            //                //區間統計
+            //                if (!studentOBJ.studentAbsence.ContainsKey(PeriodAndAbsence))
+            //                {
+            //                    studentOBJ.studentAbsence.Add(PeriodAndAbsence, 0);
+            //                }
 
-                            studentOBJ.studentAbsence[PeriodAndAbsence]++;
+            //                studentOBJ.studentAbsence[PeriodAndAbsence]++;
 
-                            //明細記錄
-                            if (!studentOBJ.studentAbsenceDetail.ContainsKey(occurDate.ToShortDateString()))
-                            {
-                                studentOBJ.studentAbsenceDetail.Add(occurDate.ToShortDateString(), new Dictionary<string, string>());
-                            }
+            //                //明細記錄
+            //                if (!studentOBJ.studentAbsenceDetail.ContainsKey(occurDate.ToShortDateString()))
+            //                {
+            //                    studentOBJ.studentAbsenceDetail.Add(occurDate.ToShortDateString(), new Dictionary<string, string>());
+            //                }
 
-                            if (!studentOBJ.studentAbsenceDetail[occurDate.ToShortDateString()].ContainsKey(attendancePeriod.Period))
-                            {
-                                studentOBJ.studentAbsenceDetail[occurDate.ToShortDateString()].Add(attendancePeriod.Period, attendancePeriod.AbsenceType);
-                            }
-                        }
-                    }
-                }
-            }
+            //                if (!studentOBJ.studentAbsenceDetail[occurDate.ToShortDateString()].ContainsKey(attendancePeriod.Period))
+            //                {
+            //                    studentOBJ.studentAbsenceDetail[occurDate.ToShortDateString()].Add(attendancePeriod.Period, attendancePeriod.AbsenceType);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             _BGWAbsenceNotification.ReportProgress(30);
 
@@ -376,65 +376,66 @@ namespace hwhs.epost.學期成績通知單
             _BGWAbsenceNotification.ReportProgress(40);
             #endregion
 
+            // 學期成績單不需要
             #region 取得所有學生獎懲紀錄，日期區間
 
-            foreach (MeritRecord merit in K12.Data.Merit.SelectByOccurDate(allStudentID, obj.StartDate, obj.EndDate))
-            {
-                string studentID = merit.RefStudentID;
-                DateTime occurDate = merit.OccurDate;
-                StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
+            //foreach (MeritRecord merit in K12.Data.Merit.SelectByOccurDate(allStudentID, obj.StartDate, obj.EndDate))
+            //{
+            //    string studentID = merit.RefStudentID;
+            //    DateTime occurDate = merit.OccurDate;
+            //    StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
 
-                //區間統計
-                if (!studentOBJ.studentMerit.ContainsKey("大功"))
-                {
-                    studentOBJ.studentMerit.Add("大功", 0);
-                }
-                if (!studentOBJ.studentMerit.ContainsKey("小功"))
-                {
-                    studentOBJ.studentMerit.Add("小功", 0);
-                }
-                if (!studentOBJ.studentMerit.ContainsKey("嘉獎"))
-                {
-                    studentOBJ.studentMerit.Add("嘉獎", 0);
-                }
+            //    //區間統計
+            //    if (!studentOBJ.studentMerit.ContainsKey("大功"))
+            //    {
+            //        studentOBJ.studentMerit.Add("大功", 0);
+            //    }
+            //    if (!studentOBJ.studentMerit.ContainsKey("小功"))
+            //    {
+            //        studentOBJ.studentMerit.Add("小功", 0);
+            //    }
+            //    if (!studentOBJ.studentMerit.ContainsKey("嘉獎"))
+            //    {
+            //        studentOBJ.studentMerit.Add("嘉獎", 0);
+            //    }
 
-                int meritA = 0;
-                int meritB = 0;
-                int meritC = 0;
+            //    int meritA = 0;
+            //    int meritB = 0;
+            //    int meritC = 0;
 
-                studentOBJ.studentMerit["大功"] += (int)(int.TryParse("" + merit.MeritA, out meritA) ? int.Parse("" + merit.MeritA) : 0);
-                studentOBJ.studentMerit["小功"] += (int)(int.TryParse("" + merit.MeritB, out meritB) ? int.Parse("" + merit.MeritB) : 0);
-                studentOBJ.studentMerit["嘉獎"] += (int)(int.TryParse("" + merit.MeritC, out meritC) ? int.Parse("" + merit.MeritC) : 0);
-            }
+            //    studentOBJ.studentMerit["大功"] += (int)(int.TryParse("" + merit.MeritA, out meritA) ? int.Parse("" + merit.MeritA) : 0);
+            //    studentOBJ.studentMerit["小功"] += (int)(int.TryParse("" + merit.MeritB, out meritB) ? int.Parse("" + merit.MeritB) : 0);
+            //    studentOBJ.studentMerit["嘉獎"] += (int)(int.TryParse("" + merit.MeritC, out meritC) ? int.Parse("" + merit.MeritC) : 0);
+            //}
 
-            foreach (DemeritRecord demerit in K12.Data.Demerit.SelectByOccurDate(allStudentID, obj.StartDate, obj.EndDate))
-            {
-                string studentID = demerit.RefStudentID;
-                DateTime occurDate = demerit.OccurDate;
-                StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
+            //foreach (DemeritRecord demerit in K12.Data.Demerit.SelectByOccurDate(allStudentID, obj.StartDate, obj.EndDate))
+            //{
+            //    string studentID = demerit.RefStudentID;
+            //    DateTime occurDate = demerit.OccurDate;
+            //    StudentOBJ studentOBJ = StudentSuperOBJ[studentID]; //取得這個物件
 
-                //區間統計
-                if (!studentOBJ.studentMerit.ContainsKey("大過"))
-                {
-                    studentOBJ.studentMerit.Add("大過", 0);
-                }
-                if (!studentOBJ.studentMerit.ContainsKey("小過"))
-                {
-                    studentOBJ.studentMerit.Add("小過", 0);
-                }
-                if (!studentOBJ.studentMerit.ContainsKey("警告"))
-                {
-                    studentOBJ.studentMerit.Add("警告", 0);
-                }
+            //    //區間統計
+            //    if (!studentOBJ.studentMerit.ContainsKey("大過"))
+            //    {
+            //        studentOBJ.studentMerit.Add("大過", 0);
+            //    }
+            //    if (!studentOBJ.studentMerit.ContainsKey("小過"))
+            //    {
+            //        studentOBJ.studentMerit.Add("小過", 0);
+            //    }
+            //    if (!studentOBJ.studentMerit.ContainsKey("警告"))
+            //    {
+            //        studentOBJ.studentMerit.Add("警告", 0);
+            //    }
 
-                int DemeritA = 0;
-                int DemeritB = 0;
-                int DemeritC = 0;
+            //    int DemeritA = 0;
+            //    int DemeritB = 0;
+            //    int DemeritC = 0;
 
-                studentOBJ.studentMerit["大過"] += (int)(int.TryParse("" + demerit.DemeritA, out DemeritA) ? int.Parse("" + demerit.DemeritA) : 0);
-                studentOBJ.studentMerit["小過"] += (int)(int.TryParse("" + demerit.DemeritB, out DemeritB) ? int.Parse("" + demerit.DemeritB) : 0);
-                studentOBJ.studentMerit["警告"] += (int)(int.TryParse("" + demerit.DemeritC, out DemeritC) ? int.Parse("" + demerit.DemeritC) : 0);
-            }
+            //    studentOBJ.studentMerit["大過"] += (int)(int.TryParse("" + demerit.DemeritA, out DemeritA) ? int.Parse("" + demerit.DemeritA) : 0);
+            //    studentOBJ.studentMerit["小過"] += (int)(int.TryParse("" + demerit.DemeritB, out DemeritB) ? int.Parse("" + demerit.DemeritB) : 0);
+            //    studentOBJ.studentMerit["警告"] += (int)(int.TryParse("" + demerit.DemeritC, out DemeritC) ? int.Parse("" + demerit.DemeritC) : 0);
+            //}
 
             _BGWAbsenceNotification.ReportProgress(50);
             #endregion
@@ -829,292 +830,301 @@ namespace hwhs.epost.學期成績通知單
 
             #endregion
 
+            // 學期成績單不需要
             #region 取得定期評量資料
-            // 課程資料
-            Dictionary<string, JHCourseRecord> CourseDict = new Dictionary<string, JHCourseRecord>();
+            //// 課程資料
+            //Dictionary<string, JHCourseRecord> CourseDict = new Dictionary<string, JHCourseRecord>();
 
-            foreach (JHCourseRecord co in JHCourse.SelectBySchoolYearAndSemester(int.Parse(obj.SchoolYear), int.Parse(obj.Semester)))
-            {
-                CourseDict.Add(co.ID, co);
-            }
+            //foreach (JHCourseRecord co in JHCourse.SelectBySchoolYearAndSemester(int.Parse(obj.SchoolYear), int.Parse(obj.Semester)))
+            //{
+            //    CourseDict.Add(co.ID, co);
+            //}
 
-            // 取評量成績
-            Dictionary<string, List<HC.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<HC.JHSCETakeRecord>>();
-            foreach (JHSCETakeRecord record in JHSCETake.SelectByStudentAndCourse(allStudentID, CourseDict.Keys.ToList()))
-            {
-                if (record.RefExamID == obj.ExamID)
-                {
-                    if (!Score1Dict.ContainsKey(record.RefStudentID))
-                        Score1Dict.Add(record.RefStudentID, new List<HC.JHSCETakeRecord>());
+            //// 取評量成績
+            //Dictionary<string, List<HC.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<HC.JHSCETakeRecord>>();
+            //foreach (JHSCETakeRecord record in JHSCETake.SelectByStudentAndCourse(allStudentID, CourseDict.Keys.ToList()))
+            //{
+            //    if (record.RefExamID == obj.ExamID)
+            //    {
+            //        if (!Score1Dict.ContainsKey(record.RefStudentID))
+            //            Score1Dict.Add(record.RefStudentID, new List<HC.JHSCETakeRecord>());
 
-                    Score1Dict[record.RefStudentID].Add(new HC.JHSCETakeRecord(record));
-                }
-            }
+            //        Score1Dict[record.RefStudentID].Add(new HC.JHSCETakeRecord(record));
+            //    }
+            //}
 
-            // 取得這次該修課程
-            Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> StudCourseDict = Utility.GetStudentSCAttendCourse(allStudentID, CourseDict.Keys.ToList(), obj.ExamID);
+            //// 取得這次該修課程
+            //Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> StudCourseDict = Utility.GetStudentSCAttendCourse(allStudentID, CourseDict.Keys.ToList(), obj.ExamID);
 
-            // 取得評量設定比例
-            Dictionary<string, decimal> ScorePercentageHSDict = Utility.GetScorePercentageHS();
+            //// 取得評量設定比例
+            //Dictionary<string, decimal> ScorePercentageHSDict = Utility.GetScorePercentageHS();
 
-            // 處理評量成績科目
-            Dictionary<string, DAO.StudExamScore> studExamScoreDict = new Dictionary<string, DAO.StudExamScore>();
-            foreach (string studID in allStudentID)
-            {
-                // 成績計算規則
-                ScoreCalculator studentCalculator = defaultScoreCalculator;
-                if (calcIDCache.ContainsKey(studID) && calcCache.ContainsKey(calcIDCache[studID]))
-                    studentCalculator = calcCache[calcIDCache[studID]];
+            //// 處理評量成績科目
+            //Dictionary<string, DAO.StudExamScore> studExamScoreDict = new Dictionary<string, DAO.StudExamScore>();
+            //foreach (string studID in allStudentID)
+            //{
+            //    // 成績計算規則
+            //    ScoreCalculator studentCalculator = defaultScoreCalculator;
+            //    if (calcIDCache.ContainsKey(studID) && calcCache.ContainsKey(calcIDCache[studID]))
+            //        studentCalculator = calcCache[calcIDCache[studID]];
 
-                if (Score1Dict.ContainsKey(studID))
-                {
-                    if (!studExamScoreDict.ContainsKey(studID))
-                        studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
+            //    if (Score1Dict.ContainsKey(studID))
+            //    {
+            //        if (!studExamScoreDict.ContainsKey(studID))
+            //            studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
 
-                    foreach (HC.JHSCETakeRecord rec in Score1Dict[studID])
-                    {
-                        if (rec.RefExamID == obj.ExamID && CourseDict.ContainsKey(rec.RefCourseID))
-                        {
-                            JHCourseRecord cr = CourseDict[rec.RefCourseID];
+            //        foreach (HC.JHSCETakeRecord rec in Score1Dict[studID])
+            //        {
+            //            if (rec.RefExamID == obj.ExamID && CourseDict.ContainsKey(rec.RefCourseID))
+            //            {
+            //                JHCourseRecord cr = CourseDict[rec.RefCourseID];
 
-                            string SubjecName = cr.Subject;
+            //                string SubjecName = cr.Subject;
 
-                            // 勾選科目
-                            if (obj.SelSubjNameList.Contains(SubjecName))
-                            {
-                                if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(SubjecName))
-                                {
-                                    DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
-                                    ess.DomainName = cr.Domain;
-                                    ess.SubjectName = SubjecName;
-                                    ess.ScoreA = rec.AssignmentScore;
-                                    ess.ScoreF = rec.Score;
+            //                // 勾選科目
+            //                if (obj.SelSubjNameList.Contains(SubjecName))
+            //                {
+            //                    if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(SubjecName))
+            //                    {
+            //                        DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
+            //                        ess.DomainName = cr.Domain;
+            //                        ess.SubjectName = SubjecName;
+            //                        ess.ScoreA = rec.AssignmentScore;
+            //                        ess.ScoreF = rec.Score;
 
-                                    if (ess.ScoreA.HasValue && ess.ScoreF.HasValue)
-                                    {
-                                        if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
-                                        {
-                                            // 取得定期，評量由100-定期
-                                            decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
-                                            decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
-                                            ess.ScoreT = ess.ScoreA.Value * a + ess.ScoreF.Value * f;
-                                        }
-                                        else
-                                            ess.ScoreT = ess.ScoreA.Value * 0.5M + ess.ScoreF.Value * 0.5M; // 沒有設定預設50,50
+            //                        if (ess.ScoreA.HasValue && ess.ScoreF.HasValue)
+            //                        {
+            //                            if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
+            //                            {
+            //                                // 取得定期，評量由100-定期
+            //                                decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
+            //                                decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
+            //                                ess.ScoreT = ess.ScoreA.Value * a + ess.ScoreF.Value * f;
+            //                            }
+            //                            else
+            //                                ess.ScoreT = ess.ScoreA.Value * 0.5M + ess.ScoreF.Value * 0.5M; // 沒有設定預設50,50
 
-                                        // 原本
-                                        //ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
-                                    }
-                                    if (ess.ScoreA.HasValue && ess.ScoreF.HasValue == false)
-                                        ess.ScoreT = ess.ScoreA.Value;
+            //                            // 原本
+            //                            //ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
+            //                        }
+            //                        if (ess.ScoreA.HasValue && ess.ScoreF.HasValue == false)
+            //                            ess.ScoreT = ess.ScoreA.Value;
 
-                                    if (ess.ScoreA.HasValue == false && ess.ScoreF.HasValue)
-                                        ess.ScoreT = ess.ScoreF.Value;
+            //                        if (ess.ScoreA.HasValue == false && ess.ScoreF.HasValue)
+            //                            ess.ScoreT = ess.ScoreF.Value;
 
-                                    // 依照成績計算規則科目方式處理進位，只有總成績。
-                                    // 平時
-                                    //if(ess.ScoreA.HasValue)
-                                    //    ess.ScoreA = studentCalculator.ParseSubjectScore(ess.ScoreA.Value);
+            //                        // 依照成績計算規則科目方式處理進位，只有總成績。
+            //                        // 平時
+            //                        //if(ess.ScoreA.HasValue)
+            //                        //    ess.ScoreA = studentCalculator.ParseSubjectScore(ess.ScoreA.Value);
 
-                                    // 定期
-                                    //if (ess.ScoreF.HasValue)
-                                    //    ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
+            //                        // 定期
+            //                        //if (ess.ScoreF.HasValue)
+            //                        //    ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
 
-                                    if (ess.ScoreT.HasValue)
-                                        ess.ScoreT = studentCalculator.ParseSubjectScore(ess.ScoreT.Value);
+            //                        if (ess.ScoreT.HasValue)
+            //                            ess.ScoreT = studentCalculator.ParseSubjectScore(ess.ScoreT.Value);
 
-                                    ess.Text = rec.Text;
-                                    ess.Credit = cr.Credit;
-                                    studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, ess);
-                                }
-                            }
-                        }
-                    }
-                    // 計算領域成績
-                    studExamScoreDict[studID].CalcSubjectToDomain();
-                }
+            //                        ess.Text = rec.Text;
+            //                        ess.Credit = cr.Credit;
+            //                        studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, ess);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        // 計算領域成績
+            //        studExamScoreDict[studID].CalcSubjectToDomain();
+            //    }
 
-                if (StudCourseDict.ContainsKey(studID))
-                {
-                    if (!studExamScoreDict.ContainsKey(studID))
-                        studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
-                    if (studExamScoreDict[studID]._ExamSubjectScoreDict == null)
-                    {
-                        studExamScoreDict[studID]._ExamSubjectScoreDict = new Dictionary<string, DAO.ExamSubjectScore>();
-                        studExamScoreDict[studID]._ExamDomainScoreDict = new Dictionary<string, DAO.ExamDomainScore>();
-                    }
-                    foreach (KeyValuePair<string, DAO.SubjectDomainName> data in StudCourseDict[studID])
-                    {
-                        // 沒有勾選不加入
-                        if (!obj.SelSubjNameList.Contains(data.Key))
-                            continue;
+            //    if (StudCourseDict.ContainsKey(studID))
+            //    {
+            //        if (!studExamScoreDict.ContainsKey(studID))
+            //            studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
+            //        if (studExamScoreDict[studID]._ExamSubjectScoreDict == null)
+            //        {
+            //            studExamScoreDict[studID]._ExamSubjectScoreDict = new Dictionary<string, DAO.ExamSubjectScore>();
+            //            studExamScoreDict[studID]._ExamDomainScoreDict = new Dictionary<string, DAO.ExamDomainScore>();
+            //        }
+            //        foreach (KeyValuePair<string, DAO.SubjectDomainName> data in StudCourseDict[studID])
+            //        {
+            //            // 沒有勾選不加入
+            //            if (!obj.SelSubjNameList.Contains(data.Key))
+            //                continue;
 
-                        // 加入有修課沒有成績空科目
-                        if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(data.Key))
-                        {
-                            DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
-                            ess.SubjectName = data.Key;
-                            ess.DomainName = data.Value.DomainName;
-                            ess.Credit = data.Value.Credit;
-                            studExamScoreDict[studID]._ExamSubjectScoreDict.Add(data.Key, ess);
-                        }
-                    }
-                }
+            //            // 加入有修課沒有成績空科目
+            //            if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(data.Key))
+            //            {
+            //                DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
+            //                ess.SubjectName = data.Key;
+            //                ess.DomainName = data.Value.DomainName;
+            //                ess.Credit = data.Value.Credit;
+            //                studExamScoreDict[studID]._ExamSubjectScoreDict.Add(data.Key, ess);
+            //            }
+            //        }
+            //    }
 
-            }
+            //}
 
             _BGWAbsenceNotification.ReportProgress(90);
             #endregion
 
+            #region 取得學期成績資料
+
+            List<JHSemesterScoreRecord> semesterScoreList = JHSemesterScore.SelectBySchoolYearAndSemester(allStudentID, int.Parse(obj.SchoolYear), int.Parse(obj.Semester));
+
+
+
+            #endregion
+
             #region 取得固定排名資料
 
-            //抓取固定排名資料
-            string sql_rank = @"
-SELECT 
-	rank_matrix.id AS rank_matrix_id
-	, rank_matrix.school_year
-	, rank_matrix.semester
-	, rank_matrix.grade_year
-	, rank_matrix.item_type
-	, rank_matrix.ref_exam_id
-	, rank_matrix.item_name
-	, rank_matrix.rank_type
-	, rank_matrix.rank_name
-	, class.class_name
-	, student.seat_no
-	, student.student_number
-	, student.name
-	, rank_detail.ref_student_id
-    , rank_detail.score
-	, rank_detail.rank
-	, rank_detail.pr
-	, rank_detail.percentile
-    , rank_matrix.avg_top_25
-    , rank_matrix.avg_top_50
-    , rank_matrix.avg
-    , rank_matrix.avg_bottom_50
-    , rank_matrix.avg_bottom_25
-FROM 
-	rank_matrix
-	LEFT OUTER JOIN rank_detail
-		ON rank_detail.ref_matrix_id = rank_matrix.id
-	LEFT OUTER JOIN student
-		ON student.id = rank_detail.ref_student_id
-	LEFT OUTER JOIN class
-		ON class.id = student.ref_class_id
-WHERE
-	rank_matrix.is_alive = true
-	AND rank_matrix.school_year = '" + obj.SchoolYear + @"'
-    AND rank_matrix.semester = '" + obj.Semester + @"'
-	AND rank_matrix.item_type like '定期評量%'
-	AND rank_matrix.ref_exam_id = '" + obj.ExamID + @"'
-    AND ref_student_id IN ('" + string.Join("','", allStudentID) + @"') 
-ORDER BY 
-	rank_matrix.id
-	, rank_detail.rank
-	, class.grade_year
-	, class.display_order
-	, class.class_name
-	, student.seat_no
-	, student.id";
+            //            //抓取固定排名資料
+            //            string sql_rank = @"
+            //SELECT 
+            //	rank_matrix.id AS rank_matrix_id
+            //	, rank_matrix.school_year
+            //	, rank_matrix.semester
+            //	, rank_matrix.grade_year
+            //	, rank_matrix.item_type
+            //	, rank_matrix.ref_exam_id
+            //	, rank_matrix.item_name
+            //	, rank_matrix.rank_type
+            //	, rank_matrix.rank_name
+            //	, class.class_name
+            //	, student.seat_no
+            //	, student.student_number
+            //	, student.name
+            //	, rank_detail.ref_student_id
+            //    , rank_detail.score
+            //	, rank_detail.rank
+            //	, rank_detail.pr
+            //	, rank_detail.percentile
+            //    , rank_matrix.avg_top_25
+            //    , rank_matrix.avg_top_50
+            //    , rank_matrix.avg
+            //    , rank_matrix.avg_bottom_50
+            //    , rank_matrix.avg_bottom_25
+            //FROM 
+            //	rank_matrix
+            //	LEFT OUTER JOIN rank_detail
+            //		ON rank_detail.ref_matrix_id = rank_matrix.id
+            //	LEFT OUTER JOIN student
+            //		ON student.id = rank_detail.ref_student_id
+            //	LEFT OUTER JOIN class
+            //		ON class.id = student.ref_class_id
+            //WHERE
+            //	rank_matrix.is_alive = true
+            //	AND rank_matrix.school_year = '" + obj.SchoolYear + @"'
+            //    AND rank_matrix.semester = '" + obj.Semester + @"'
+            //	AND rank_matrix.item_type like '定期評量%'
+            //	AND rank_matrix.ref_exam_id = '" + obj.ExamID + @"'
+            //    AND ref_student_id IN ('" + string.Join("','", allStudentID) + @"') 
+            //ORDER BY 
+            //	rank_matrix.id
+            //	, rank_detail.rank
+            //	, class.grade_year
+            //	, class.display_order
+            //	, class.class_name
+            //	, student.seat_no
+            //	, student.id";
 
-            QueryHelper qh = new QueryHelper();
+            //            QueryHelper qh = new QueryHelper();
 
-            DataTable datatableRank = qh.Select(sql_rank);
+            //            DataTable datatableRank = qh.Select(sql_rank);
 
-            // 處理 固定排名 (2019/12/10目前沒有平時評量的固定排名，與業務嘉詮佳樺討論後，他們說先暫時不用 )
-            Dictionary<string, Dictionary<string, string>> studScoreRankDict = new Dictionary<string, Dictionary<string, string>>();
+            //            // 處理 固定排名 (2019/12/10目前沒有平時評量的固定排名，與業務嘉詮佳樺討論後，他們說先暫時不用 )
+            //            Dictionary<string, Dictionary<string, string>> studScoreRankDict = new Dictionary<string, Dictionary<string, string>>();
 
-            foreach (DataRow dr in datatableRank.Rows)
-            {
-                if (!studScoreRankDict.ContainsKey("" + dr["ref_student_id"]))
-                {
-                    studScoreRankDict.Add("" + dr["ref_student_id"], new Dictionary<string, string>());
+            //            foreach (DataRow dr in datatableRank.Rows)
+            //            {
+            //                if (!studScoreRankDict.ContainsKey("" + dr["ref_student_id"]))
+            //                {
+            //                    studScoreRankDict.Add("" + dr["ref_student_id"], new Dictionary<string, string>());
 
-                    if ("" + dr["item_type"] == "定期評量/總計成績" && "" + dr["item_name"] == "加權平均")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("評量總加權平均"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + dr["score"]);
-                        }
-                    }
+            //                    if ("" + dr["item_type"] == "定期評量/總計成績" && "" + dr["item_name"] == "加權平均")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("評量總加權平均"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + dr["score"]);
+            //                        }
+            //                    }
 
-                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權平均")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權平均"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + dr["score"]);
-                        }
-                    }
+            //                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權平均")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權平均"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + dr["score"]);
+            //                        }
+            //                    }
 
-                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權總分"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權總分", "" + dr["score"]);
-                        }
-                    }
+            //                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權總分"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權總分", "" + dr["score"]);
+            //                        }
+            //                    }
 
-                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "班排名")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("名次"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("名次", "" + dr["rank"]);
-                        }
-                    }
+            //                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "班排名")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("名次"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("名次", "" + dr["rank"]);
+            //                        }
+            //                    }
 
-                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "年排名")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("年排名"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("年排名", "" + dr["rank"]);
-                        }
-                    }
+            //                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "年排名")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("年排名"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("年排名", "" + dr["rank"]);
+            //                        }
+            //                    }
 
-                }
-                else
-                {
-                    if ("" + dr["item_type"] == "定期評量/總計成績" && "" + dr["item_name"] == "加權平均")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("評量總加權平均"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + dr["score"]);
-                        }
-                    }
+            //                }
+            //                else
+            //                {
+            //                    if ("" + dr["item_type"] == "定期評量/總計成績" && "" + dr["item_name"] == "加權平均")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("評量總加權平均"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + dr["score"]);
+            //                        }
+            //                    }
 
-                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權平均")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權平均"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + dr["score"]);
-                        }
-                    }
+            //                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權平均")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權平均"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + dr["score"]);
+            //                        }
+            //                    }
 
-                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權總分"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權總分", "" + dr["score"]);
-                        }
-                    }
+            //                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權總分"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權總分", "" + dr["score"]);
+            //                        }
+            //                    }
 
-                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "班排名")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("名次"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("名次", "" + dr["rank"]);
-                        }
-                    }
+            //                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "班排名")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("名次"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("名次", "" + dr["rank"]);
+            //                        }
+            //                    }
 
-                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "年排名")
-                    {
-                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("年排名"))
-                        {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("年排名", "" + dr["rank"]);
-                        }
-                    }
-                }
-            }
+            //                    if ("" + dr["item_type"] == "定期評量_定期/總計成績" && "" + dr["item_name"] == "加權總分" && "" + dr["rank_type"] == "年排名")
+            //                    {
+            //                        if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("年排名"))
+            //                        {
+            //                            studScoreRankDict["" + dr["ref_student_id"]].Add("年排名", "" + dr["rank"]);
+            //                        }
+            //                    }
+            //                }
+            //            }
 
             _BGWAbsenceNotification.ReportProgress(100);
             #endregion
@@ -1262,42 +1272,42 @@ ORDER BY
                 }
 
                 // 定期評量成績
-                if (studExamScoreDict.ContainsKey(studentID))
-                {
-                    int subjectIndex = 1;
+                //if (studExamScoreDict.ContainsKey(studentID))
+                //{
+                //    int subjectIndex = 1;
 
-                    foreach (string subject in obj.SelSubjNameList)
-                    {
-                        // 2019/12/10 弘文國中開的科目數，以五個為上限
-                        if (subjectIndex > 5)
-                        {
-                            break;
-                        }
-                        if (studExamScoreDict[studentID]._ExamSubjectScoreDict.ContainsKey(subject))
-                        {
-                            mapping.Add("科目名稱" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].SubjectName);
+                //    foreach (string subject in obj.SelSubjNameList)
+                //    {
+                //        // 2019/12/10 弘文國中開的科目數，以五個為上限
+                //        if (subjectIndex > 5)
+                //        {
+                //            break;
+                //        }
+                //        if (studExamScoreDict[studentID]._ExamSubjectScoreDict.ContainsKey(subject))
+                //        {
+                //            mapping.Add("科目名稱" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].SubjectName);
 
-                            mapping.Add("科目節數" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].Credit);
+                //            mapping.Add("科目節數" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].Credit);
 
-                            mapping.Add("成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreF);
+                //            mapping.Add("成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreF);
 
-                            mapping.Add("平時成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreA);
+                //            mapping.Add("平時成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreA);
 
-                            mapping.Add("評量總成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreT);
-                        }
-                        subjectIndex++;
-                    }
+                //            mapping.Add("評量總成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreT);
+                //        }
+                //        subjectIndex++;
+                //    }
 
-                }
+                //}
 
                 //固定排名
-                if (studScoreRankDict.ContainsKey(studentID))
-                {
-                    foreach (string rankName in studScoreRankDict[studentID].Keys)
-                    {
-                        mapping.Add(rankName, studScoreRankDict[studentID][rankName]);
-                    }
-                }
+                //if (studScoreRankDict.ContainsKey(studentID))
+                //{
+                //    foreach (string rankName in studScoreRankDict[studentID].Keys)
+                //    {
+                //        mapping.Add(rankName, studScoreRankDict[studentID][rankName]);
+                //    }
+                //}
 
 
                 #region epost 使用

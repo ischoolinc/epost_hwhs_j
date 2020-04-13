@@ -281,6 +281,43 @@ namespace hwhs.epost.學期成績通知單
         }
 
         /// <summary>
+        /// 直接傳遞弘文國中學期成績單EPOST 需要的科目名稱
+        /// </summary>       
+        /// <returns></returns>
+        public static List<string> GetSemesterSubjecList()
+        {
+            List<string> SemesterSubjecList = new List<string>();
+
+            SemesterSubjecList.Add("國文");
+            SemesterSubjecList.Add("英語");
+            SemesterSubjecList.Add("數學");
+            SemesterSubjecList.Add("社會");
+            SemesterSubjecList.Add("自然科學");
+            SemesterSubjecList.Add("理化");
+            SemesterSubjecList.Add("自然");
+            SemesterSubjecList.Add("資訊科技");
+            SemesterSubjecList.Add("生活科技");
+            SemesterSubjecList.Add("音樂");
+            SemesterSubjecList.Add("視覺藝術");
+            SemesterSubjecList.Add("表演藝術");
+            SemesterSubjecList.Add("家政");
+            SemesterSubjecList.Add("童軍");
+            SemesterSubjecList.Add("輔導");
+            SemesterSubjecList.Add("健康教育");
+            SemesterSubjecList.Add("體育");
+            SemesterSubjecList.Add("英語聽講");
+            SemesterSubjecList.Add("資訊應用");
+            SemesterSubjecList.Add("ESL");
+            SemesterSubjecList.Add("地球科學");
+            SemesterSubjecList.Add("閱讀理解");
+            SemesterSubjecList.Add("閱讀與寫作");
+            SemesterSubjecList.Add("語文表達");
+
+            return SemesterSubjecList;
+        }
+
+
+        /// <summary>
         /// 取得評量比例設定
         /// </summary>
         public static Dictionary<string, decimal> GetScorePercentageHS()

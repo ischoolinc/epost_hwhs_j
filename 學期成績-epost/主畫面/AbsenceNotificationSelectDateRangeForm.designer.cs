@@ -54,42 +54,35 @@
             // 
             // labelX1
             // 
-            this.labelX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             // 
             // 
             // 
             this.labelX1.BackgroundStyle.Class = "";
             this.labelX1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX1.Location = new System.Drawing.Point(12, 266);
-            this.labelX1.Margin = new System.Windows.Forms.Padding(3);
-            this.labelX1.Size = new System.Drawing.Size(221, 21);
-            this.labelX1.TabIndex = 0;
-            this.labelX1.Text = "請選擇您要列印的缺曠統計日期區間";
+            this.labelX1.Size = new System.Drawing.Size(181, 21);
+            this.labelX1.Text = "請選擇您要列印的學年度學期";
             // 
             // labelX2
             // 
-            this.labelX2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             // 
             // 
             // 
             this.labelX2.BackgroundStyle.Class = "";
             this.labelX2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX2.Location = new System.Drawing.Point(154, 295);
-            this.labelX2.Margin = new System.Windows.Forms.Padding(3);
+            this.labelX2.Location = new System.Drawing.Point(123, 341);
             this.labelX2.Size = new System.Drawing.Size(20, 21);
-            this.labelX2.TabIndex = 2;
             this.labelX2.Text = "至";
+            this.labelX2.Visible = false;
             // 
             // buttonX1
             // 
             this.buttonX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonX1.Location = new System.Drawing.Point(247, 386);
+            this.buttonX1.Location = new System.Drawing.Point(247, 343);
             this.buttonX1.TabIndex = 11;
             this.buttonX1.Click += new System.EventHandler(this.buttonX1_Click_1);
             // 
             // dateTimeInput2
             // 
-            this.dateTimeInput2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             // 
             // 
             // 
@@ -97,9 +90,7 @@
             this.dateTimeInput2.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.dateTimeInput2.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
             this.dateTimeInput2.ButtonDropDown.Visible = true;
-            this.dateTimeInput2.ButtonFreeText.Checked = true;
-            this.dateTimeInput2.FreeTextEntryMode = true;
-            this.dateTimeInput2.Location = new System.Drawing.Point(177, 293);
+            this.dateTimeInput2.Location = new System.Drawing.Point(148, 337);
             // 
             // 
             // 
@@ -143,13 +134,10 @@
             this.dateTimeInput2.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.dateTimeInput2.MonthCalendar.TodayButtonVisible = true;
             this.dateTimeInput2.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
-            this.dateTimeInput2.Size = new System.Drawing.Size(140, 25);
-            this.dateTimeInput2.TabIndex = 3;
-            this.dateTimeInput2.TextChanged += new System.EventHandler(this.dateTimeInput2_TextChanged);
+            this.dateTimeInput2.Visible = false;
             // 
             // dateTimeInput1
             // 
-            this.dateTimeInput1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             // 
             // 
             // 
@@ -157,9 +145,7 @@
             this.dateTimeInput1.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.dateTimeInput1.ButtonDropDown.Shortcut = DevComponents.DotNetBar.eShortcut.AltDown;
             this.dateTimeInput1.ButtonDropDown.Visible = true;
-            this.dateTimeInput1.ButtonFreeText.Checked = true;
-            this.dateTimeInput1.FreeTextEntryMode = true;
-            this.dateTimeInput1.Location = new System.Drawing.Point(14, 293);
+            this.dateTimeInput1.Location = new System.Drawing.Point(16, 337);
             // 
             // 
             // 
@@ -203,16 +189,14 @@
             this.dateTimeInput1.MonthCalendar.NavigationBackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.dateTimeInput1.MonthCalendar.TodayButtonVisible = true;
             this.dateTimeInput1.MonthCalendar.WeeklyMarkedDays = new System.DayOfWeek[0];
-            this.dateTimeInput1.Size = new System.Drawing.Size(140, 25);
-            this.dateTimeInput1.TabIndex = 1;
-            this.dateTimeInput1.TextChanged += new System.EventHandler(this.dateTimeInput1_TextChanged);
+            this.dateTimeInput1.Visible = false;
             // 
             // linkLabel1
             // 
             this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabel1.Location = new System.Drawing.Point(79, 394);
+            this.linkLabel1.Location = new System.Drawing.Point(79, 351);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(60, 17);
@@ -227,7 +211,7 @@
             this.linkLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabel2.Location = new System.Drawing.Point(11, 394);
+            this.linkLabel2.Location = new System.Drawing.Point(11, 351);
             this.linkLabel2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(60, 17);
@@ -242,7 +226,7 @@
             this.buttonX2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonX2.BackColor = System.Drawing.Color.Transparent;
             this.buttonX2.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonX2.Location = new System.Drawing.Point(322, 386);
+            this.buttonX2.Location = new System.Drawing.Point(322, 343);
             this.buttonX2.Name = "buttonX2";
             this.buttonX2.Size = new System.Drawing.Size(70, 25);
             this.buttonX2.TabIndex = 12;
@@ -254,7 +238,7 @@
             this.linkLabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabel3.AutoSize = true;
             this.linkLabel3.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabel3.Location = new System.Drawing.Point(145, 394);
+            this.linkLabel3.Location = new System.Drawing.Point(145, 351);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(86, 17);
             this.linkLabel3.TabIndex = 10;
@@ -273,11 +257,11 @@
             // 
             this.labelX3.BackgroundStyle.Class = "";
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(10, 324);
+            this.labelX3.Location = new System.Drawing.Point(16, 275);
             this.labelX3.Name = "labelX3";
             this.labelX3.Size = new System.Drawing.Size(323, 56);
             this.labelX3.TabIndex = 7;
-            this.labelX3.Text = "說明:\r\n本報表為專門支援弘文高中產生定期評量通知單epost \r\n最後產生CSV檔\r\n";
+            this.labelX3.Text = "說明:\r\n本報表為專門支援弘文高中產生學期成績通知單epost \r\n最後產生TXT檔\r\n";
             // 
             // tabItem1
             // 
@@ -293,7 +277,7 @@
             // 
             this.chkSubjSelAll.BackgroundStyle.Class = "";
             this.chkSubjSelAll.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkSubjSelAll.Location = new System.Drawing.Point(78, 110);
+            this.chkSubjSelAll.Location = new System.Drawing.Point(79, 78);
             this.chkSubjSelAll.Name = "chkSubjSelAll";
             this.chkSubjSelAll.Size = new System.Drawing.Size(54, 21);
             this.chkSubjSelAll.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
@@ -318,7 +302,7 @@
             this.circularProgress1.ProgressBarType = DevComponents.DotNetBar.eCircularProgressType.Dot;
             this.circularProgress1.ProgressColor = System.Drawing.Color.LimeGreen;
             this.circularProgress1.ProgressTextVisible = true;
-            this.circularProgress1.Size = new System.Drawing.Size(53, 46);
+            this.circularProgress1.Size = new System.Drawing.Size(53, 56);
             this.circularProgress1.Style = DevComponents.DotNetBar.eDotNetBarStyle.Windows7;
             this.circularProgress1.TabIndex = 38;
             // 
@@ -357,7 +341,7 @@
             // 
             this.labelX4.BackgroundStyle.Class = "";
             this.labelX4.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX4.Location = new System.Drawing.Point(15, 110);
+            this.labelX4.Location = new System.Drawing.Point(16, 78);
             this.labelX4.Name = "labelX4";
             this.labelX4.Size = new System.Drawing.Size(60, 21);
             this.labelX4.TabIndex = 36;
@@ -375,9 +359,9 @@
             this.lvSubject.Border.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.lvSubject.CheckBoxes = true;
             this.lvSubject.HideSelection = false;
-            this.lvSubject.Location = new System.Drawing.Point(15, 136);
+            this.lvSubject.Location = new System.Drawing.Point(15, 105);
             this.lvSubject.Name = "lvSubject";
-            this.lvSubject.Size = new System.Drawing.Size(390, 124);
+            this.lvSubject.Size = new System.Drawing.Size(390, 164);
             this.lvSubject.TabIndex = 33;
             this.lvSubject.UseCompatibleStateImageBehavior = false;
             this.lvSubject.View = System.Windows.Forms.View.List;
@@ -391,11 +375,12 @@
             // 
             this.labelX5.BackgroundStyle.Class = "";
             this.labelX5.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX5.Location = new System.Drawing.Point(15, 74);
+            this.labelX5.Location = new System.Drawing.Point(153, 316);
             this.labelX5.Name = "labelX5";
             this.labelX5.Size = new System.Drawing.Size(60, 21);
             this.labelX5.TabIndex = 35;
             this.labelX5.Text = "試別名稱";
+            this.labelX5.Visible = false;
             // 
             // labelX6
             // 
@@ -433,26 +418,25 @@
             this.cboExam.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cboExam.FormattingEnabled = true;
             this.cboExam.ItemHeight = 19;
-            this.cboExam.Location = new System.Drawing.Point(78, 70);
+            this.cboExam.Location = new System.Drawing.Point(216, 312);
             this.cboExam.Name = "cboExam";
             this.cboExam.Size = new System.Drawing.Size(156, 25);
             this.cboExam.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.cboExam.TabIndex = 40;
+            this.cboExam.Visible = false;
             this.cboExam.SelectedIndexChanged += new System.EventHandler(this.cboExam_SelectedIndexChanged);
             // 
             // AbsenceNotificationSelectDateRangeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 424);
-            this.Controls.Add(this.cboExam);
+            this.ClientSize = new System.Drawing.Size(417, 381);
             this.Controls.Add(this.chkSubjSelAll);
             this.Controls.Add(this.circularProgress1);
             this.Controls.Add(this.cboSemester);
             this.Controls.Add(this.cboSchoolYear);
             this.Controls.Add(this.labelX4);
             this.Controls.Add(this.lvSubject);
-            this.Controls.Add(this.labelX5);
             this.Controls.Add(this.labelX6);
             this.Controls.Add(this.labelX7);
             this.Controls.Add(this.buttonX2);
@@ -460,11 +444,19 @@
             this.Controls.Add(this.linkLabel3);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.linkLabel2);
+            this.Controls.Add(this.cboExam);
+            this.Controls.Add(this.labelX5);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(3);
             this.Name = "AbsenceNotificationSelectDateRangeForm";
             this.Text = "學期成績通知單(弘文epsot)";
             this.Load += new System.EventHandler(this.AbsenceNotificationSelectDateRangeForm_Load);
+            this.Controls.SetChildIndex(this.labelX5, 0);
+            this.Controls.SetChildIndex(this.cboExam, 0);
+            this.Controls.SetChildIndex(this.labelX2, 0);
+            this.Controls.SetChildIndex(this.dateTimeInput1, 0);
+            this.Controls.SetChildIndex(this.dateTimeInput2, 0);
+            this.Controls.SetChildIndex(this.labelX1, 0);
             this.Controls.SetChildIndex(this.linkLabel2, 0);
             this.Controls.SetChildIndex(this.linkLabel1, 0);
             this.Controls.SetChildIndex(this.linkLabel3, 0);
@@ -472,18 +464,12 @@
             this.Controls.SetChildIndex(this.buttonX2, 0);
             this.Controls.SetChildIndex(this.labelX7, 0);
             this.Controls.SetChildIndex(this.labelX6, 0);
-            this.Controls.SetChildIndex(this.labelX5, 0);
             this.Controls.SetChildIndex(this.lvSubject, 0);
             this.Controls.SetChildIndex(this.labelX4, 0);
             this.Controls.SetChildIndex(this.cboSchoolYear, 0);
             this.Controls.SetChildIndex(this.cboSemester, 0);
             this.Controls.SetChildIndex(this.circularProgress1, 0);
             this.Controls.SetChildIndex(this.chkSubjSelAll, 0);
-            this.Controls.SetChildIndex(this.cboExam, 0);
-            this.Controls.SetChildIndex(this.dateTimeInput2, 0);
-            this.Controls.SetChildIndex(this.dateTimeInput1, 0);
-            this.Controls.SetChildIndex(this.labelX2, 0);
-            this.Controls.SetChildIndex(this.labelX1, 0);
             this.Controls.SetChildIndex(this.buttonX1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider2)).EndInit();
