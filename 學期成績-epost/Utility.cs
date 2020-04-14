@@ -6,6 +6,7 @@ using System.Data;
 using FISCA.Data;
 using K12.Data;
 using System.IO;
+using System.Xml.Linq;
 
 namespace hwhs.epost.學期成績通知單
 {
@@ -339,6 +340,60 @@ namespace hwhs.epost.學期成績通知單
             }
             return returnData;
         }
+
+        /// <summary>
+        /// 取得等第對照
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<decimal, string> GetScoreLevelMapping()
+        {
+            Dictionary<decimal, string> retVal = new Dictionary<decimal, string>();
+            QueryHelper qh = new QueryHelper();
+            string strSQL = "select content from list where name='等第對照表';";
+            DataTable dt = qh.Select(strSQL);
+            string xmlStr = "";
+            foreach (DataRow dr in dt.Rows)
+                xmlStr = dr[0].ToString();
+
+            try
+            {
+                if (xmlStr != "")
+                {
+                    XElement elmRoot = XElement.Parse(xmlStr);
+                    if (elmRoot != null)
+                    {
+                        string elmstr1 = elmRoot.Element("Configuration").Value;
+                        XElement elmXml = XElement.Parse(elmstr1);
+                        Dictionary<decimal, string> tmp = new Dictionary<decimal, string>();
+                        foreach (XElement elm in elmXml.Elements("ScoreMapping"))
+                        {
+                            decimal dd;
+                            if (elm.Attribute("Score") != null && elm.Attribute("Name") != null)
+                                if (decimal.TryParse(elm.Attribute("Score").Value, out dd))
+                                    tmp.Add(dd, elm.Attribute("Name").Value);
+                        }
+                        List<decimal> tmpsort = new List<decimal>();
+
+                        tmpsort = (from data in tmp orderby data.Key descending select data.Key).ToList();
+
+                        foreach (decimal d in tmpsort)
+                        {
+                            if (tmp.ContainsKey(d))
+                                retVal.Add(d, tmp[d]);
+                        }
+
+                        if (!retVal.ContainsKey(0))
+                            retVal.Add(0, "丁");
+                    }
+
+                }
+            }
+            catch { }
+            return retVal;
+
+        }
+
+
 
         // 建立word 大量功能變數
         public static void CreateFieldTemplate()

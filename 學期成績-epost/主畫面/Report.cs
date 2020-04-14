@@ -29,6 +29,9 @@ namespace hwhs.epost.學期成績通知單
 
         private static QueryHelper queryHelper;
 
+        private Dictionary<decimal, string> _ScoreLevelMapping;
+
+
         string addconfigName = "定期評量通知單_缺曠別設定_2019_弘文epost";
 
         List<string> configkeylist { get; set; }
@@ -970,11 +973,31 @@ namespace hwhs.epost.學期成績通知單
 
             #region 取得學期成績資料
 
+            Dictionary<string, JHSemesterScoreRecord> Score1Dict = new Dictionary<string, JHSemesterScoreRecord>();
+
             List<JHSemesterScoreRecord> semesterScoreList = JHSemesterScore.SelectBySchoolYearAndSemester(allStudentID, int.Parse(obj.SchoolYear), int.Parse(obj.Semester));
+
+            foreach (JHSemesterScoreRecord record in semesterScoreList)
+            {
+                if (!Score1Dict.ContainsKey(record.RefStudentID))
+                {
+                    Score1Dict.Add(record.RefStudentID, record);
+                }
+            }
 
 
 
             #endregion
+
+
+            #region 導師評語
+
+            SchoolYearSemester sys = new SchoolYearSemester(int.Parse(obj.SchoolYear), int.Parse(obj.Semester));
+
+            List<MoralScoreRecord> moralScoreList = K12.Data.MoralScore.SelectBySchoolYearAndSemesterLessEqual(allStudentID, sys);
+
+            #endregion
+            
 
             #region 取得固定排名資料
 
@@ -1127,6 +1150,11 @@ namespace hwhs.epost.學期成績通知單
             //            }
 
             _BGWAbsenceNotification.ReportProgress(100);
+            #endregion
+
+
+            #region 取得等第對照
+            _ScoreLevelMapping = Utility.GetScoreLevelMapping();
             #endregion
 
 
@@ -1300,6 +1328,22 @@ namespace hwhs.epost.學期成績通知單
 
                 //}
 
+                // 學期成績
+                if (Score1Dict.ContainsKey(studentID))
+                {
+                    foreach (SubjectScore record in Score1Dict[studentID].Subjects.Values)
+                    {
+                        if (obj.SelSubjNameList.Contains(record.Subject))
+                        {
+                            mapping.Add(record.Subject + "百分成績", record.Score);
+                            mapping.Add(record.Subject + "節數", record.Period);
+                            mapping.Add(record.Subject + "等第", GetScoreLevel(record.Score));
+                            mapping.Add(record.Subject + "文字描述", record.Text);
+                        }
+                    }
+                }
+
+
                 //固定排名
                 //if (studScoreRankDict.ContainsKey(studentID))
                 //{
@@ -1367,6 +1411,29 @@ namespace hwhs.epost.學期成績通知單
             else
                 return "";
         }
+
+        /// <summary>
+        /// 取得等第對照後結果
+        /// </summary>
+        /// <param name="score"></param>
+        /// <returns></returns>
+        public string GetScoreLevel(decimal? score)
+        {
+            string retVal = "";
+            if (score.HasValue)
+            {
+                foreach (KeyValuePair<decimal, string> data in _ScoreLevelMapping)
+                {
+                    if (score.Value >= data.Key)
+                    {
+                        retVal = data.Value;
+                        break;
+                    }
+                }
+            }
+            return retVal;
+        }
+
     }
 }
 

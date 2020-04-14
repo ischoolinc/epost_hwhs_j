@@ -400,7 +400,8 @@ namespace hwhs.epost.學期成績通知單
         }
 
         private void DisSelect()
-        {            
+        {
+            chkSubjSelAll.Checked = false;
             //cboExam.Enabled = false;
             cboSchoolYear.Enabled = false;
             cboSemester.Enabled = false;
