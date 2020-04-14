@@ -133,6 +133,7 @@
     <Compile Include="DAO\SubjectDomainName.cs" />
     <Compile Include="DAO\SubjectRangeCount.cs" />
     <Compile Include="DAO\UDTTransfer.cs" />
+    <Compile Include="DAO\UDT_SLRecord.cs" />
     <Compile Include="DAO\UDT_ScoreConfig.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="Program.cs" />

@@ -16,6 +16,8 @@ using JHSchool.Data;
 using HsinChu.JHEvaluation.Data;
 using System.Linq;
 using JHSchool.Evaluation.Calculation;
+using hwhs.epost.學期成績通知單.DAO;
+using FISCA.UDT;
 
 namespace hwhs.epost.學期成績通知單
 {
@@ -41,6 +43,8 @@ namespace hwhs.epost.學期成績通知單
 
         //轉縮寫
         Dictionary<string, string> absenceList = new Dictionary<string, string>();
+
+        AccessHelper _accessHelper = new AccessHelper();
 
         public Report(string _entityName)
         {
@@ -990,14 +994,49 @@ namespace hwhs.epost.學期成績通知單
             #endregion
 
 
-            #region 導師評語
+            #region 導師評語 品德資料
+
+            Dictionary<string, MoralScoreRecord> moralDict = new Dictionary<string, MoralScoreRecord>();
 
             SchoolYearSemester sys = new SchoolYearSemester(int.Parse(obj.SchoolYear), int.Parse(obj.Semester));
 
+            // 2020/04/04 穎驊註解 發現K12 API有缺陷  盡管傳入學年度 學期資料 但 MoralScore 怎麼抓都會把全部學期的資料都抓下來 要另外再濾
             List<MoralScoreRecord> moralScoreList = K12.Data.MoralScore.SelectBySchoolYearAndSemesterLessEqual(allStudentID, sys);
 
+            foreach (MoralScoreRecord record in moralScoreList)
+            {
+                if (!moralDict.ContainsKey(record.RefStudentID) & record.SchoolYear == int.Parse(obj.SchoolYear) & record.Semester == int.Parse(obj.Semester))
+                {
+                    moralDict.Add(record.RefStudentID, record);
+                }
+            }
+
+
+
             #endregion
-            
+
+
+            #region 服務學習時數
+
+            List<SLRecord> list = new List<SLRecord>();
+
+            // 穎驊註記 經過詢問過孟樺、公司同仁 ，目前服務學習無API 可以抓， 都要用SQL 取得
+            list = _accessHelper.Select<SLRecord>("ref_student_id in ('" + string.Join("','", allStudentID) + "') and school_year='" + obj.SchoolYear + "' and semester='" + obj.Semester + "'");
+
+            Dictionary<string, List<SLRecord>> sLDict = new Dictionary<string, List<SLRecord>>();
+            foreach (SLRecord record in list)
+            {
+                if (!sLDict.ContainsKey(record.RefStudentID))
+                {
+                    sLDict.Add(record.RefStudentID, new List<SLRecord>());
+                }
+                sLDict[record.RefStudentID].Add(record);
+            }
+
+
+
+            #endregion
+
 
             #region 取得固定排名資料
 
@@ -1344,6 +1383,7 @@ namespace hwhs.epost.學期成績通知單
                 }
 
 
+
                 //固定排名
                 //if (studScoreRankDict.ContainsKey(studentID))
                 //{
@@ -1352,6 +1392,57 @@ namespace hwhs.epost.學期成績通知單
                 //        mapping.Add(rankName, studScoreRankDict[studentID][rankName]);
                 //    }
                 //}
+
+
+                List<string> dailyBehaviors = new List<string>() { "愛整潔", "有禮貌", "守秩序", "責任心", "公德心", "友愛關懷", "團隊合作" };
+
+                List<string> otherBehaviors = new List<string>() { "團體活動表現", "導師評語" };
+
+
+                // 導師評語 品德資料
+                if (moralDict.ContainsKey(studentID))
+                {                    
+                    foreach (string field in dailyBehaviors)
+                    {
+                        XmlElement Element = moralDict[studentID].TextScore.SelectSingleNode("DailyBehavior/Item[@Name=\"" + field + "\"]") as XmlElement;
+
+                        mapping.Add(field, Element.GetAttribute("Degree"));
+                    }
+
+                    XmlElement otherElement = moralDict[studentID].TextScore.SelectSingleNode("OtherRecommend[@Name=\"" + "團體活動表現" + "\"]") as XmlElement;
+
+                    //穎驊註記 因使用者在此項目 有機會輸入逗號, 會造成CSV 檔辨識換欄位錯誤，因此要另外補雙引號
+                    string performance = "";
+
+                    performance = otherElement.GetAttribute("Description").Contains(",") ? '"' + otherElement.GetAttribute("Description") + '"' : otherElement.GetAttribute("Description");
+
+                    mapping.Add("團體活動表現", performance);
+
+                    XmlElement recommendElement = moralDict[studentID].TextScore.SelectSingleNode("DailyLifeRecommend[@Name=\"" + "導師評語" + "\"]") as XmlElement;
+
+                    string comment = "";
+
+                    comment = recommendElement.GetAttribute("Description").Contains(",") ? '"' + recommendElement.GetAttribute("Description") + '"' : recommendElement.GetAttribute("Description");
+
+                    mapping.Add("導師評語", comment);
+
+                }
+
+
+                //服務學習
+                if (sLDict.ContainsKey(studentID))
+                {
+                    decimal hours = 0;
+
+                    foreach (SLRecord record in sLDict[studentID])
+                    {
+                        hours += record.Hours;
+                    }
+
+                    mapping.Add("服務學習時數", hours);
+                }
+
+
 
 
                 #region epost 使用
