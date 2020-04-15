@@ -30,7 +30,7 @@ namespace hwhs.epost.學期成績通知單
                     
                     try
                     {
-                        #region 產生CSV 檔
+                        #region 產生TXT 檔
                         DateTime now = DateTime.Now;
 
                         String workingFolder = $"{System.Windows.Forms.Application.StartupPath}\\Reports";
@@ -38,11 +38,11 @@ namespace hwhs.epost.學期成績通知單
                         {
                             Directory.CreateDirectory(workingFolder);
                         }
-                        string csvfilePath = $"{workingFolder}\\定期評量通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.csv";
+                        string csvfilePath = $"{workingFolder}\\定期評量通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.txt";
 
                         exportToCSV(dt, csvfilePath);
 
-                        if (MessageBox.Show("已成功匯出 CSV 檔案，是否要開啟檔案？", "完成", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        if (MessageBox.Show("已成功匯出 TXT 檔案，是否要開啟檔案？", "完成", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             System.Diagnostics.Process.Start(csvfilePath);
                         }
@@ -88,7 +88,11 @@ namespace hwhs.epost.學期成績通知單
                 sb.AppendLine(string.Join(",", fields));
             }
 
-            File.WriteAllText(csvFilePath, sb.ToString(), Encoding.GetEncoding("Big5"));
+            // Big5 編碼
+            //File.WriteAllText(csvFilePath, sb.ToString(), Encoding.GetEncoding("Big5"));
+
+            // unicode 編碼
+            File.WriteAllText(csvFilePath, sb.ToString(), Encoding.GetEncoding("unicode"));
         }
 
         //回報進度

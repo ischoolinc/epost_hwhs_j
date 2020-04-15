@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4A2B3730-3796-48A0-AA1B-683F1A08641C}</ProjectGuid>
+    <ProjectGuid>{C1440AD4-115C-439F-BD70-471038039C06}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>hwhs.epost.定期評量通知單</RootNamespace>
