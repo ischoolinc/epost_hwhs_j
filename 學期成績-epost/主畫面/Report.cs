@@ -614,23 +614,10 @@ namespace hwhs.epost.學期成績通知單
             #region 通用資料
 
             Allmapping.Add("學年度", obj.SchoolYear);
-            Allmapping.Add("學期", obj.Semester);
-            Allmapping.Add("試別", obj.ExamName);
-            Allmapping.Add("缺曠獎懲統計期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
+            Allmapping.Add("學期", obj.Semester);                  
             Allmapping.Add("校長", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorChineseName").InnerText);
             Allmapping.Add("教務主任", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText);
-
-
-            Allmapping.Add("科目名稱1", "");
-            Allmapping.Add("科目名稱2", "");
-            Allmapping.Add("科目名稱3", "");
-            Allmapping.Add("科目名稱4", "");
-            Allmapping.Add("科目名稱5", "");
-            Allmapping.Add("科目節數1", "");
-            Allmapping.Add("科目節數2", "");
-            Allmapping.Add("科目節數3", "");
-            Allmapping.Add("科目節數4", "");
-            Allmapping.Add("科目節數5", "");
+            Allmapping.Add("班級導師", "");
             Allmapping.Add("CN", "");
             Allmapping.Add("POSTALCODE", "");
             Allmapping.Add("POSTALADDRESS", "");
@@ -638,45 +625,16 @@ namespace hwhs.epost.學期成績通知單
             Allmapping.Add("班級", "");
             Allmapping.Add("座號", "");
             Allmapping.Add("學生姓名", "");
-            Allmapping.Add("成績1", "");
-            Allmapping.Add("成績2", "");
-            Allmapping.Add("成績3", "");
-            Allmapping.Add("成績4", "");
-            Allmapping.Add("成績5", "");
-            Allmapping.Add("加權平均", "");
-            Allmapping.Add("加權總分", "");
-            Allmapping.Add("名次", "");
-            Allmapping.Add("年排名", "");
-            Allmapping.Add("平時成績1", "");
-            Allmapping.Add("平時成績2", "");
-            Allmapping.Add("平時成績3", "");
-            Allmapping.Add("平時成績4", "");
-            Allmapping.Add("平時成績5", "");
-            Allmapping.Add("平時加權平均", "");
-            Allmapping.Add("評量總成績1", "");
-            Allmapping.Add("評量總成績2", "");
-            Allmapping.Add("評量總成績3", "");
-            Allmapping.Add("評量總成績4", "");
-            Allmapping.Add("評量總成績5", "");
-            Allmapping.Add("評量總加權平均", "");
-            Allmapping.Add("大功", "0");
-            Allmapping.Add("小功", "0");
-            Allmapping.Add("嘉獎", "0");
-            Allmapping.Add("大過", "0");
-            Allmapping.Add("小過", "0");
-            Allmapping.Add("警告", "0");
-            Allmapping.Add("曠課", "0");
-            Allmapping.Add("事假", "0");
-            Allmapping.Add("病假", "0");
-            Allmapping.Add("喪假", "0");
-            Allmapping.Add("公假", "0");
-            Allmapping.Add("家長代碼", "");
+           
+            
 
             #endregion
 
             //2019/12/05 穎驊註解，弘文epost 這個case 比較特別，經過業務PM嘉詮確認，它們學校是已經跟郵局談好CSV檔的格式(先前都是行政手動產生)
             //然後我們要來接，它一份CSV檔的格式 同時包括了定期、學期資料，因此將本程式設計模式，能夠依不同的需求分別產生對應的資料
             // EX: 產生定期資料時，學期資料資料就是空白
+
+            //2020/05/28 經過業務 嘉詮與學校確認後，確定將  定期、學期的兩個資料切割處理，資料欄位不再重覆
             #region 學期資料
             Allmapping.Add("國文百分成績", "");
             Allmapping.Add("英語百分成績", "");
@@ -796,17 +754,8 @@ namespace hwhs.epost.學期成績通知單
             Allmapping.Add("團體活動表現", "");
             Allmapping.Add("導師評語", "");
             Allmapping.Add("服務學習時數", "");
-            Allmapping.Add("科目班級平均", "");
-            Allmapping.Add("科目排名", "");
-            Allmapping.Add("班級加權總分", "");
-            Allmapping.Add("班級加權平均", "");
-            Allmapping.Add("學期科目班級平均", "");
-            Allmapping.Add("學期科目排名", "");
-            Allmapping.Add("學期班級加權總分", "");
-            Allmapping.Add("學期班級加權平均", "");
-            Allmapping.Add("班級人數", "");
-            Allmapping.Add("年級人數", "");
-            Allmapping.Add("科目PR值", "");
+            Allmapping.Add("家長代碼", "");
+
             #endregion
 
             #region 取得學生成績計算規則
@@ -1234,7 +1183,7 @@ namespace hwhs.epost.學期成績通知單
                 mapping.Add("座號", eachStudentInfo.SeatNo);
                 mapping.Add("學號", eachStudentInfo.StudentNumber);
                 mapping.Add("班級導師", eachStudentInfo.TeacherName);
-                mapping.Add("資料期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
+                //mapping.Add("資料期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
 
                 // 2019/11/12 穎驊註解 本專案為弘文於本學期提出來的需求，增加家長代碼
                 mapping.Add("家長代碼", eachStudentInfo.ParentCode);
@@ -1249,14 +1198,14 @@ namespace hwhs.epost.學期成績通知單
                 //else
                 //    mapping.Add("收件人姓名", eachStudentInfo.student.Name);
 
-                if (obj.ReceiveName == "監護人姓名")
-                    mapping.Add("CN", eachStudentInfo.CustodianName);
-                else if (obj.ReceiveName == "父親姓名")
-                    mapping.Add("CN", eachStudentInfo.FatherName);
-                else if (obj.ReceiveName == "母親姓名")
-                    mapping.Add("CN", eachStudentInfo.MotherName);
-                else
-                    mapping.Add("CN", eachStudentInfo.student.Name);
+                //if (obj.ReceiveName == "監護人姓名")
+                //    mapping.Add("CN", eachStudentInfo.CustodianName);
+                //else if (obj.ReceiveName == "父親姓名")
+                //    mapping.Add("CN", eachStudentInfo.FatherName);
+                //else if (obj.ReceiveName == "母親姓名")
+                //    mapping.Add("CN", eachStudentInfo.MotherName);
+                //else
+                //    mapping.Add("CN", eachStudentInfo.student.Name);
 
                 //收件人地址資料
                 //mapping.Add("收件人地址", eachStudentInfo.address);
@@ -1264,7 +1213,7 @@ namespace hwhs.epost.學期成績通知單
 
                 mapping.Add("POSTALADDRESS", eachStudentInfo.address);
                 mapping.Add("POSTALCODE", eachStudentInfo.ZipCode);
-
+                mapping.Add("CN", eachStudentInfo.CustodianName);
                 //mapping.Add("0", eachStudentInfo.ZipCode1);
                 //mapping.Add("1", eachStudentInfo.ZipCode2);
                 //mapping.Add("2", eachStudentInfo.ZipCode3);
@@ -1283,28 +1232,33 @@ namespace hwhs.epost.學期成績通知單
 
                     foreach (string absenceType in config[attendanceType])
                     {
-                        int dataValue = 0;
+                        //婚假、產假 為ischool 國中系統內建假別，弘文國中epost 報表沒有需要，故把此欄位剃除
+                        if (absenceType == "婚假" || absenceType == "產假")
+                        {
+                            continue;
+                        }
+                        //int dataValue = 0;
                         int semesterDataValue = 0;
                         string PeriodAndAbsence = attendanceType + "," + absenceType;
-                        //本期統計
-                        if (eachStudentInfo.studentAbsence.ContainsKey(PeriodAndAbsence))
-                        {
-                            dataValue = eachStudentInfo.studentAbsence[PeriodAndAbsence];
-                        }
+                        ////本期統計
+                        //if (eachStudentInfo.studentAbsence.ContainsKey(PeriodAndAbsence))
+                        //{
+                        //    dataValue = eachStudentInfo.studentAbsence[PeriodAndAbsence];
+                        //}
                         //學期統計
                         if (eachStudentInfo.studentSemesterAbsence.ContainsKey(PeriodAndAbsence))
                         {
                             semesterDataValue = eachStudentInfo.studentSemesterAbsence[PeriodAndAbsence];
                         }
 
-                        if (!absenceTotalDict.ContainsKey(absenceType))
-                        {
-                            absenceTotalDict.Add(absenceType, dataValue);
-                        }
-                        else
-                        {
-                            absenceTotalDict[absenceType] += dataValue;
-                        }
+                        //if (!absenceTotalDict.ContainsKey(absenceType))
+                        //{
+                        //    absenceTotalDict.Add(absenceType, dataValue);
+                        //}
+                        //else
+                        //{
+                        //    absenceTotalDict[absenceType] += dataValue;
+                        //}
 
                         if (!absenceTotalDict.ContainsKey("學期" + absenceType))
                         {
