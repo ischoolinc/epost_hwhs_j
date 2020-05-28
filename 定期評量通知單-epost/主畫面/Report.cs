@@ -611,8 +611,7 @@ namespace hwhs.epost.定期評量通知單
             Allmapping.Add("缺曠獎懲統計期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
             Allmapping.Add("校長", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorChineseName").InnerText);
             Allmapping.Add("教務主任", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText);
-
-
+            Allmapping.Add("班級導師", "");
             Allmapping.Add("科目名稱1", "");
             Allmapping.Add("科目名稱2", "");
             Allmapping.Add("科目名稱3", "");
@@ -639,12 +638,16 @@ namespace hwhs.epost.定期評量通知單
             Allmapping.Add("加權總分", "");
             Allmapping.Add("名次", "");
             Allmapping.Add("年排名", "");
+            Allmapping.Add("科目班級平均成績1", "");
+            Allmapping.Add("科目班級平均成績2", "");
+            Allmapping.Add("科目班級平均成績3", "");
+            Allmapping.Add("科目班級平均成績4", "");
+            Allmapping.Add("科目班級平均成績5", "");
             Allmapping.Add("平時成績1", "");
             Allmapping.Add("平時成績2", "");
             Allmapping.Add("平時成績3", "");
             Allmapping.Add("平時成績4", "");
             Allmapping.Add("平時成績5", "");
-            Allmapping.Add("平時加權平均", "");
             Allmapping.Add("評量總成績1", "");
             Allmapping.Add("評量總成績2", "");
             Allmapping.Add("評量總成績3", "");
@@ -662,6 +665,7 @@ namespace hwhs.epost.定期評量通知單
             Allmapping.Add("病假", "0");
             Allmapping.Add("喪假", "0");
             Allmapping.Add("公假", "0");
+            Allmapping.Add("遲到", "0");
             Allmapping.Add("家長代碼", "");
 
             #endregion
@@ -669,136 +673,138 @@ namespace hwhs.epost.定期評量通知單
             //2019/12/05 穎驊註解，弘文epost 這個case 比較特別，經過業務PM嘉詮確認，它們學校是已經跟郵局談好CSV檔的格式(先前都是行政手動產生)
             //然後我們要來接，它一份CSV檔的格式 同時包括了定期、學期資料，因此將本程式設計模式，能夠依不同的需求分別產生對應的資料
             // EX: 產生定期資料時，學期資料資料就是空白
+
+            //2020/05/28 經過業務 嘉詮與學校確認後，確定將  定期、學期的兩個資料切割處理，資料欄位不再重覆
             #region 學期資料
-            Allmapping.Add("國文百分成績", "");
-            Allmapping.Add("英語百分成績", "");
-            Allmapping.Add("數學百分成績", "");
-            Allmapping.Add("社會百分成績", "");
-            Allmapping.Add("自然科學百分成績", "");
-            Allmapping.Add("理化百分成績", "");
-            Allmapping.Add("自然百分成績", "");
-            Allmapping.Add("資訊科技百分成績", "");
-            Allmapping.Add("生活科技百分成績", "");
-            Allmapping.Add("音樂百分成績", "");
-            Allmapping.Add("視覺藝術百分成績", "");
-            Allmapping.Add("表演藝術百分成績", "");
-            Allmapping.Add("家政百分成績", "");
-            Allmapping.Add("童軍百分成績", "");
-            Allmapping.Add("輔導百分成績", "");
-            Allmapping.Add("健康教育百分成績", "");
-            Allmapping.Add("體育百分成績", "");
-            Allmapping.Add("英語聽講百分成績", "");
-            Allmapping.Add("資訊應用百分成績", "");
-            Allmapping.Add("ESL百分成績", "");
-            Allmapping.Add("地球科學百分成績", "");
-            Allmapping.Add("閱讀理解百分成績", "");
-            Allmapping.Add("閱讀與寫作百分成績", "");
-            Allmapping.Add("語文表達百分成績", "");
-            Allmapping.Add("國文節數", "");
-            Allmapping.Add("英語節數", "");
-            Allmapping.Add("數學節數", "");
-            Allmapping.Add("社會節數", "");
-            Allmapping.Add("自然科學節數", "");
-            Allmapping.Add("理化節數", "");
-            Allmapping.Add("自然節數", "");
-            Allmapping.Add("資訊科技節數", "");
-            Allmapping.Add("生活科技節數", "");
-            Allmapping.Add("音樂節數", "");
-            Allmapping.Add("視覺藝術節數", "");
-            Allmapping.Add("表演藝術節數", "");
-            Allmapping.Add("家政節數", "");
-            Allmapping.Add("童軍節數", "");
-            Allmapping.Add("輔導節數", "");
-            Allmapping.Add("健康教育節數", "");
-            Allmapping.Add("體育節數", "");
-            Allmapping.Add("英語聽講節數", "");
-            Allmapping.Add("資訊應用節數", "");
-            Allmapping.Add("ESL節數", "");
-            Allmapping.Add("地球科學節數", "");
-            Allmapping.Add("閱讀理解節數", "");
-            Allmapping.Add("閱讀與寫作節數", "");
-            Allmapping.Add("語文表達節數", "");
-            Allmapping.Add("國文等第", "");
-            Allmapping.Add("英語等第", "");
-            Allmapping.Add("數學等第", "");
-            Allmapping.Add("社會等第", "");
-            Allmapping.Add("自然科學等第", "");
-            Allmapping.Add("理化等第", "");
-            Allmapping.Add("自然等第", "");
-            Allmapping.Add("資訊科技等第", "");
-            Allmapping.Add("生活科技等第", "");
-            Allmapping.Add("音樂等第", "");
-            Allmapping.Add("視覺藝術等第", "");
-            Allmapping.Add("表演藝術等第", "");
-            Allmapping.Add("家政等第", "");
-            Allmapping.Add("童軍等第", "");
-            Allmapping.Add("輔導等第", "");
-            Allmapping.Add("健康教育等第", "");
-            Allmapping.Add("體育等第", "");
-            Allmapping.Add("英語聽講等第", "");
-            Allmapping.Add("資訊應用等第", "");
-            Allmapping.Add("ESL等第", "");
-            Allmapping.Add("地球科學等第", "");
-            Allmapping.Add("閱讀理解等第", "");
-            Allmapping.Add("閱讀與寫作等第", "");
-            Allmapping.Add("語文表達等第", "");
-            Allmapping.Add("國文文字描述", "");
-            Allmapping.Add("英語文字描述", "");
-            Allmapping.Add("數學文字描述", "");
-            Allmapping.Add("社會文字描述", "");
-            Allmapping.Add("自然科學文字描述", "");
-            Allmapping.Add("理化文字描述", "");
-            Allmapping.Add("自然文字描述", "");
-            Allmapping.Add("資訊科技文字描述", "");
-            Allmapping.Add("生活科技文字描述", "");
-            Allmapping.Add("音樂文字描述", "");
-            Allmapping.Add("視覺藝術文字描述", "");
-            Allmapping.Add("表演藝術文字描述", "");
-            Allmapping.Add("家政文字描述", "");
-            Allmapping.Add("童軍文字描述", "");
-            Allmapping.Add("輔導文字描述", "");
-            Allmapping.Add("健康教育文字描述", "");
-            Allmapping.Add("體育文字描述", "");
-            Allmapping.Add("英語聽講文字描述", "");
-            Allmapping.Add("資訊應用文字描述", "");
-            Allmapping.Add("ESL文字描述", "");
-            Allmapping.Add("地球科學文字描述", "");
-            Allmapping.Add("閱讀理解文字描述", "");
-            Allmapping.Add("閱讀與寫作文字描述", "");
-            Allmapping.Add("語文表達文字描述", "");
-            Allmapping.Add("學期大功", "");
-            Allmapping.Add("學期小功", "");
-            Allmapping.Add("學期嘉獎", "");
-            Allmapping.Add("學期大過", "");
-            Allmapping.Add("學期小過", "");
-            Allmapping.Add("學期警告", "");
-            Allmapping.Add("學期曠課", "");
-            Allmapping.Add("學期事假", "");
-            Allmapping.Add("學期病假", "");
-            Allmapping.Add("學期喪假", "");
-            Allmapping.Add("學期公假", "");
-            Allmapping.Add("學期遲到", "");
-            Allmapping.Add("愛整潔", "");
-            Allmapping.Add("有禮貌", "");
-            Allmapping.Add("守秩序", "");
-            Allmapping.Add("責任心", "");
-            Allmapping.Add("公德心", "");
-            Allmapping.Add("友愛關懷", "");
-            Allmapping.Add("團隊合作", "");
-            Allmapping.Add("團體活動表現", "");
-            Allmapping.Add("導師評語", "");
-            Allmapping.Add("服務學習時數", "");
-            Allmapping.Add("科目班級平均", "");
-            Allmapping.Add("科目排名", "");
-            Allmapping.Add("班級加權總分", "");
-            Allmapping.Add("班級加權平均", "");
-            Allmapping.Add("學期科目班級平均", "");
-            Allmapping.Add("學期科目排名", "");
-            Allmapping.Add("學期班級加權總分", "");
-            Allmapping.Add("學期班級加權平均", "");
-            Allmapping.Add("班級人數", "");
-            Allmapping.Add("年級人數", "");
-            Allmapping.Add("科目PR值", "");
+            //Allmapping.Add("國文百分成績", "");
+            //Allmapping.Add("英語百分成績", "");
+            //Allmapping.Add("數學百分成績", "");
+            //Allmapping.Add("社會百分成績", "");
+            //Allmapping.Add("自然科學百分成績", "");
+            //Allmapping.Add("理化百分成績", "");
+            //Allmapping.Add("自然百分成績", "");
+            //Allmapping.Add("資訊科技百分成績", "");
+            //Allmapping.Add("生活科技百分成績", "");
+            //Allmapping.Add("音樂百分成績", "");
+            //Allmapping.Add("視覺藝術百分成績", "");
+            //Allmapping.Add("表演藝術百分成績", "");
+            //Allmapping.Add("家政百分成績", "");
+            //Allmapping.Add("童軍百分成績", "");
+            //Allmapping.Add("輔導百分成績", "");
+            //Allmapping.Add("健康教育百分成績", "");
+            //Allmapping.Add("體育百分成績", "");
+            //Allmapping.Add("英語聽講百分成績", "");
+            //Allmapping.Add("資訊應用百分成績", "");
+            //Allmapping.Add("ESL百分成績", "");
+            //Allmapping.Add("地球科學百分成績", "");
+            //Allmapping.Add("閱讀理解百分成績", "");
+            //Allmapping.Add("閱讀與寫作百分成績", "");
+            //Allmapping.Add("語文表達百分成績", "");
+            //Allmapping.Add("國文節數", "");
+            //Allmapping.Add("英語節數", "");
+            //Allmapping.Add("數學節數", "");
+            //Allmapping.Add("社會節數", "");
+            //Allmapping.Add("自然科學節數", "");
+            //Allmapping.Add("理化節數", "");
+            //Allmapping.Add("自然節數", "");
+            //Allmapping.Add("資訊科技節數", "");
+            //Allmapping.Add("生活科技節數", "");
+            //Allmapping.Add("音樂節數", "");
+            //Allmapping.Add("視覺藝術節數", "");
+            //Allmapping.Add("表演藝術節數", "");
+            //Allmapping.Add("家政節數", "");
+            //Allmapping.Add("童軍節數", "");
+            //Allmapping.Add("輔導節數", "");
+            //Allmapping.Add("健康教育節數", "");
+            //Allmapping.Add("體育節數", "");
+            //Allmapping.Add("英語聽講節數", "");
+            //Allmapping.Add("資訊應用節數", "");
+            //Allmapping.Add("ESL節數", "");
+            //Allmapping.Add("地球科學節數", "");
+            //Allmapping.Add("閱讀理解節數", "");
+            //Allmapping.Add("閱讀與寫作節數", "");
+            //Allmapping.Add("語文表達節數", "");
+            //Allmapping.Add("國文等第", "");
+            //Allmapping.Add("英語等第", "");
+            //Allmapping.Add("數學等第", "");
+            //Allmapping.Add("社會等第", "");
+            //Allmapping.Add("自然科學等第", "");
+            //Allmapping.Add("理化等第", "");
+            //Allmapping.Add("自然等第", "");
+            //Allmapping.Add("資訊科技等第", "");
+            //Allmapping.Add("生活科技等第", "");
+            //Allmapping.Add("音樂等第", "");
+            //Allmapping.Add("視覺藝術等第", "");
+            //Allmapping.Add("表演藝術等第", "");
+            //Allmapping.Add("家政等第", "");
+            //Allmapping.Add("童軍等第", "");
+            //Allmapping.Add("輔導等第", "");
+            //Allmapping.Add("健康教育等第", "");
+            //Allmapping.Add("體育等第", "");
+            //Allmapping.Add("英語聽講等第", "");
+            //Allmapping.Add("資訊應用等第", "");
+            //Allmapping.Add("ESL等第", "");
+            //Allmapping.Add("地球科學等第", "");
+            //Allmapping.Add("閱讀理解等第", "");
+            //Allmapping.Add("閱讀與寫作等第", "");
+            //Allmapping.Add("語文表達等第", "");
+            //Allmapping.Add("國文文字描述", "");
+            //Allmapping.Add("英語文字描述", "");
+            //Allmapping.Add("數學文字描述", "");
+            //Allmapping.Add("社會文字描述", "");
+            //Allmapping.Add("自然科學文字描述", "");
+            //Allmapping.Add("理化文字描述", "");
+            //Allmapping.Add("自然文字描述", "");
+            //Allmapping.Add("資訊科技文字描述", "");
+            //Allmapping.Add("生活科技文字描述", "");
+            //Allmapping.Add("音樂文字描述", "");
+            //Allmapping.Add("視覺藝術文字描述", "");
+            //Allmapping.Add("表演藝術文字描述", "");
+            //Allmapping.Add("家政文字描述", "");
+            //Allmapping.Add("童軍文字描述", "");
+            //Allmapping.Add("輔導文字描述", "");
+            //Allmapping.Add("健康教育文字描述", "");
+            //Allmapping.Add("體育文字描述", "");
+            //Allmapping.Add("英語聽講文字描述", "");
+            //Allmapping.Add("資訊應用文字描述", "");
+            //Allmapping.Add("ESL文字描述", "");
+            //Allmapping.Add("地球科學文字描述", "");
+            //Allmapping.Add("閱讀理解文字描述", "");
+            //Allmapping.Add("閱讀與寫作文字描述", "");
+            //Allmapping.Add("語文表達文字描述", "");
+            //Allmapping.Add("學期大功", "");
+            //Allmapping.Add("學期小功", "");
+            //Allmapping.Add("學期嘉獎", "");
+            //Allmapping.Add("學期大過", "");
+            //Allmapping.Add("學期小過", "");
+            //Allmapping.Add("學期警告", "");
+            //Allmapping.Add("學期曠課", "");
+            //Allmapping.Add("學期事假", "");
+            //Allmapping.Add("學期病假", "");
+            //Allmapping.Add("學期喪假", "");
+            //Allmapping.Add("學期公假", "");
+            //Allmapping.Add("學期遲到", "");
+            //Allmapping.Add("愛整潔", "");
+            //Allmapping.Add("有禮貌", "");
+            //Allmapping.Add("守秩序", "");
+            //Allmapping.Add("責任心", "");
+            //Allmapping.Add("公德心", "");
+            //Allmapping.Add("友愛關懷", "");
+            //Allmapping.Add("團隊合作", "");
+            //Allmapping.Add("團體活動表現", "");
+            //Allmapping.Add("導師評語", "");
+            //Allmapping.Add("服務學習時數", "");
+            //Allmapping.Add("科目班級平均", "");
+            //Allmapping.Add("科目排名", "");
+            //Allmapping.Add("班級加權總分", "");
+            //Allmapping.Add("班級加權平均", "");
+            //Allmapping.Add("學期科目班級平均", "");
+            //Allmapping.Add("學期科目排名", "");
+            //Allmapping.Add("學期班級加權總分", "");
+            //Allmapping.Add("學期班級加權平均", "");
+            //Allmapping.Add("班級人數", "");
+            //Allmapping.Add("年級人數", "");
+            //Allmapping.Add("科目PR值", "");
             #endregion
 
             #region 取得學生成績計算規則
@@ -1035,7 +1041,13 @@ ORDER BY
                     {
                         if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("評量總加權平均"))
                         {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + dr["score"]);
+                            // 2020/05/28 按照弘文需求四捨五入到小數第2位
+                            if (decimal.TryParse("" + dr["score"], out decimal score))
+                            {
+                                score = Math.Round(score, 2, MidpointRounding.AwayFromZero);
+                            }
+
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + score);
                         }
                     }
 
@@ -1043,7 +1055,13 @@ ORDER BY
                     {
                         if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權平均"))
                         {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + dr["score"]);
+                            // 2020/05/28 按照弘文需求四捨五入到小數第2位
+                            if (decimal.TryParse("" + dr["score"], out decimal score))
+                            {
+                                score = Math.Round(score, 2, MidpointRounding.AwayFromZero);
+                            }
+
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + score);
                         }
                     }
 
@@ -1071,6 +1089,30 @@ ORDER BY
                         }
                     }
 
+                    //科目班級平均成績1~5
+                    int subjectIndex = 1;
+                    foreach (string subject in obj.SelSubjNameList)
+                    {
+                        if ("" + dr["item_type"] == "定期評量/科目成績" && "" + dr["item_name"] == subject)
+                        {
+                            // 2019/12/10 弘文國中開的科目數，以五個為上限
+                            if (subjectIndex > 5)
+                            {
+                                break;
+                            }
+
+                            if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("科目班級平均成績" + subjectIndex))
+                            {
+                                // 2020/05/28 按照弘文需求四捨五入到小數第2位
+                                if (decimal.TryParse("" + dr["avg"], out decimal score))
+                                {
+                                    score = Math.Round(score, 2, MidpointRounding.AwayFromZero);
+                                }
+                                studScoreRankDict["" + dr["ref_student_id"]].Add("科目班級平均成績" + subjectIndex, "" + score);
+                            }
+                        }
+                        subjectIndex++;
+                    }
                 }
                 else
                 {
@@ -1078,7 +1120,13 @@ ORDER BY
                     {
                         if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("評量總加權平均"))
                         {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + dr["score"]);
+                            // 2020/05/28 按照弘文需求四捨五入到小數第2位
+                            if (decimal.TryParse("" + dr["score"], out decimal score))
+                            {
+                                score = Math.Round(score, 2, MidpointRounding.AwayFromZero);
+                            }
+
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("評量總加權平均", "" + score);
                         }
                     }
 
@@ -1086,7 +1134,13 @@ ORDER BY
                     {
                         if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("加權平均"))
                         {
-                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + dr["score"]);
+                            // 2020/05/28 按照弘文需求四捨五入到小數第2位
+                            if (decimal.TryParse("" + dr["score"], out decimal score))
+                            {
+                                score = Math.Round(score, 2, MidpointRounding.AwayFromZero);
+                            }
+
+                            studScoreRankDict["" + dr["ref_student_id"]].Add("加權平均", "" + score);
                         }
                     }
 
@@ -1112,6 +1166,31 @@ ORDER BY
                         {
                             studScoreRankDict["" + dr["ref_student_id"]].Add("年排名", "" + dr["rank"]);
                         }
+                    }
+
+                    //科目班級平均成績1~5
+                    int subjectIndex = 1;
+                    foreach (string subject in obj.SelSubjNameList)
+                    {
+                        if ("" + dr["item_type"] == "定期評量/科目成績" && "" + dr["item_name"] == subject)
+                        {
+                            // 2019/12/10 弘文國中開的科目數，以五個為上限
+                            if (subjectIndex > 5)
+                            {
+                                break;
+                            }
+
+                            if (!studScoreRankDict["" + dr["ref_student_id"]].ContainsKey("科目班級平均成績" + subjectIndex))
+                            {
+                                // 2020/05/28 按照弘文需求四捨五入到小數第2位
+                                if (decimal.TryParse("" + dr["avg"], out decimal score))
+                                {
+                                    score = Math.Round(score, 2, MidpointRounding.AwayFromZero);
+                                }
+                                studScoreRankDict["" + dr["ref_student_id"]].Add("科目班級平均成績" + subjectIndex, "" + score);
+                            }
+                        }
+                        subjectIndex++;
                     }
                 }
             }
@@ -1157,7 +1236,7 @@ ORDER BY
                 mapping.Add("座號", eachStudentInfo.SeatNo);
                 mapping.Add("學號", eachStudentInfo.StudentNumber);
                 mapping.Add("班級導師", eachStudentInfo.TeacherName);
-                mapping.Add("資料期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
+                //mapping.Add("資料期間", obj.StartDate.ToShortDateString() + " 至 " + obj.EndDate.ToShortDateString());
 
                 // 2019/11/12 穎驊註解 本專案為弘文於本學期提出來的需求，增加家長代碼
                 mapping.Add("家長代碼", eachStudentInfo.ParentCode);
@@ -1172,14 +1251,17 @@ ORDER BY
                 //else
                 //    mapping.Add("收件人姓名", eachStudentInfo.student.Name);
 
-                if (obj.ReceiveName == "監護人姓名")
-                    mapping.Add("CN", eachStudentInfo.CustodianName);
-                else if (obj.ReceiveName == "父親姓名")
-                    mapping.Add("CN", eachStudentInfo.FatherName);
-                else if (obj.ReceiveName == "母親姓名")
-                    mapping.Add("CN", eachStudentInfo.MotherName);
-                else
-                    mapping.Add("CN", eachStudentInfo.student.Name);
+                //if (obj.ReceiveName == "監護人姓名")
+                //    mapping.Add("CN", eachStudentInfo.CustodianName);
+                //else if (obj.ReceiveName == "父親姓名")
+                //    mapping.Add("CN", eachStudentInfo.FatherName);
+                //else if (obj.ReceiveName == "母親姓名")
+                //    mapping.Add("CN", eachStudentInfo.MotherName);
+                //else
+                //    mapping.Add("CN", eachStudentInfo.student.Name);
+
+                // 學校確認 CN 固定改為監護人姓名
+                mapping.Add("CN", eachStudentInfo.CustodianName);
 
                 //收件人地址資料
                 //mapping.Add("收件人地址", eachStudentInfo.address);
@@ -1206,19 +1288,25 @@ ORDER BY
 
                     foreach (string absenceType in config[attendanceType])
                     {
+                        //婚假、產假 為ischool 國中系統內建假別，弘文國中epost 報表沒有需要，故把此欄位剃除
+                        if (absenceType == "婚假" || absenceType == "產假")
+                        {
+                            continue;
+                        }
+
                         int dataValue = 0;
-                        int semesterDataValue = 0;
+                        //int semesterDataValue = 0;
                         string PeriodAndAbsence = attendanceType + "," + absenceType;
                         //本期統計
                         if (eachStudentInfo.studentAbsence.ContainsKey(PeriodAndAbsence))
                         {
                             dataValue = eachStudentInfo.studentAbsence[PeriodAndAbsence];
                         }
-                        //學期統計
-                        if (eachStudentInfo.studentSemesterAbsence.ContainsKey(PeriodAndAbsence))
-                        {
-                            semesterDataValue = eachStudentInfo.studentSemesterAbsence[PeriodAndAbsence];
-                        }
+                        ////學期統計
+                        //if (eachStudentInfo.studentSemesterAbsence.ContainsKey(PeriodAndAbsence))
+                        //{
+                        //    semesterDataValue = eachStudentInfo.studentSemesterAbsence[PeriodAndAbsence];
+                        //}
 
                         if (!absenceTotalDict.ContainsKey(absenceType))
                         {
@@ -1229,14 +1317,14 @@ ORDER BY
                             absenceTotalDict[absenceType] += dataValue;
                         }
 
-                        if (!absenceTotalDict.ContainsKey("學期" + absenceType))
-                        {
-                            absenceTotalDict.Add("學期" + absenceType, semesterDataValue);
-                        }
-                        else
-                        {
-                            absenceTotalDict["學期" + absenceType] += semesterDataValue;
-                        }
+                        //if (!absenceTotalDict.ContainsKey("學期" + absenceType))
+                        //{
+                        //    absenceTotalDict.Add("學期" + absenceType, semesterDataValue);
+                        //}
+                        //else
+                        //{
+                        //    absenceTotalDict["學期" + absenceType] += semesterDataValue;
+                        //}
 
                     }
                 }
@@ -1254,10 +1342,10 @@ ORDER BY
                         mapping.Add(merit, eachStudentInfo.studentMerit[merit]);
                     }
 
-                    if (eachStudentInfo.studentSemesterMerit.ContainsKey(merit))
-                    {
-                        mapping.Add("學期" + merit, eachStudentInfo.studentSemesterMerit[merit]);
-                    }
+                    //if (eachStudentInfo.studentSemesterMerit.ContainsKey(merit))
+                    //{
+                    //    mapping.Add("學期" + merit, eachStudentInfo.studentSemesterMerit[merit]);
+                    //}
 
                 }
 
@@ -1290,13 +1378,13 @@ ORDER BY
 
                 }
 
-                //固定排名
+                //固定排名資料
                 if (studScoreRankDict.ContainsKey(studentID))
                 {
                     foreach (string rankName in studScoreRankDict[studentID].Keys)
                     {
                         mapping.Add(rankName, studScoreRankDict[studentID][rankName]);
-                    }
+                    }                    
                 }
 
 
