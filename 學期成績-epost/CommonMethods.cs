@@ -38,7 +38,7 @@ namespace hwhs.epost.學期成績通知單
                         {
                             Directory.CreateDirectory(workingFolder);
                         }
-                        string csvfilePath = $"{workingFolder}\\定期評量通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.txt";
+                        string csvfilePath = $"{workingFolder}\\學期成績通知單(弘文ePost)_{now.ToString("yyyyMMdd-HHmmss")}.txt";
 
                         exportToCSV(dt, csvfilePath);
 
