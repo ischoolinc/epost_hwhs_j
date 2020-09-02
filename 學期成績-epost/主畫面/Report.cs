@@ -1331,7 +1331,19 @@ namespace hwhs.epost.學期成績通知單
                             mapping.Add(record.Subject + "百分成績", record.Score);
                             mapping.Add(record.Subject + "節數", record.Period);
                             mapping.Add(record.Subject + "等第", GetScoreLevel(record.Score));
-                            mapping.Add(record.Subject + "文字描述", record.Text);
+
+                            //穎驊註記 因使用者在此項目 有機會輸入逗號, 會造成CSV 檔辨識換欄位錯誤，因此要另外補雙引號                                                        
+                            string comment = "";
+
+                            //穎驊註記 ，學校要求文字項目前要標註 科目名稱
+                            string head = record.Subject + ": ";
+
+                            // 假如本學期科目成績 有評語， 才印出來
+                            if ("" + record.Text != "")
+                            {
+                                comment = record.Text.Contains(",") ? '"' + head + record.Text + '"' : head + record.Text;
+                            }                            
+                            mapping.Add(record.Subject + "文字描述", comment);
                         }
                     }
                 }
