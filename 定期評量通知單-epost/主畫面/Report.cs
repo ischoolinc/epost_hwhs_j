@@ -97,13 +97,13 @@ namespace hwhs.epost.定期評量通知單
                 obj.SelSubjNameList = form._SelSubjNameList; // 使用者勾選科目
 
                 obj.StartDate = form.StartDate;
-                obj.EndDate = form.EndDate;                
+                obj.EndDate = form.EndDate;
                 obj.PrintHasRecordOnly = form.PrintHasRecordOnly;
-                
+
                 obj.Template = form.Template;
 
                 obj.ReceiveName = form.ReceiveName;
-                obj.ReceiveAddress = form.ReceiveAddress !=""? form.ReceiveAddress: "聯絡地址";
+                obj.ReceiveAddress = form.ReceiveAddress != "" ? form.ReceiveAddress : "聯絡地址";
                 obj.ConditionName = form.ConditionName;
                 obj.ConditionNumber = form.ConditionNumber;
                 obj.ConditionName2 = form.ConditionName2;
@@ -145,7 +145,7 @@ namespace hwhs.epost.定期評量通知單
                 throw new NotImplementedException();
 
             SelectedStudents.Sort(new Comparison<StudentRecord>(CommonMethods.ClassSeatNoComparer));
-            
+
             _BGWAbsenceNotification.ReportProgress(10);
 
             #endregion
@@ -612,16 +612,14 @@ namespace hwhs.epost.定期評量通知單
             Allmapping.Add("校長", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorChineseName").InnerText);
             Allmapping.Add("教務主任", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText);
             Allmapping.Add("班級導師", "");
-            Allmapping.Add("科目名稱1", "");
-            Allmapping.Add("科目名稱2", "");
-            Allmapping.Add("科目名稱3", "");
-            Allmapping.Add("科目名稱4", "");
-            Allmapping.Add("科目名稱5", "");
-            Allmapping.Add("科目節數1", "");
-            Allmapping.Add("科目節數2", "");
-            Allmapping.Add("科目節數3", "");
-            Allmapping.Add("科目節數4", "");
-            Allmapping.Add("科目節數5", "");
+            for (int i = 1; i <= 11; i++)
+            {
+                Allmapping.Add("科目名稱" + i, "");
+            }
+            for (int i = 1; i <= 11; i++)
+            {
+                Allmapping.Add("科目節數" + i, "");
+            }
             Allmapping.Add("CN", "");
             Allmapping.Add("POSTALCODE", "");
             Allmapping.Add("POSTALADDRESS", "");
@@ -629,30 +627,29 @@ namespace hwhs.epost.定期評量通知單
             Allmapping.Add("班級", "");
             Allmapping.Add("座號", "");
             Allmapping.Add("學生姓名", "");
-            Allmapping.Add("成績1", "");
-            Allmapping.Add("成績2", "");
-            Allmapping.Add("成績3", "");
-            Allmapping.Add("成績4", "");
-            Allmapping.Add("成績5", "");
+            for (int i = 1; i <= 11; i++)
+            {
+                Allmapping.Add("成績" + i, "");
+            }
+
             Allmapping.Add("加權平均", "");
             Allmapping.Add("加權總分", "");
             Allmapping.Add("名次", "");
             Allmapping.Add("年排名", "");
-            Allmapping.Add("科目班級平均成績1", "");
-            Allmapping.Add("科目班級平均成績2", "");
-            Allmapping.Add("科目班級平均成績3", "");
-            Allmapping.Add("科目班級平均成績4", "");
-            Allmapping.Add("科目班級平均成績5", "");
-            Allmapping.Add("平時成績1", "");
-            Allmapping.Add("平時成績2", "");
-            Allmapping.Add("平時成績3", "");
-            Allmapping.Add("平時成績4", "");
-            Allmapping.Add("平時成績5", "");
-            Allmapping.Add("評量總成績1", "");
-            Allmapping.Add("評量總成績2", "");
-            Allmapping.Add("評量總成績3", "");
-            Allmapping.Add("評量總成績4", "");
-            Allmapping.Add("評量總成績5", "");
+
+            for (int i = 1; i <= 11; i++)
+            {
+                Allmapping.Add("科目班級平均成績" + i, "");
+            }
+            for (int i = 1; i <= 11; i++)
+            {
+                Allmapping.Add("平時成績" + i, "");
+            }
+            for (int i = 1; i <= 11; i++)
+            {
+                Allmapping.Add("評量總成績" + i, "");
+            }
+
             Allmapping.Add("評量總加權平均", "");
             Allmapping.Add("大功", "0");
             Allmapping.Add("小功", "0");
@@ -1096,7 +1093,8 @@ ORDER BY
                         if ("" + dr["item_type"] == "定期評量/科目成績" && "" + dr["item_name"] == subject)
                         {
                             // 2019/12/10 弘文國中開的科目數，以五個為上限
-                            if (subjectIndex > 5)
+                            // 2022-03-25 Cynthia 改為11
+                            if (subjectIndex > 11)
                             {
                                 break;
                             }
@@ -1175,7 +1173,8 @@ ORDER BY
                         if ("" + dr["item_type"] == "定期評量/科目成績" && "" + dr["item_name"] == subject)
                         {
                             // 2019/12/10 弘文國中開的科目數，以五個為上限
-                            if (subjectIndex > 5)
+                            // 2022-03-25 Cynthia 改為11
+                            if (subjectIndex > 11)
                             {
                                 break;
                             }
@@ -1276,8 +1275,10 @@ ORDER BY
                 //mapping.Add("4", eachStudentInfo.ZipCode4);
                 //mapping.Add("5", eachStudentInfo.ZipCode5);
 
-                mapping.Add("學年度", School.DefaultSchoolYear);
-                mapping.Add("學期", School.DefaultSemester);
+                //mapping.Add("學年度", School.DefaultSchoolYear);
+                //mapping.Add("學期", School.DefaultSemester);
+                mapping.Add("學年度", obj.SchoolYear);
+                mapping.Add("學期", obj.Semester);
 
                 // 作為統計全部缺曠
                 Dictionary<string, int> absenceTotalDict = new Dictionary<string, int>();
@@ -1357,7 +1358,8 @@ ORDER BY
                     foreach (string subject in obj.SelSubjNameList)
                     {
                         // 2019/12/10 弘文國中開的科目數，以五個為上限
-                        if (subjectIndex > 5)
+                        // 2022-03-25 Cynthia  改為11個
+                        if (subjectIndex > 11)
                         {
                             break;
                         }
@@ -1384,7 +1386,7 @@ ORDER BY
                     foreach (string rankName in studScoreRankDict[studentID].Keys)
                     {
                         mapping.Add(rankName, studScoreRankDict[studentID][rankName]);
-                    }                    
+                    }
                 }
 
 
