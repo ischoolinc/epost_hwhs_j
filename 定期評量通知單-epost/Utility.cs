@@ -281,6 +281,38 @@ namespace hwhs.epost.定期評量通知單
         }
 
         /// <summary>
+        /// 科目排序
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetSubjectOrder()
+        {
+            List<string> result = new List<string>();
+            QueryHelper qh = new QueryHelper();
+            string sql =
+                @"
+WITH subject_mapping AS 
+(
+SELECT
+    unnest(xpath('//Subjects/Subject/@Name',  xmlparse(content replace(replace(content ,'&lt;','<'),'&gt;','>'))))::text AS subject_name
+FROM  
+    list 
+WHERE name  ='JHEvaluation_Subject_Ordinal'
+)SELECT
+		replace (subject_name ,'&amp;amp;','&') AS subject_name
+	FROM  subject_mapping
+";
+
+            DataTable dt = qh.Select(sql);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                string subject = dr["subject_name"].ToString();
+                result.Add(subject);
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 取得評量比例設定
         /// </summary>
         public static Dictionary<string, decimal> GetScorePercentageHS()

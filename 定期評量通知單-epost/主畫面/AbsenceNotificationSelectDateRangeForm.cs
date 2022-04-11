@@ -447,17 +447,18 @@ namespace hwhs.epost.定期評量通知單
             foreach (var list in _ExamSubjectFull.Values)
             {
                 #region 排序
-                list.Sort(new StringComparer("國文"
-                                , "英文"
-                                , "數學"
-                                , "理化"
-                                , "生物"
-                                , "社會"
-                                , "物理"
-                                , "化學"
-                                , "歷史"
-                                , "地理"
-                                , "公民"));
+                list.Sort(new StringComparer(Utility.GetSubjectOrder().ToArray()));
+                //list.Sort(new StringComparer("國文"
+                //                , "英文"
+                //                , "數學"
+                //                , "理化"
+                //                , "生物"
+                //                , "社會"
+                //                , "物理"
+                //                , "化學"
+                //                , "歷史"
+                //                , "地理"
+                //                , "公民"));
                 #endregion
             }
         }

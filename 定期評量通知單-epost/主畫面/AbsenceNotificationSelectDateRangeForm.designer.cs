@@ -83,7 +83,7 @@
             // buttonX1
             // 
             this.buttonX1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonX1.Location = new System.Drawing.Point(247, 386);
+            this.buttonX1.Location = new System.Drawing.Point(247, 404);
             this.buttonX1.TabIndex = 11;
             this.buttonX1.Click += new System.EventHandler(this.buttonX1_Click_1);
             // 
@@ -212,7 +212,7 @@
             this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabel1.Location = new System.Drawing.Point(79, 394);
+            this.linkLabel1.Location = new System.Drawing.Point(79, 412);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(60, 17);
@@ -227,7 +227,7 @@
             this.linkLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabel2.Location = new System.Drawing.Point(11, 394);
+            this.linkLabel2.Location = new System.Drawing.Point(11, 412);
             this.linkLabel2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(60, 17);
@@ -242,7 +242,7 @@
             this.buttonX2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonX2.BackColor = System.Drawing.Color.Transparent;
             this.buttonX2.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonX2.Location = new System.Drawing.Point(322, 386);
+            this.buttonX2.Location = new System.Drawing.Point(322, 404);
             this.buttonX2.Name = "buttonX2";
             this.buttonX2.Size = new System.Drawing.Size(70, 25);
             this.buttonX2.TabIndex = 12;
@@ -254,7 +254,7 @@
             this.linkLabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabel3.AutoSize = true;
             this.linkLabel3.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabel3.Location = new System.Drawing.Point(145, 394);
+            this.linkLabel3.Location = new System.Drawing.Point(145, 412);
             this.linkLabel3.Name = "linkLabel3";
             this.linkLabel3.Size = new System.Drawing.Size(86, 17);
             this.linkLabel3.TabIndex = 10;
@@ -273,11 +273,11 @@
             // 
             this.labelX3.BackgroundStyle.Class = "";
             this.labelX3.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.labelX3.Location = new System.Drawing.Point(10, 324);
+            this.labelX3.Location = new System.Drawing.Point(12, 326);
             this.labelX3.Name = "labelX3";
-            this.labelX3.Size = new System.Drawing.Size(323, 56);
+            this.labelX3.Size = new System.Drawing.Size(323, 73);
             this.labelX3.TabIndex = 7;
-            this.labelX3.Text = "說明:\r\n本報表為專門支援弘文高中產生定期評量通知單epost \r\n最後產生CSV檔\r\n";
+            this.labelX3.Text = "說明:\r\n本報表為專門支援弘文高中產生定期評量通知單epost \r\n最後產生CSV檔\r\n於2022/03將科目數量改為11個";
             // 
             // tabItem1
             // 
@@ -444,7 +444,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 424);
+            this.ClientSize = new System.Drawing.Size(417, 442);
             this.Controls.Add(this.cboExam);
             this.Controls.Add(this.chkSubjSelAll);
             this.Controls.Add(this.circularProgress1);
