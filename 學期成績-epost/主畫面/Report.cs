@@ -1379,19 +1379,22 @@ namespace hwhs_epost_semester
 
                     //穎驊註記 因使用者在此項目 有機會輸入逗號, 會造成CSV 檔辨識換欄位錯誤，因此要另外補雙引號
                     string performance = "";
-
-                    performance = otherElement.GetAttribute("Description").Contains(",") ? '"' + otherElement.GetAttribute("Description") + '"' : otherElement.GetAttribute("Description");
-
-                    mapping.Add("團體活動表現", performance);
+                    if (otherElement != null)
+                    {
+                        performance = otherElement.GetAttribute("Description").Contains(",") ? '"' + otherElement.GetAttribute("Description") + '"' : otherElement.GetAttribute("Description");
+                        if (performance != null)
+                            mapping.Add("團體活動表現", performance);
+                    }
 
                     XmlElement recommendElement = moralDict[studentID].TextScore.SelectSingleNode("DailyLifeRecommend[@Name=\"" + "導師評語" + "\"]") as XmlElement;
 
                     string comment = "";
-
-                    comment = recommendElement.GetAttribute("Description").Contains(",") ? '"' + recommendElement.GetAttribute("Description") + '"' : recommendElement.GetAttribute("Description");
-
-                    mapping.Add("導師評語", comment);
-
+                    if (recommendElement != null)
+                    {
+                        comment = recommendElement.GetAttribute("Description").Contains(",") ? '"' + recommendElement.GetAttribute("Description") + '"' : recommendElement.GetAttribute("Description");
+                        if (comment != null)
+                            mapping.Add("導師評語", comment);
+                    }
                 }
 
 
