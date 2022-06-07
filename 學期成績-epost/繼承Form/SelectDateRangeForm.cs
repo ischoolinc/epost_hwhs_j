@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using FISCA.Presentation.Controls;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     public partial class SelectDateRangeForm : BaseForm
     {

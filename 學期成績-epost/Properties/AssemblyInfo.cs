@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 組件的一般資訊是由下列的屬性集控制。
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
-[assembly: AssemblyTitle("K12.缺曠通知單")]
+[assembly: AssemblyTitle("hwhs_epost_semester")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("office")]
-[assembly: AssemblyProduct("K12.缺曠通知單")]
+[assembly: AssemblyProduct("hwhs_epost_semester")]
 [assembly: AssemblyCopyright("Copyright © office 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // 您可以指定所有的值，也可以依照以下的方式，使用 '*' 將組建和修訂編號
 // 指定為預設值:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.1.14")]
-[assembly: AssemblyFileVersion("1.1.1.14")]
+[assembly: AssemblyVersion("1.1.1.15")]
+[assembly: AssemblyFileVersion("1.1.1.15")]

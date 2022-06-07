@@ -7,7 +7,7 @@ using FISCA.Permission;
 using FISCA.Presentation;
 using FISCA.Presentation.Controls;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     // 2019/11/12 穎驊註解 本專案為弘文於本學期提出來的需求 希望 能將 定期評量通知單(測試版) 輸出CSV檔支援 epost 列印
     // 製作方向 參照原本報表邏輯、新固定排名資料抓法、缺曠通知單的抓法， 以缺曠通知單 流程為基底修改而成

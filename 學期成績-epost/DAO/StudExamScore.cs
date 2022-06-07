@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using JHSchool.Evaluation.Calculation;
 
-namespace hwhs.epost.學期成績通知單.DAO
+namespace hwhs_epost_semester.DAO
 {
     /// <summary>
     /// 學生評量成績

@@ -1,4 +1,4 @@
-﻿namespace hwhs.epost.學期成績通知單
+﻿namespace hwhs_epost_semester
 {
     partial class AbsenceNotificationSelectDateRangeForm
     {

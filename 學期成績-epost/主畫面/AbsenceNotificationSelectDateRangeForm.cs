@@ -7,7 +7,7 @@ using System.ComponentModel;
 using K12.Data;
 using System.Collections.Generic;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     // 2020/04/10 穎驊註解 本程式碼為 弘文國中定期評量epost 改寫成學期成績單epost (因學校與郵局洽談的產出的格式欄位相同)，
     // 修正不必要的定期資料後 改寫完成

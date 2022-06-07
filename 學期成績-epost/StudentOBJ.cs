@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using K12.Data;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     class StudentOBJ
     {

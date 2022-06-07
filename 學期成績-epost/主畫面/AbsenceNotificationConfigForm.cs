@@ -8,7 +8,7 @@ using FISCA.DSAUtil;
 using FISCA.Presentation.Controls;
 using K12.Data.Configuration;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     public partial class AbsenceNotificationConfigForm : BaseForm
     {

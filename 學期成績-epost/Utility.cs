@@ -8,7 +8,7 @@ using K12.Data;
 using System.IO;
 using System.Xml.Linq;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     public class Utility
     {

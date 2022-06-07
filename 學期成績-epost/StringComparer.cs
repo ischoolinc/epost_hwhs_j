@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     /// <summary>
     /// 使用自訂的字根來比較字串大小，可配合List<T>.Sort()使用

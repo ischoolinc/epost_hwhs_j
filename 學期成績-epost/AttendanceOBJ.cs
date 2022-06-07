@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     class AttendanceOBJ
     {

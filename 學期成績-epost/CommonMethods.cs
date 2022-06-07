@@ -10,7 +10,7 @@ using Aspose.Cells;
 using FISCA.Presentation.Controls;
 using System.Linq;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     internal static class CommonMethods
     {

@@ -16,10 +16,10 @@ using JHSchool.Data;
 using HsinChu.JHEvaluation.Data;
 using System.Linq;
 using JHSchool.Evaluation.Calculation;
-using hwhs.epost.學期成績通知單.DAO;
+using hwhs_epost_semester.DAO;
 using FISCA.UDT;
 
-namespace hwhs.epost.學期成績通知單
+namespace hwhs_epost_semester
 {
     internal class Report : IReport
     {
@@ -614,7 +614,7 @@ namespace hwhs.epost.學期成績通知單
             #region 通用資料
 
             Allmapping.Add("學年度", obj.SchoolYear);
-            Allmapping.Add("學期", obj.Semester);                  
+            Allmapping.Add("學期", obj.Semester);
             Allmapping.Add("校長", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("ChancellorChineseName").InnerText);
             Allmapping.Add("教務主任", K12.Data.School.Configuration["學校資訊"].PreviousData.SelectSingleNode("EduDirectorName").InnerText);
             Allmapping.Add("班級導師", "");
@@ -625,8 +625,8 @@ namespace hwhs.epost.學期成績通知單
             Allmapping.Add("班級", "");
             Allmapping.Add("座號", "");
             Allmapping.Add("學生姓名", "");
-           
-            
+
+
 
             #endregion
 
@@ -1342,7 +1342,7 @@ namespace hwhs.epost.學期成績通知單
                             if ("" + record.Text != "")
                             {
                                 comment = record.Text.Contains(",") ? '"' + head + record.Text + '"' : head + record.Text;
-                            }                            
+                            }
                             mapping.Add(record.Subject + "文字描述", comment);
                         }
                     }
@@ -1367,12 +1367,12 @@ namespace hwhs.epost.學期成績通知單
 
                 // 導師評語 品德資料
                 if (moralDict.ContainsKey(studentID))
-                {                    
+                {
                     foreach (string field in dailyBehaviors)
                     {
                         XmlElement Element = moralDict[studentID].TextScore.SelectSingleNode("DailyBehavior/Item[@Name=\"" + field + "\"]") as XmlElement;
-
-                        mapping.Add(field, Element.GetAttribute("Degree"));
+                        if (Element != null)
+                            mapping.Add(field, Element.GetAttribute("Degree"));
                     }
 
                     XmlElement otherElement = moralDict[studentID].TextScore.SelectSingleNode("OtherRecommend[@Name=\"" + "團體活動表現" + "\"]") as XmlElement;

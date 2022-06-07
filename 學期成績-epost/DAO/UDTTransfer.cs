@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using FISCA.UDT;
 
-namespace hwhs.epost.學期成績通知單.DAO
+namespace hwhs_epost_semester.DAO
 {
     public class UDTTransfer
     {
