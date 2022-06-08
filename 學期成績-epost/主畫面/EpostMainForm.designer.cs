@@ -449,7 +449,7 @@
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(3);
             this.Name = "AbsenceNotificationSelectDateRangeForm";
-            this.Text = "學期成績通知單(弘文epsot)";
+            this.Text = "學期成績通知單(弘文epost)";
             this.Load += new System.EventHandler(this.AbsenceNotificationSelectDateRangeForm_Load);
             this.Controls.SetChildIndex(this.labelX5, 0);
             this.Controls.SetChildIndex(this.cboExam, 0);

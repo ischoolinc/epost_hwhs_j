@@ -155,11 +155,11 @@
     <Compile Include="主畫面\AbsenceNotificationConfigForm.designer.cs">
       <DependentUpon>AbsenceNotificationConfigForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="主畫面\AbsenceNotificationSelectDateRangeForm.cs">
+    <Compile Include="主畫面\EpostMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="主畫面\AbsenceNotificationSelectDateRangeForm.designer.cs">
-      <DependentUpon>AbsenceNotificationSelectDateRangeForm.cs</DependentUpon>
+    <Compile Include="主畫面\EpostMainForm.designer.cs">
+      <DependentUpon>EpostMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="主畫面\Report.cs" />
     <Compile Include="介面\IReport.cs" />
@@ -186,8 +186,8 @@
       <DependentUpon>AbsenceNotificationConfigForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="主畫面\AbsenceNotificationSelectDateRangeForm.resx">
-      <DependentUpon>AbsenceNotificationSelectDateRangeForm.cs</DependentUpon>
+    <EmbeddedResource Include="主畫面\EpostMainForm.resx">
+      <DependentUpon>EpostMainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="繼承Form\SelectDateRangeForm.resx">
