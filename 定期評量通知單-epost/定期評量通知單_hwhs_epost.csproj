@@ -26,7 +26,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>obj\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -57,6 +57,7 @@
     <Reference Include="DevComponents.DotNetBar2, Version=7.9.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\ischool_Senior with FISCA\LibraryProject\DevComponents.DotNetBar2.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FISCA">
       <HintPath>..\..\..\ischool_Senior with FISCA\LibraryProject\FISCA.dll</HintPath>
@@ -151,11 +152,11 @@
     <Compile Include="主畫面\AbsenceNotificationConfigForm.designer.cs">
       <DependentUpon>AbsenceNotificationConfigForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="主畫面\AbsenceNotificationSelectDateRangeForm.cs">
+    <Compile Include="主畫面\EpostMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="主畫面\AbsenceNotificationSelectDateRangeForm.designer.cs">
-      <DependentUpon>AbsenceNotificationSelectDateRangeForm.cs</DependentUpon>
+    <Compile Include="主畫面\EpostMainForm.designer.cs">
+      <DependentUpon>EpostMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="主畫面\Report.cs" />
     <Compile Include="介面\IReport.cs" />
@@ -182,8 +183,8 @@
       <DependentUpon>AbsenceNotificationConfigForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="主畫面\AbsenceNotificationSelectDateRangeForm.resx">
-      <DependentUpon>AbsenceNotificationSelectDateRangeForm.cs</DependentUpon>
+    <EmbeddedResource Include="主畫面\EpostMainForm.resx">
+      <DependentUpon>EpostMainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="繼承Form\SelectDateRangeForm.resx">
