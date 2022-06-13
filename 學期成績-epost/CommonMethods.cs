@@ -14,8 +14,6 @@ namespace hwhs_epost_semester
 {
     internal static class CommonMethods
     {
-        
-        //Word報表
         public static void WordReport_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (!e.Cancelled)

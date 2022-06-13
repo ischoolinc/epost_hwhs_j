@@ -217,30 +217,6 @@ namespace hwhs_epost_semester
             meritNameList.Add("警告");
             #endregion
 
-            //????使用者所選取的所有假別種類????
-            //List<string> userDefinedAbsenceList = new List<string>();
-
-            //int DefinedType = 1;
-            //foreach (string kind in configkeylist)
-            //{
-            //    int DefinedAbsence = 1;
-            //    Allmapping.Add("類型" + DefinedType, kind);
-
-            //    foreach (string type in config[kind])
-            //    {
-            //        Allmapping.Add("類型" + DefinedType + "缺曠" + DefinedAbsence, type);
-            //        Allmapping.Add("類型" + DefinedType + "縮寫" + DefinedAbsence, absenceList[type]);
-            //        DefinedAbsence++;
-
-            //        if (!userDefinedAbsenceList.Contains(type))
-            //        {
-            //            userDefinedAbsenceList.Add(type);
-            //        }
-            //    }
-
-            //    DefinedType++;
-            //}
-
             #region 取得所有學生ID
             foreach (StudentRecord aStudent in SelectedStudents)
             {
@@ -635,103 +611,31 @@ namespace hwhs_epost_semester
             // EX: 產生定期資料時，學期資料資料就是空白
 
             //2020/05/28 經過業務 嘉詮與學校確認後，確定將  定期、學期的兩個資料切割處理，資料欄位不再重覆
+
+            //2022-06-09 Cynthia  https://3.basecamp.com/4399967/buckets/15765350/todos/5004783567
             #region 學期資料
-            Allmapping.Add("國文百分成績", "");
-            Allmapping.Add("英語百分成績", "");
-            Allmapping.Add("數學百分成績", "");
-            Allmapping.Add("社會百分成績", "");
-            Allmapping.Add("自然科學百分成績", "");
-            Allmapping.Add("理化百分成績", "");
-            Allmapping.Add("自然百分成績", "");
-            Allmapping.Add("資訊科技百分成績", "");
-            Allmapping.Add("生活科技百分成績", "");
-            Allmapping.Add("音樂百分成績", "");
-            Allmapping.Add("視覺藝術百分成績", "");
-            Allmapping.Add("表演藝術百分成績", "");
-            Allmapping.Add("家政百分成績", "");
-            Allmapping.Add("童軍百分成績", "");
-            Allmapping.Add("輔導百分成績", "");
-            Allmapping.Add("健康教育百分成績", "");
-            Allmapping.Add("體育百分成績", "");
-            Allmapping.Add("英語聽講百分成績", "");
-            Allmapping.Add("資訊應用百分成績", "");
-            Allmapping.Add("ESL百分成績", "");
-            Allmapping.Add("地球科學百分成績", "");
-            Allmapping.Add("閱讀理解百分成績", "");
-            Allmapping.Add("閱讀與寫作百分成績", "");
-            Allmapping.Add("語文表達百分成績", "");
-            Allmapping.Add("國文節數", "");
-            Allmapping.Add("英語節數", "");
-            Allmapping.Add("數學節數", "");
-            Allmapping.Add("社會節數", "");
-            Allmapping.Add("自然科學節數", "");
-            Allmapping.Add("理化節數", "");
-            Allmapping.Add("自然節數", "");
-            Allmapping.Add("資訊科技節數", "");
-            Allmapping.Add("生活科技節數", "");
-            Allmapping.Add("音樂節數", "");
-            Allmapping.Add("視覺藝術節數", "");
-            Allmapping.Add("表演藝術節數", "");
-            Allmapping.Add("家政節數", "");
-            Allmapping.Add("童軍節數", "");
-            Allmapping.Add("輔導節數", "");
-            Allmapping.Add("健康教育節數", "");
-            Allmapping.Add("體育節數", "");
-            Allmapping.Add("英語聽講節數", "");
-            Allmapping.Add("資訊應用節數", "");
-            Allmapping.Add("ESL節數", "");
-            Allmapping.Add("地球科學節數", "");
-            Allmapping.Add("閱讀理解節數", "");
-            Allmapping.Add("閱讀與寫作節數", "");
-            Allmapping.Add("語文表達節數", "");
-            Allmapping.Add("國文等第", "");
-            Allmapping.Add("英語等第", "");
-            Allmapping.Add("數學等第", "");
-            Allmapping.Add("社會等第", "");
-            Allmapping.Add("自然科學等第", "");
-            Allmapping.Add("理化等第", "");
-            Allmapping.Add("自然等第", "");
-            Allmapping.Add("資訊科技等第", "");
-            Allmapping.Add("生活科技等第", "");
-            Allmapping.Add("音樂等第", "");
-            Allmapping.Add("視覺藝術等第", "");
-            Allmapping.Add("表演藝術等第", "");
-            Allmapping.Add("家政等第", "");
-            Allmapping.Add("童軍等第", "");
-            Allmapping.Add("輔導等第", "");
-            Allmapping.Add("健康教育等第", "");
-            Allmapping.Add("體育等第", "");
-            Allmapping.Add("英語聽講等第", "");
-            Allmapping.Add("資訊應用等第", "");
-            Allmapping.Add("ESL等第", "");
-            Allmapping.Add("地球科學等第", "");
-            Allmapping.Add("閱讀理解等第", "");
-            Allmapping.Add("閱讀與寫作等第", "");
-            Allmapping.Add("語文表達等第", "");
-            Allmapping.Add("國文文字描述", "");
-            Allmapping.Add("英語文字描述", "");
-            Allmapping.Add("數學文字描述", "");
-            Allmapping.Add("社會文字描述", "");
-            Allmapping.Add("自然科學文字描述", "");
-            Allmapping.Add("理化文字描述", "");
-            Allmapping.Add("自然文字描述", "");
-            Allmapping.Add("資訊科技文字描述", "");
-            Allmapping.Add("生活科技文字描述", "");
-            Allmapping.Add("音樂文字描述", "");
-            Allmapping.Add("視覺藝術文字描述", "");
-            Allmapping.Add("表演藝術文字描述", "");
-            Allmapping.Add("家政文字描述", "");
-            Allmapping.Add("童軍文字描述", "");
-            Allmapping.Add("輔導文字描述", "");
-            Allmapping.Add("健康教育文字描述", "");
-            Allmapping.Add("體育文字描述", "");
-            Allmapping.Add("英語聽講文字描述", "");
-            Allmapping.Add("資訊應用文字描述", "");
-            Allmapping.Add("ESL文字描述", "");
-            Allmapping.Add("地球科學文字描述", "");
-            Allmapping.Add("閱讀理解文字描述", "");
-            Allmapping.Add("閱讀與寫作文字描述", "");
-            Allmapping.Add("語文表達文字描述", "");
+
+            //obj.SelSubjNameList.Count
+            for (int i = 1; i <= 25; i++)
+            {
+                Allmapping.Add("學期科目名稱" + i, "");
+            }
+            for (int i = 1; i <= 25; i++)
+            {
+                Allmapping.Add("學期科目成績" + i, "");
+            }
+            for (int i = 1; i <= 25; i++)
+            {
+                Allmapping.Add("學期科目節數" + i, "");
+            }
+            for (int i = 1; i <= 25; i++)
+            {
+                Allmapping.Add("學期科目等第" + i, "");
+            }
+            for (int i = 1; i <= 25; i++)
+            {
+                Allmapping.Add("學期科目文字描述" + i, "");
+            }
             Allmapping.Add("學期大功", "");
             Allmapping.Add("學期小功", "");
             Allmapping.Add("學期嘉獎", "");
@@ -786,144 +690,6 @@ namespace hwhs_epost_semester
 
             #endregion
 
-            // 學期成績單不需要
-            #region 取得定期評量資料
-            //// 課程資料
-            //Dictionary<string, JHCourseRecord> CourseDict = new Dictionary<string, JHCourseRecord>();
-
-            //foreach (JHCourseRecord co in JHCourse.SelectBySchoolYearAndSemester(int.Parse(obj.SchoolYear), int.Parse(obj.Semester)))
-            //{
-            //    CourseDict.Add(co.ID, co);
-            //}
-
-            //// 取評量成績
-            //Dictionary<string, List<HC.JHSCETakeRecord>> Score1Dict = new Dictionary<string, List<HC.JHSCETakeRecord>>();
-            //foreach (JHSCETakeRecord record in JHSCETake.SelectByStudentAndCourse(allStudentID, CourseDict.Keys.ToList()))
-            //{
-            //    if (record.RefExamID == obj.ExamID)
-            //    {
-            //        if (!Score1Dict.ContainsKey(record.RefStudentID))
-            //            Score1Dict.Add(record.RefStudentID, new List<HC.JHSCETakeRecord>());
-
-            //        Score1Dict[record.RefStudentID].Add(new HC.JHSCETakeRecord(record));
-            //    }
-            //}
-
-            //// 取得這次該修課程
-            //Dictionary<string, Dictionary<string, DAO.SubjectDomainName>> StudCourseDict = Utility.GetStudentSCAttendCourse(allStudentID, CourseDict.Keys.ToList(), obj.ExamID);
-
-            //// 取得評量設定比例
-            //Dictionary<string, decimal> ScorePercentageHSDict = Utility.GetScorePercentageHS();
-
-            //// 處理評量成績科目
-            //Dictionary<string, DAO.StudExamScore> studExamScoreDict = new Dictionary<string, DAO.StudExamScore>();
-            //foreach (string studID in allStudentID)
-            //{
-            //    // 成績計算規則
-            //    ScoreCalculator studentCalculator = defaultScoreCalculator;
-            //    if (calcIDCache.ContainsKey(studID) && calcCache.ContainsKey(calcIDCache[studID]))
-            //        studentCalculator = calcCache[calcIDCache[studID]];
-
-            //    if (Score1Dict.ContainsKey(studID))
-            //    {
-            //        if (!studExamScoreDict.ContainsKey(studID))
-            //            studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
-
-            //        foreach (HC.JHSCETakeRecord rec in Score1Dict[studID])
-            //        {
-            //            if (rec.RefExamID == obj.ExamID && CourseDict.ContainsKey(rec.RefCourseID))
-            //            {
-            //                JHCourseRecord cr = CourseDict[rec.RefCourseID];
-
-            //                string SubjecName = cr.Subject;
-
-            //                // 勾選科目
-            //                if (obj.SelSubjNameList.Contains(SubjecName))
-            //                {
-            //                    if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(SubjecName))
-            //                    {
-            //                        DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
-            //                        ess.DomainName = cr.Domain;
-            //                        ess.SubjectName = SubjecName;
-            //                        ess.ScoreA = rec.AssignmentScore;
-            //                        ess.ScoreF = rec.Score;
-
-            //                        if (ess.ScoreA.HasValue && ess.ScoreF.HasValue)
-            //                        {
-            //                            if (ScorePercentageHSDict.ContainsKey(cr.RefAssessmentSetupID))
-            //                            {
-            //                                // 取得定期，評量由100-定期
-            //                                decimal f = ScorePercentageHSDict[cr.RefAssessmentSetupID] * 0.01M;
-            //                                decimal a = (100 - ScorePercentageHSDict[cr.RefAssessmentSetupID]) * 0.01M;
-            //                                ess.ScoreT = ess.ScoreA.Value * a + ess.ScoreF.Value * f;
-            //                            }
-            //                            else
-            //                                ess.ScoreT = ess.ScoreA.Value * 0.5M + ess.ScoreF.Value * 0.5M; // 沒有設定預設50,50
-
-            //                            // 原本
-            //                            //ess.ScoreT = (ess.ScoreA.Value + ess.ScoreF.Value) / 2;
-            //                        }
-            //                        if (ess.ScoreA.HasValue && ess.ScoreF.HasValue == false)
-            //                            ess.ScoreT = ess.ScoreA.Value;
-
-            //                        if (ess.ScoreA.HasValue == false && ess.ScoreF.HasValue)
-            //                            ess.ScoreT = ess.ScoreF.Value;
-
-            //                        // 依照成績計算規則科目方式處理進位，只有總成績。
-            //                        // 平時
-            //                        //if(ess.ScoreA.HasValue)
-            //                        //    ess.ScoreA = studentCalculator.ParseSubjectScore(ess.ScoreA.Value);
-
-            //                        // 定期
-            //                        //if (ess.ScoreF.HasValue)
-            //                        //    ess.ScoreF = studentCalculator.ParseSubjectScore(ess.ScoreF.Value);
-
-            //                        if (ess.ScoreT.HasValue)
-            //                            ess.ScoreT = studentCalculator.ParseSubjectScore(ess.ScoreT.Value);
-
-            //                        ess.Text = rec.Text;
-            //                        ess.Credit = cr.Credit;
-            //                        studExamScoreDict[studID]._ExamSubjectScoreDict.Add(SubjecName, ess);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        // 計算領域成績
-            //        studExamScoreDict[studID].CalcSubjectToDomain();
-            //    }
-
-            //    if (StudCourseDict.ContainsKey(studID))
-            //    {
-            //        if (!studExamScoreDict.ContainsKey(studID))
-            //            studExamScoreDict.Add(studID, new DAO.StudExamScore(studentCalculator));
-            //        if (studExamScoreDict[studID]._ExamSubjectScoreDict == null)
-            //        {
-            //            studExamScoreDict[studID]._ExamSubjectScoreDict = new Dictionary<string, DAO.ExamSubjectScore>();
-            //            studExamScoreDict[studID]._ExamDomainScoreDict = new Dictionary<string, DAO.ExamDomainScore>();
-            //        }
-            //        foreach (KeyValuePair<string, DAO.SubjectDomainName> data in StudCourseDict[studID])
-            //        {
-            //            // 沒有勾選不加入
-            //            if (!obj.SelSubjNameList.Contains(data.Key))
-            //                continue;
-
-            //            // 加入有修課沒有成績空科目
-            //            if (!studExamScoreDict[studID]._ExamSubjectScoreDict.ContainsKey(data.Key))
-            //            {
-            //                DAO.ExamSubjectScore ess = new DAO.ExamSubjectScore();
-            //                ess.SubjectName = data.Key;
-            //                ess.DomainName = data.Value.DomainName;
-            //                ess.Credit = data.Value.Credit;
-            //                studExamScoreDict[studID]._ExamSubjectScoreDict.Add(data.Key, ess);
-            //            }
-            //        }
-            //    }
-
-            //}
-
-            _BGWAbsenceNotification.ReportProgress(90);
-            #endregion
-
             #region 取得學期成績資料
 
             Dictionary<string, JHSemesterScoreRecord> Score1Dict = new Dictionary<string, JHSemesterScoreRecord>();
@@ -937,7 +703,6 @@ namespace hwhs_epost_semester
                     Score1Dict.Add(record.RefStudentID, record);
                 }
             }
-
 
 
             #endregion
@@ -1144,7 +909,7 @@ namespace hwhs_epost_semester
             #region 取得等第對照
             _ScoreLevelMapping = Utility.GetScoreLevelMapping();
             #endregion
-
+            
 
             #region 產生報表
 
@@ -1171,12 +936,6 @@ namespace hwhs_epost_semester
                     }
                 }
 
-                // 弘文高中國中部 CSV 規格 沒有要用到這些
-                ////學校資訊
-                //mapping.Add("學校名稱", School.ChineseName);
-                //mapping.Add("學校地址", School.Address);
-                //mapping.Add("學校電話", School.Telephone);
-
                 //學生資料
                 mapping.Add("學生姓名", eachStudentInfo.student.Name);
                 mapping.Add("班級", eachStudentInfo.ClassName);
@@ -1187,39 +946,9 @@ namespace hwhs_epost_semester
 
                 // 2019/11/12 穎驊註解 本專案為弘文於本學期提出來的需求，增加家長代碼
                 mapping.Add("家長代碼", eachStudentInfo.ParentCode);
-
-                //收件人資料
-                //if (obj.ReceiveName == "監護人姓名")
-                //    mapping.Add("收件人姓名", eachStudentInfo.CustodianName);
-                //else if (obj.ReceiveName == "父親姓名")
-                //    mapping.Add("收件人姓名", eachStudentInfo.FatherName);
-                //else if (obj.ReceiveName == "母親姓名")
-                //    mapping.Add("收件人姓名", eachStudentInfo.MotherName);
-                //else
-                //    mapping.Add("收件人姓名", eachStudentInfo.student.Name);
-
-                //if (obj.ReceiveName == "監護人姓名")
-                //    mapping.Add("CN", eachStudentInfo.CustodianName);
-                //else if (obj.ReceiveName == "父親姓名")
-                //    mapping.Add("CN", eachStudentInfo.FatherName);
-                //else if (obj.ReceiveName == "母親姓名")
-                //    mapping.Add("CN", eachStudentInfo.MotherName);
-                //else
-                //    mapping.Add("CN", eachStudentInfo.student.Name);
-
-                //收件人地址資料
-                //mapping.Add("收件人地址", eachStudentInfo.address);
-                //mapping.Add("郵遞區號", eachStudentInfo.ZipCode);
-
                 mapping.Add("POSTALADDRESS", eachStudentInfo.address);
                 mapping.Add("POSTALCODE", eachStudentInfo.ZipCode);
                 mapping.Add("CN", eachStudentInfo.CustodianName);
-                //mapping.Add("0", eachStudentInfo.ZipCode1);
-                //mapping.Add("1", eachStudentInfo.ZipCode2);
-                //mapping.Add("2", eachStudentInfo.ZipCode3);
-                //mapping.Add("4", eachStudentInfo.ZipCode4);
-                //mapping.Add("5", eachStudentInfo.ZipCode5);
-
                 mapping.Add("學年度", School.DefaultSchoolYear);
                 mapping.Add("學期", School.DefaultSemester);
 
@@ -1251,14 +980,6 @@ namespace hwhs_epost_semester
                             semesterDataValue = eachStudentInfo.studentSemesterAbsence[PeriodAndAbsence];
                         }
 
-                        //if (!absenceTotalDict.ContainsKey(absenceType))
-                        //{
-                        //    absenceTotalDict.Add(absenceType, dataValue);
-                        //}
-                        //else
-                        //{
-                        //    absenceTotalDict[absenceType] += dataValue;
-                        //}
 
                         if (!absenceTotalDict.ContainsKey("學期" + absenceType))
                         {
@@ -1292,45 +1013,29 @@ namespace hwhs_epost_semester
 
                 }
 
-                // 定期評量成績
-                //if (studExamScoreDict.ContainsKey(studentID))
-                //{
-                //    int subjectIndex = 1;
-
-                //    foreach (string subject in obj.SelSubjNameList)
-                //    {
-                //        // 2019/12/10 弘文國中開的科目數，以五個為上限
-                //        if (subjectIndex > 5)
-                //        {
-                //            break;
-                //        }
-                //        if (studExamScoreDict[studentID]._ExamSubjectScoreDict.ContainsKey(subject))
-                //        {
-                //            mapping.Add("科目名稱" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].SubjectName);
-
-                //            mapping.Add("科目節數" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].Credit);
-
-                //            mapping.Add("成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreF);
-
-                //            mapping.Add("平時成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreA);
-
-                //            mapping.Add("評量總成績" + subjectIndex, studExamScoreDict[studentID]._ExamSubjectScoreDict[subject].ScoreT);
-                //        }
-                //        subjectIndex++;
-                //    }
-
-                //}
-
                 // 學期成績
                 if (Score1Dict.ContainsKey(studentID))
                 {
-                    foreach (SubjectScore record in Score1Dict[studentID].Subjects.Values)
+                    #region 處理科目排序
+                    JHSemesterScoreRecord jsr = Score1Dict[studentID];
+                    List<SubjectScore> jsSubjects = new List<SubjectScore>(jsr.Subjects.Values);
+                    jsSubjects.Sort(delegate (SubjectScore r1, SubjectScore r2)
+                    {
+                        return StringComparer.Comparer(r1.Subject, r2.Subject, obj.SelSubjNameList.ToArray());
+                    });
+
+                    #endregion
+
+                    int num = 1;
+                    //foreach (SubjectScore record in Score1Dict[studentID].Subjects.Values)
+                    foreach (SubjectScore record in jsSubjects)
                     {
                         if (obj.SelSubjNameList.Contains(record.Subject))
                         {
-                            mapping.Add(record.Subject + "百分成績", record.Score);
-                            mapping.Add(record.Subject + "節數", record.Period);
-                            mapping.Add(record.Subject + "等第", GetScoreLevel(record.Score));
+                            mapping.Add("學期科目名稱" + num, record.Subject);
+                            mapping.Add("學期科目成績" + num, record.Score);
+                            mapping.Add("學期科目節數" + num, record.Period);
+                            mapping.Add("學期科目等第" + num, GetScoreLevel(record.Score));
 
                             //穎驊註記 因使用者在此項目 有機會輸入逗號, 會造成CSV 檔辨識換欄位錯誤，因此要另外補雙引號                                                        
                             string comment = "";
@@ -1343,7 +1048,9 @@ namespace hwhs_epost_semester
                             {
                                 comment = record.Text.Contains(",") ? '"' + head + record.Text + '"' : head + record.Text;
                             }
-                            mapping.Add(record.Subject + "文字描述", comment);
+                            mapping.Add("學期科目文字描述" + num, comment);
+
+                            num++;
                         }
                     }
                 }

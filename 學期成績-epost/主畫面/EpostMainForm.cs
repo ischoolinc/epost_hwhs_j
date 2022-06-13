@@ -6,6 +6,7 @@ using K12.Data.Configuration;
 using System.ComponentModel;
 using K12.Data;
 using System.Collections.Generic;
+using FISCA.Presentation.Controls;
 
 namespace hwhs_epost_semester
 {
@@ -14,11 +15,11 @@ namespace hwhs_epost_semester
     public partial class AbsenceNotificationSelectDateRangeForm : SelectDateRangeForm
     {
         private Dictionary<string, List<string>> _ExamSubjects = new Dictionary<string, List<string>>();
-        
+
         //private Dictionary<string, List<string>> _ExamSubjectFull = new Dictionary<string, List<string>>();
 
         // 原本動態試別科目的不需要了，弘文學期成績單EPSOT 學期科目項目為固定，若日後有要增加科目 再調整程式碼
-        private List<string> _SemesterSubjectFull = new  List<string>();
+        private List<string> _SemesterSubjectFull = new List<string>();
 
         public List<string> _SelSubjNameList = new List<string>();
 
@@ -56,6 +57,8 @@ namespace hwhs_epost_semester
         public int _SelSemester;
         public string _SelExamName = "";
         public string _SelExamID = "";
+
+        //JHScoreReportDAL.Config confDomainSubject = new JHScoreReportDAL.Config();
 
         public string ReceiveName
         {
@@ -97,7 +100,7 @@ namespace hwhs_epost_semester
         public AbsenceNotificationSelectDateRangeForm(List<string> StudIDList)
         {
             InitializeComponent();
-            Text = "學期成績通知單(弘文epsot)";
+            Text = "學期成績通知單(弘文epost)";
             LoadPreference();
             InitialDateRange();
 
@@ -177,7 +180,7 @@ namespace hwhs_epost_semester
                 if (receive != null)
                 {
                     _receiveName = receive.GetAttribute("Name");
-                    _receiveAddress = receive.GetAttribute("Address");      
+                    _receiveAddress = receive.GetAttribute("Address");
                 }
                 else
                 {
@@ -419,33 +422,6 @@ namespace hwhs_epost_semester
 
         private void LoadSubject()
         {
-            lvSubject.Items.Clear();
-            //string ExamID = "";
-            //foreach (ExamRecord ex in _exams)
-            //{
-            //    if (ex.Name == cboExam.Text)
-            //    {
-            //        ExamID = ex.ID;
-            //        break;
-            //    }
-            //}
-
-            //if (_ExamSubjectFull.ContainsKey(ExamID))
-            //{
-            //    foreach (string subjName in _ExamSubjectFull[ExamID])
-            //        lvSubject.Items.Add(subjName);
-            //}
-
-            foreach (string subjName in _SemesterSubjectFull)
-            {
-                lvSubject.Items.Add(subjName);
-            }            
-        }
-
-        // 載入學生所屬學年度學習的試別，科目，並排序
-        private void LoadExamSubject()
-        {
-            // 取得該學年度學期所有學生的試別修課科目
             _SelSchoolYear = _SelSemester = 0;
             int ss, sc;
             if (int.TryParse(cboSchoolYear.Text, out ss))
@@ -454,27 +430,30 @@ namespace hwhs_epost_semester
             if (int.TryParse(cboSemester.Text, out sc))
                 _SelSemester = sc;
 
-            //_ExamSubjectFull = Utility.GetExamSubjecList(_StudentIDList, _SelSchoolYear, _SelSemester);
-
-            //foreach (var list in _ExamSubjectFull.Values)
-            //{
-            //    #region 排序
-            //    list.Sort(new StringComparer("國文"
-            //                    , "英文"
-            //                    , "數學"
-            //                    , "理化"
-            //                    , "生物"
-            //                    , "社會"
-            //                    , "物理"
-            //                    , "化學"
-            //                    , "歷史"
-            //                    , "地理"
-            //                    , "公民"));
-            //    #endregion
-            //}
-
             // 取得學期成績單的固定科目
-            _SemesterSubjectFull = Utility.GetSemesterSubjecList();
+            //_SemesterSubjectFull = Utility.GetSemesterSubjecList();
+
+            //動態取得所選學生的學期科目
+            _SemesterSubjectFull = Utility.GetFormSubjectList(_StudentIDList, _SelSchoolYear, _SelSemester);
+
+            //// 取得科目領域名稱
+            //confDomainSubject.GetConfigData();
+            //List<string> tempSubject = new List<string>();
+            //foreach (JHScoreReportDAL.ConfigItem it in confDomainSubject.GetSubjectItemList())
+            //    tempSubject.Add(it.Name);
+            //_SemesterSubjectFull.Sort(new StringComparer(tempSubject.ToArray()));
+
+            lvSubject.Items.Clear();
+            foreach (string subjName in _SemesterSubjectFull)
+            {
+                lvSubject.Items.Add(subjName);
+            }
+        }
+
+        // 載入學生所屬學年度學習的試別，科目，並排序
+        private void LoadExamSubject()
+        {
+
         }
 
         private DateTime GetWeekFirstDay(DateTime inputDate)
@@ -606,7 +585,7 @@ namespace hwhs_epost_semester
             bkw.RunWorkerAsync();
         }
 
-        
+
         private void cboSchoolYear_SelectedIndexChanged(object sender, EventArgs e)
         {
             DisSelect();
@@ -639,18 +618,6 @@ namespace hwhs_epost_semester
 
         private void buttonX1_Click_1(object sender, EventArgs e)
         {
-            //if (dateTimeInput1.IsEmpty || dateTimeInput2.IsEmpty)
-            //{
-            //    FISCA.Presentation.Controls.MsgBox.Show("日期區間必須輸入!");
-            //    return;
-            //}
-
-            //if (dateTimeInput1.Value > dateTimeInput2.Value)
-            //{
-            //    FISCA.Presentation.Controls.MsgBox.Show("開始日期必須小於或等於結束日期!!");
-            //    return;
-            //}
-
             int sc, ss;
             if (int.TryParse(cboSchoolYear.Text, out sc))
             {
@@ -672,29 +639,6 @@ namespace hwhs_epost_semester
                 return;
             }
 
-            //if (string.IsNullOrEmpty(cboExam.Text))
-            //{
-            //    FISCA.Presentation.Controls.MsgBox.Show("請選擇試別!");
-            //    return;
-            //}
-            //else
-            //{
-            //    bool isEr = true;
-            //    foreach (ExamRecord ex in _exams)
-            //        if (ex.Name == cboExam.Text)
-            //        {
-            //            _SelExamID = ex.ID;
-            //            _SelExamName = ex.Name;
-            //            isEr = false;
-            //            break;
-            //        }
-
-            //    if (isEr)
-            //    {
-            //        FISCA.Presentation.Controls.MsgBox.Show("試別錯誤，請重新選擇!");
-            //        return;
-            //    }
-            //}
 
             // 使用者勾選科目
             foreach (ListViewItem item in lvSubject.Items)
@@ -711,8 +655,17 @@ namespace hwhs_epost_semester
                 }
             }
 
+            if (_SelSubjNameList.Count > 25)
+            {
+                MsgBox.Show("科目數量上限為25科。");
+            }
 
+        }
 
+        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            主畫面.TextForm textForm = new 主畫面.TextForm();
+            textForm.ShowDialog();
         }
     }
 }
