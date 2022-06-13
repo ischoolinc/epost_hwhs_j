@@ -91,7 +91,7 @@ namespace hwhs.epost.定期評量通知單
         public AbsenceNotificationSelectDateRangeForm(List<string> StudIDList)
         {
             InitializeComponent();
-            Text = "定期評量通知單(弘文epsot)";
+            Text = "定期評量通知單(弘文epost)";
             LoadPreference();
             InitialDateRange();
 
