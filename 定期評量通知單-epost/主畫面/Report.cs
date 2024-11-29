@@ -1170,7 +1170,7 @@ ORDER BY
                     int subjectIndex = 1;
                     foreach (string subject in obj.SelSubjNameList)
                     {
-                        if ("" + dr["item_type"] == "定期評量/科目成績" && "" + dr["item_name"] == subject)
+                        if ("" + dr["item_type"] == "定期評量_定期/科目成績" && "" + dr["item_name"] == subject && "" + dr["rank_type"] == "班排名")
                         {
                             // 2019/12/10 弘文國中開的科目數，以五個為上限
                             // 2022-03-25 Cynthia 改為11
